@@ -8,9 +8,15 @@ The goal of this app is therefore to make this process easy and seamless. It wil
 
 ##  User Stories and User Cases
 
+1.	John
+John is a student and does not have a facebook account, yet he wants to connect to his classmates to discuss the issues related to class. Unfortunately, he finds the email system very tedious and is told that no one uses it. He is looking for a system where he can keep his privacy, yet connect with his friends from the class.
+
+John opens the application. He creates a simple account just with the username which he makes abstract (making his real name in disguise). Then he joins the group chat that his classmates have created.
+
+2. Suzie
+
+
 
 
 ## Wireframes and/or Object Diagrams
 Optional.
-
-
