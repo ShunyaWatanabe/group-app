@@ -1,6 +1,11 @@
 # GroupApp
 Our app makes creating group chats for students in class easy and seamless.
 
+## Group Members
+Shunya Watanabe
+Tomasz Bachosz
+October Li
+
 ## Purposes and Goals
 The purpose of this app is to make the process of creating a group chat for classes easier. Currently, the way to connect to people in class and send messages to everyone at the same time is to make a group chat on facebook. However, this proves bothersome, as one student from the class has to find out every other student in class on facebook and manually add one by one. Moreover, it is usually the case that he or she is not friends with all the students in class, which makes it hard to ensure that everyone is in the group chat. In most cases, not everyone has a facebook account as well, which makes this way of connecting with others in class imperfect.
 
