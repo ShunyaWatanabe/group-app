@@ -2,8 +2,8 @@
 Our app makes creating group chats for students in class easy and seamless.
 
 ## Group Members
-Shunya Watanabe\n
-Tomasz Bachosz\n
+Shunya Watanabe <br/>
+Tomasz Bachosz <br/>
 October Li
 
 ## Purposes and Goals
