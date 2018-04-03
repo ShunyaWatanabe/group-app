@@ -19,22 +19,21 @@
         android:id="@+id/ti_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/accent"
-        android:textColorHint="@color/accent"
-        android:layout_below="@id/iv_logo">
+        android:layout_gravity="center">
+        <!--android:backgroundTint="@color/accent"-->
+        <!--android:textColorHint="@color/accent">-->
 
         <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/ti_email"
-            android:hint="@string/email"
-            android:textColorHint="@color/accent"
-            android:backgroundTint="@color/accent"
-            android:textColor="@color/accent"
-            android:inputType="textEmailAddress" />
+            android:layout_below="@+id/ti_email"/>
+            <!--android:hint="@string/email"-->
+            <!--android:textColorHint="@color/accent"-->
+            <!--android:backgroundTint="@color/accent"-->
+            <!--android:textColor="@color/accent"-->
+            <!--android:inputType="textEmailAddress" />-->
 
         <!--android:drawableRight="@drawable/ic_email"-->
 
