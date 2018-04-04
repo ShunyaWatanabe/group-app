@@ -4,10 +4,33 @@
     android:layout_height="match_parent"
     tools:context="com.groupapp.groupapp.groupapp.screens.LogInFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorPrimary"
+            android:gravity="center"
+            android:hint="@string/user_name_hint" />
+
+        <Button
+            android:id="@+id/b_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorWhite"
+            android:layout_below="@+id/tv_username"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="@string/start" />
+
+    </RelativeLayout>
 
 </FrameLayout>

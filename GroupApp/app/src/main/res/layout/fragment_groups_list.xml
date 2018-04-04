@@ -1,0 +1,80 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.groupapp.groupapp.groupapp.screens.GroupsListFragment">
+    <!--android:clickable="true"-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"/>
+        <!--app:srcCompat="@drawable/ic_stat_add" />-->
+
+    <LinearLayout
+        android:id="@+id/linlaHeaderProgress"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:id="@+id/tv_progressText"
+            android:text = "@string/loading_groups" />
+
+        <!--android:layout_alignLeft="@id/pbHeaderProgress"-->
+        <!--android:layout_alignTop="@id/pbHeaderProgress"-->
+        <!--android:layout_alignRight="@id/pbHeaderProgress"-->
+        <!--android:layout_alignBottom="@id/pbHeaderProgress"-->
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ProgressBar>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_groups">
+
+        <!--<android.support.v7.widget.SearchView-->
+            <!--android:id="@+id/search_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:queryHint="Change location"-->
+            <!--android:background="@drawable/search_view_ballot_box"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_toStartOf="@+id/b_open_filters"/>-->
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipeContainer"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--android:layout_below="@+id/search_view"-->
+            <!---->
+            <!---->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+
+                android:transcriptMode="alwaysScroll" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
