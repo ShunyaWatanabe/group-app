@@ -2,7 +2,7 @@ package com.groupapp.groupapp.groupapp.network;
 
 import android.util.Base64;
 
-import com.ballotbox.ballotbox.utils.Constants;
+import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
