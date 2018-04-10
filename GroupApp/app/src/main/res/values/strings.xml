@@ -7,4 +7,7 @@
     <string name="loading_groups">Loading groups...</string>
     <string name="start">START</string>
     <string name="user_name_hint">Enter your username</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="create_group">ENTER FOUR DIGITS</string>
+    <string name="join_group">Join</string>
 </resources>
