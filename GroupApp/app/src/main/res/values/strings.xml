@@ -7,6 +7,10 @@
     <string name="loading_groups">Loading groups...</string>
     <string name="start">START</string>
     <string name="user_name_hint">Enter your username</string>
+    <string name="user_name">user name</string>
+    <string name="user_key">user key</string>
+    <string name="code">1234</string>
+    <string name="code_info">Join group using this code within 3 minutes</string>
     <string name="leave_group">Leave Group</string>
     <string name="create_group">ENTER FOUR DIGITS</string>
     <string name="join_group">Join</string>
