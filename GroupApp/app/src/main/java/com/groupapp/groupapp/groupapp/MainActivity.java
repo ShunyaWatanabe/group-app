@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.groupapp.groupapp.groupapp.screens.LogInFragment;
+import com.groupapp.groupapp.groupapp.screens.JoinGroupFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment() {
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         ft.addToBackStack("MainActivity");
-        LogInFragment fragment = new LogInFragment();
-        ft.replace(R.id.fragmentFrame, fragment, LogInFragment.TAG);
+        JoinGroupFragment fragment = new JoinGroupFragment();
+        ft.replace(R.id.fragmentFrame, fragment, JoinGroupFragment.TAG);
         ft.commit();
     }
 
