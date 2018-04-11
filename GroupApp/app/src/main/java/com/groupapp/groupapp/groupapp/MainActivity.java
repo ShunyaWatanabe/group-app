@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.groupapp.groupapp.groupapp.screens.LogInFragment;
+import com.groupapp.groupapp.groupapp.screens.JoinGroupFragment;
 
 public class MainActivity extends AppCompatActivity {
 
