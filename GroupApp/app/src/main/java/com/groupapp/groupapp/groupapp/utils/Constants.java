@@ -20,6 +20,7 @@ public class Constants {
     // "http://192.168.1.108:8080/api/v1/";
     public static final String TOKEN = "token";
     public static final String NAME = "name";
+    public static final String PRIVATE_KEY = "private_key";
     public static final String REFRESH_TOKEN = "refresh_token";
 //    public static final String COGNITO_POOL_ID = "us-east-1:20a9c264-b671-47a6-8698-7bda9ea6fdfa";
 //    public static final String COGNITO_POOL_REGION = "us-east-1";
@@ -40,12 +41,13 @@ public class Constants {
 
     private static Context context;
 
-    public static void saveTokens(Activity activity, String token, String refreshToken, String name){
+    public static void saveTokens(Activity activity, String token, String refreshToken, String name, String private_key){
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(Constants.TOKEN, token);
         editor.putString(Constants.NAME, name);
+        editor.putString(Constants.PRIVATE_KEY, private_key);
         editor.putString(Constants.REFRESH_TOKEN, refreshToken);
         editor.apply();
     }
@@ -66,11 +68,19 @@ public class Constants {
         editor.apply();
     }
 
-    public static void saveEmail(Activity activity, String name){
+    public static void saveName(Activity activity, String name){
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(Constants.NAME, name);
+        editor.apply();
+    }
+
+    public static void savePrivateKey(Activity activity, String private_key){
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(Constants.NAME, private_key);
         editor.apply();
     }
 
@@ -90,6 +100,12 @@ public class Constants {
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
         return mSharedPreferences.getString(Constants.NAME,"");
+    }
+
+    public static String getPrivateKey(Activity activity){
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        return mSharedPreferences.getString(Constants.PRIVATE_KEY,"");
     }
 
     public static void resetTokens(Activity activity){

@@ -15,11 +15,15 @@ public class User implements Parcelable {
     private String private_key;
     private String created_at;
     private ArrayList<Group> groups;
+    private String token;
+    private String fcm_token;
 
     protected User(Parcel in) {
         name = in.readString();
         private_key = in.readString();
         created_at = in.readString();
+        token = in.readString();
+        fcm_token = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -42,6 +46,14 @@ public class User implements Parcelable {
         this.name = name;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
     public String getPrivate_key() {
         return private_key;
     }
@@ -58,6 +70,14 @@ public class User implements Parcelable {
         this.created_at = created_at;
     }
 
+    public String getFcm_token() {
+        return fcm_token;
+    }
+
+    public void setFcm_token(String fcm_token) {
+        this.fcm_token = fcm_token;
+    }
+
     public ArrayList<Group> getGroups() {
         return groups;
     }
@@ -66,11 +86,11 @@ public class User implements Parcelable {
         this.groups = groups;
     }
 
-    public User(String name, String private_key, String created_at, ArrayList<Group> groups) {
+    public User(String name) {
         this.name = name;
-        this.private_key = private_key;
-        this.created_at = created_at;
-        this.groups = groups;
+//        this.private_key = private_key;
+//        this.created_at = created_at;
+//        this.groups = groups;
     }
 
     @Override
@@ -84,5 +104,7 @@ public class User implements Parcelable {
         dest.writeString(private_key);
         dest.writeString(created_at);
         dest.writeList(groups);
+        dest.writeString(token);
+        dest.writeString(fcm_token);
     }
 }

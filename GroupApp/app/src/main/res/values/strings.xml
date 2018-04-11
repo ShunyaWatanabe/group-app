@@ -7,4 +7,5 @@
     <string name="loading_groups">Loading groups...</string>
     <string name="start">START</string>
     <string name="user_name_hint">Enter your username</string>
+    <string name="logging_in">Loggin in...</string>
 </resources>

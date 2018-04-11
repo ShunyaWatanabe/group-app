@@ -22,6 +22,11 @@ public interface RetrofitInterface {
     @POST("users/relogin")
     Observable<Response> reLogin();
 
+    @GET("users/checkIfregistered")
+    Observable<Response> checkIfRegistered(@Path("private_key")String private_key);
+
+    @GET("users/{private_key}")
+    Observable<User> getProfile(@Path("private_key") String private_key);
 
     //Group
 //    @POST("events/create/{email}")
