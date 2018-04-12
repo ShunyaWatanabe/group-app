@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorWhite"
-            android:layout_below="@+id/gv_keyboards"
+            android:layout_below="@+id/gv_keyboard"
             android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"
             android:gravity="center"
