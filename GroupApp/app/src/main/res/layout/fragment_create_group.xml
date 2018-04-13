@@ -33,93 +33,20 @@
             />
 
 
-        <GridLayout
-            android:id="@+id/kb_keyboard"
+        <GridView
+            android:id="@+id/gv_keyboard"
             android:layout_below="@+id/tv_inputDigit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="35dp"
-            android:columnCount="3"
-
            >
 
-            <Button
-                android:id="@+id/b_1"
-                android:text="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_2"
-                android:text="2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_3"
-                android:text="3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_4"
-                android:text="4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_5"
-                android:text="5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_6"
-                android:text="6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_7"
-                android:text="7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_8"
-                android:text="8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-            android:id="@+id/b_9"
-            android:text="9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_0"
-                android:text="0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-            <Button
-                android:id="@+id/b_back"
-                android:text="<"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </GridLayout>
+        </GridView>
 
 
         <Button
             android:id="@+id/b_joinGroup"
-            android:layout_below="@+id/kb_keyboard"
+            android:layout_below="@+id/gv_keyboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

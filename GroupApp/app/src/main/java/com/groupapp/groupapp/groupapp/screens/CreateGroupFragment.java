@@ -1,6 +1,5 @@
 package com.groupapp.groupapp.groupapp.screens;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import com.groupapp.groupapp.groupapp.R;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import butterknife.BindView;
@@ -21,7 +19,8 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class CreateGroupFragment extends Fragment {
-    public String[] keyboardArray =  {"1","2","3","4","5","6","7","8","9"," ","0","<-"};
+
+    private Button[] buttonList = new Button[12];
 
     @BindView(R.id.b_joinGroup)
     Button join;
@@ -38,23 +37,43 @@ public class CreateGroupFragment extends Fragment {
     }
 
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //i need to add an adapter and listener to the keyboard
-
     }
 
+    private void adapterToKeyboard(){
+        for (int i = 0; i < 12; i++) {
+            Button button = new Button(getContext());
+            button.setTextSize(15);
+            if (i == 9) button.setText("");
+            else if (i == 10) button.setText("0");
+            else if (i == 11) button.setText("<");
+            else button.setText(String.valueOf(i+1));
+            buttonList[i] = button;
+        }
+        //i think there is something wrong with the code here with arrayadapter on buttons, but I don't know how to fix it.
+        ArrayAdapter<Button> arrayAdapter = new ArrayAdapter<Button>(getContext(),
+              android.R.layout.simple_list_item_1,buttonList);
 
+
+
+        keyboard.setNumColumns(3);
+        keyboard.setAdapter(arrayAdapter);
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_member, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_group, container, false);
         ButterKnife.bind(this,view);
+
+
+        //I want to set an adapter to keyboard here
+        adapterToKeyboard();
+
         return view;
     }
 
