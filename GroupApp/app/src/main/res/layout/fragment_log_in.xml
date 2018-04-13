@@ -14,9 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center"
             android:backgroundTint="@color/colorPrimary"
-            android:gravity="center"
             android:hint="@string/user_name_hint" />
 
         <Button
@@ -28,7 +26,6 @@
             android:layout_below="@+id/et_username"
             android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"
-            android:gravity="center"
             android:text="@string/start" />
 
     </RelativeLayout>
