@@ -1,0 +1,8 @@
+{
+ "name" : "GroupApp",
+ "email" : "t.bachosz@gmail.com",
+ "password" : "n7uKEAZWayTo",
+ "secret" : "tbachosz",
+ "db" : "mongodb://tbachosz:battlefield1@ds135179.mlab.com:35179/group-app",
+ "serverKey" : "AAAA11BqIGo:APA91bHaC5UPjvZzB8F3R2YZV1rErMhirMf24m0h9SU9n1V52vPPe_HgrFZx8Psu7z5Ts0un542LWH7m8Rp4CgZLU2hSovP_IwUXKVq2eAW0qXjtxjBUpnP3AG-QcCGeMtsTXk3SnBZt"
+}
