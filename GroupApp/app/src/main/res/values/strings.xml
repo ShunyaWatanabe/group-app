@@ -7,9 +7,7 @@
     <string name="loading_groups">Loading groups...</string>
     <string name="start">START</string>
     <string name="user_name_hint">Enter your username</string>
-<<<<<<< HEAD
     <string name="logging_in">Loggin in...</string>
-=======
     <string name="user_name">user name</string>
     <string name="user_key">user key</string>
     <string name="code">1234</string>
@@ -17,5 +15,5 @@
     <string name="leave_group">Leave Group</string>
     <string name="create_group">ENTER FOUR DIGITS</string>
     <string name="join_group">Join</string>
->>>>>>> 6f059b6eb0b0558dc2ae25e2bc219fc78ef3925d
+
 </resources>
