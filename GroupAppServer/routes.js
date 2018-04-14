@@ -161,81 +161,81 @@ module.exports = router => {
 		}
 	});
 
-	//get the user profile details
-	router.get('/users/:email', (req,res) => {
+// 	//get the user profile details
+// 	router.get('/users/:email', (req,res) => {
 
-		checkingTokens.checkTokens(req)
+// 		checkingTokens.checkTokens(req)
 
-			.then(result => {
+// 			.then(result => {
 
-				profile.getProfile(req.params.email)
+// 				profile.getProfile(req.params.email)
 
-				.then(result1 =>{
+// 				.then(result1 =>{
 
-					result1 = createResponse(result, result1);
+// 					result1 = createResponse(result, result1);
 
-					res.status(result.status).json(result1);
-				})
+// 					res.status(result.status).json(result1);
+// 				})
 
-				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
+// 				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
 
-			})
+// 			})
 
-			.catch(err => res.status(err.status).json({ message: err.message }));
+// 			.catch(err => res.status(err.status).json({ message: err.message }));
 
-	});
+// 	});
 
-	//editer user profile details
-	router.post('/users/edit/:email', (req,res) => {
+// 	//editer user profile details
+// 	router.post('/users/edit/:email', (req,res) => {
 
-		checkingTokens.checkTokens(req)
+// 		checkingTokens.checkTokens(req)
 
-			.then(result => {
+// 			.then(result => {
 
-				profile.editProfile(req)
+// 				profile.editProfile(req)
 
-				.then(result1 =>{
+// 				.then(result1 =>{
 
-					result1 = createResponse(result, result1);
+// 					result1 = createResponse(result, result1);
 
-					res.status(result.status).json(result1);
-				})
+// 					res.status(result.status).json(result1);
+// 				})
 
-				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
+// 				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
 
-			})
+// 			})
 
-			.catch(err => res.status(err.status).json({ message: err.message }));
+// 			.catch(err => res.status(err.status).json({ message: err.message }));
 
-	});
+// 	});
 
-	//deletes fcm_token from user
-	router.post('/users/logout/:email', (req,res) => {
+// 	//deletes fcm_token from user
+// 	router.post('/users/logout/:email', (req,res) => {
 
-		login.logout(req.params.email, req.body.fcm_token)
+// 		login.logout(req.params.email, req.body.fcm_token)
 
-			.then(result =>{
+// 			.then(result =>{
 
-				res.status(result.status).json(result);
-			})
+// 				res.status(result.status).json(result);
+// 			})
 
-			.catch(err => res.status(err.status).json({ message: err.message }));
+// 			.catch(err => res.status(err.status).json({ message: err.message }));
 
-	});
+// 	});
 
-	//Checks if emial is already used
-	router.post('/users/checkEmail/:email', (req,res) => {
+// 	//Checks if emial is already used
+// 	router.post('/users/checkEmail/:email', (req,res) => {
 
-		register.checkEmail(req.params.email)
+// 		register.checkEmail(req.params.email)
 
-			.then(result => {
+// 			.then(result => {
 
-				res.status(result.status).json({ message: result.message, isAvailable: result.isAvailable })
-			})
+// 				res.status(result.status).json({ message: result.message, isAvailable: result.isAvailable })
+// 			})
 
-			.catch(err => res.status(err.status).json({ message: err.message}));
+// 			.catch(err => res.status(err.status).json({ message: err.message}));
 
-	});
+// 	});
 
 	router.get('/users/search/:query', (req,res) => {
 
