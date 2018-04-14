@@ -53,4 +53,4 @@ exports.checkIfRegistered = req =>
 
 		}
 
-	});
+	}});
