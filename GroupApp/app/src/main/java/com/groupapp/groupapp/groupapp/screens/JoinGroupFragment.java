@@ -3,6 +3,7 @@ package com.groupapp.groupapp.groupapp.screens;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,5 +48,21 @@ public class JoinGroupFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         //mListener = null;
+    }
+
+    private void replaceFragment(){
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userData",user);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        ft.addToBackStack("JoinGroupFragment");
+
+        GroupsListFragment fragment = new GroupsListFragment();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.fragmentFrame, fragment, GroupsListFragment.TAG);
+
+        ft.commit();
+
     }
 }

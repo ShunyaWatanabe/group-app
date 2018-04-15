@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +57,8 @@ public class GroupsListFragment extends Fragment {
     ProgressBar pbHeaderProgress;
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.create_group_button)
+    FloatingActionButton createGroupButton;
 
     public static RecyclerView rvGroups;
 
@@ -94,7 +97,7 @@ public class GroupsListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups_list, container, false);
         rvGroups = view.findViewById(R.id.list);
-//        ButterKnife.bind(this,view);
+        ButterKnife.bind(this,view);
 //
 //        svEvent = (android.support.v7.widget.SearchView)view.findViewById(R.id.search_view);
 
@@ -125,6 +128,29 @@ public class GroupsListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    @OnClick(R.id.create_group_button)
+    public void createGroup(){
+        Log.e(TAG, "create group button is clicked!");
+        replaceFragment("CreateGroupFragment");
+    }
+
+    private void replaceFragment(String fragmentString){
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userData",user);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        ft.addToBackStack("GroupsListFragment");
+
+        if (fragmentString.equals("CreateGroupFragment")) {
+            CreateGroupFragment fragment = new CreateGroupFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
+
+            ft.commit();
+        }
     }
 
     @Override

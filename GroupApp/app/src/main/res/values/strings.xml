@@ -16,4 +16,6 @@
     <string name="create_group">ENTER FOUR DIGITS</string>
     <string name="join_group">Join</string>
 
+    <string name="group_name">Software Engineering</string>
+
 </resources>

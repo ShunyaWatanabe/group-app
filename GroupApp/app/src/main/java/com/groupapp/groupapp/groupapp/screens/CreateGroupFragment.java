@@ -2,6 +2,7 @@ package com.groupapp.groupapp.groupapp.screens;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,13 @@ import butterknife.OnClick;
  */
 public class CreateGroupFragment extends Fragment {
 
+    public static final String TAG = CreateGroupFragment.class.getSimpleName();
+
     private Button[] buttonList = new Button[12];
+
+    public CreateGroupFragment(){
+
+    }
 
     @BindView(R.id.b_joinGroup)
     Button join;
@@ -33,9 +40,10 @@ public class CreateGroupFragment extends Fragment {
 
     @OnClick(R.id.b_joinGroup)
     public void joinGroup(){
+
+        // move to group chat fragment
         throw new UnsupportedOperationException();
     }
-
 
 
     @Override
@@ -75,6 +83,22 @@ public class CreateGroupFragment extends Fragment {
         adapterToKeyboard();
 
         return view;
+    }
+
+    private void replaceFragment(){
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userData",user);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        ft.addToBackStack("CreateGroupFragment");
+
+        GroupsListFragment fragment = new GroupsListFragment();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.fragmentFrame, fragment, GroupsListFragment.TAG);
+
+        ft.commit();
+
     }
 
 }
