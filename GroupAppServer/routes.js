@@ -55,39 +55,6 @@ module.exports = router => {
 	});
 
 
-
-
-	// //user facebook- check if already registered
-	// router.post('/users/fb/login/:email', (req, res) => {
-	//
-	// 	facebookFunctions.checkIfRegistered(req.params.email, req.body.fcm_token)
-	//
-	// 		.then(result => {
-	//
-	// 			const token = jwt.sign(result, config.secret, { expiresIn: 20 });
-	// 			res.status(result.status).json({ message: result.message, is_registered: result.is_registered, token: token, refresh_token: result.refresh_token})
-	//
-	// 		})
-	//
-	// 		.catch(err => res.status(err.status).json({ message: err.message }));
-	//
-	// });
-	//
-	// //user facebook registaration
-	// router.post('/users/fb/signup', (req, res) => {
-	//
-	// 	facebookFunctions.registerUser(req)
-	//
-	// 		.then(result => {
-	//
-	// 			res.status(result.status).json({ message: result.message})
-	// 		})
-	//
-	// 		.catch(err => res.status(err.status).json({ message: err.message }));
-	//
-	// });
-
-
 	//user login operation
 	router.post('/users/login', (req, res) => {
 
@@ -161,81 +128,6 @@ module.exports = router => {
 		}
 	});
 
-// 	//get the user profile details
-// 	router.get('/users/:email', (req,res) => {
-
-// 		checkingTokens.checkTokens(req)
-
-// 			.then(result => {
-
-// 				profile.getProfile(req.params.email)
-
-// 				.then(result1 =>{
-
-// 					result1 = createResponse(result, result1);
-
-// 					res.status(result.status).json(result1);
-// 				})
-
-// 				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
-
-// 			})
-
-// 			.catch(err => res.status(err.status).json({ message: err.message }));
-
-// 	});
-
-// 	//editer user profile details
-// 	router.post('/users/edit/:email', (req,res) => {
-
-// 		checkingTokens.checkTokens(req)
-
-// 			.then(result => {
-
-// 				profile.editProfile(req)
-
-// 				.then(result1 =>{
-
-// 					result1 = createResponse(result, result1);
-
-// 					res.status(result.status).json(result1);
-// 				})
-
-// 				.catch(err1 => res.status(err1.status).json({ message: err1.message }));
-
-// 			})
-
-// 			.catch(err => res.status(err.status).json({ message: err.message }));
-
-// 	});
-
-// 	//deletes fcm_token from user
-// 	router.post('/users/logout/:email', (req,res) => {
-
-// 		login.logout(req.params.email, req.body.fcm_token)
-
-// 			.then(result =>{
-
-// 				res.status(result.status).json(result);
-// 			})
-
-// 			.catch(err => res.status(err.status).json({ message: err.message }));
-
-// 	});
-
-// 	//Checks if emial is already used
-// 	router.post('/users/checkEmail/:email', (req,res) => {
-
-// 		register.checkEmail(req.params.email)
-
-// 			.then(result => {
-
-// 				res.status(result.status).json({ message: result.message, isAvailable: result.isAvailable })
-// 			})
-
-// 			.catch(err => res.status(err.status).json({ message: err.message}));
-
-// 	});
 
 	router.get('/users/search/:query', (req,res) => {
 

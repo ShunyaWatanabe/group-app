@@ -50,7 +50,9 @@ public class LogInFragment extends Fragment {
 
     @OnClick(R.id.b_start)
     public void startApp(){
-        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getName(getActivity())).register(new User(etUsername.getText().toString()))
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                                                    Constants.getRefreshToken(getActivity()),
+                                                    Constants.getName(getActivity())).register(new User(etUsername.getText().toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

@@ -1,7 +1,7 @@
 {
   "name": "node-login",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "dependencies": {
     "basic-auth": "^1.1.0",
     "bcryptjs": "^2.4.3",
