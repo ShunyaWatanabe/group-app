@@ -7,9 +7,6 @@ const logger 	   = require('morgan');
 const router 	   = express.Router();
 const port 	   = process.env.PORT || 8080;
 
-const backPath = './';
-const scheduler = require(backPath + 'functions/scheduler');
-
 //Security
 var helmet = require('helmet');
 app.use(helmet());
@@ -50,69 +47,10 @@ var limiter = new RateLimit({
 //  apply to all requests 
 app.use(limiter);
 
-
-// var createAccountLimiter = new RateLimit({
-//   windowMs: 60*60*1000, // 1 hour window 
-//   delayAfter: 1, // begin slowing down responses after the first request 
-//   delayMs: 3*1000, // slow down subsequent responses by 3 seconds per request 
-//   max: 5, // start blocking after 5 requests 
-//   message: "Too many accounts created from this IP, please try again after an hour"
-// });
-
-// app.post('/authenticate', createAccountLimiter, function(req, res) {
-//  //... 
-// });
-
-
-
-
-
-
-// //Session Management
-// var cookieSession = require('cookie-session');  
-
-// app.use(cookieSession({  
-//   name: 'session',
-//   keys: [
-//     process.env.COOKIE_KEY1,
-//     process.env.COOKIE_KEY2
-//   ]
-// }));
-
-// app.use(function (req, res, next) {  
-//   var n = req.session.views || 0;
-//   req.session.views = n++;
-//   res.end(n + ' views');
-// });
-
-
-// //CSRF
-// var cookieParser = require('cookie-parser');  
-// var csrf = require('csurf');  
-
-// // setup route middlewares 
-// var csrfProtection = csrf({ cookie: true });  
-// var parseForm = bodyParser.urlencoded({ extended: false });
-
-// // we need this because "cookie" is true in csrfProtection 
-// app.use(cookieParser());
-
-
-// app.get('/form', csrfProtection, function(req, res) {  
-//   // pass the csrfToken to the view 
-//   res.render('send', { csrfToken: req.csrfToken() });
-// });
-
-// app.post('/process', parseForm, csrfProtection, function(req, res) {  
-//   res.send('data is being processed');
-// });
-
-scheduler.addToRate();
-
 // CHAT
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-const socketioHandler = require(backPath + 'functions/socketioHandler');
+const socketioHandler = require('./functions/socketioHandler');
 socketioHandler.ioConnections(io);
 
 
