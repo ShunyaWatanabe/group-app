@@ -18,6 +18,9 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class MemberFragment extends Fragment {
+
+    public static final String TAG = MemberFragment.class.getSimpleName();
+
     @BindView(R.id.b_leaveGroup)
     Button bLeaveGroup;
     @BindView(R.id.gv_members)
