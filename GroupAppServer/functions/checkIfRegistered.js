@@ -9,7 +9,7 @@ exports.checkIfRegistered = req =>
 
 		const token = req.headers['x-access-token'];
 
-		const email = req.headers['private_key'];
+		const private_key = req.headers['private_key'];
 
 		if (token) {
 
@@ -17,7 +17,7 @@ exports.checkIfRegistered = req =>
 
   				var decoded = jwt.verify(token, config.secret);
 
-  				if(decoded.message === email){
+  				if(decoded.message === private_key){
 
   					resolve({ status: 200, message: "Correct token"});
   				}
