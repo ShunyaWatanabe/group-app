@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,6 +60,8 @@ public class GroupsListFragment extends Fragment {
     SwipeRefreshLayout swipeContainer;
     @BindView(R.id.create_group_button)
     FloatingActionButton createGroupButton;
+    @BindView(R.id.iv_profile)
+    ImageView ivProfile;
 
     public static RecyclerView rvGroups;
 
@@ -102,6 +105,7 @@ public class GroupsListFragment extends Fragment {
 //        svEvent = (android.support.v7.widget.SearchView)view.findViewById(R.id.search_view);
 
         getGroups();
+        ivProfile.bringToFront();
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
@@ -136,7 +140,14 @@ public class GroupsListFragment extends Fragment {
         replaceFragment("CreateGroupFragment");
     }
 
+    @OnClick(R.id.iv_profile)
+    public void show_profile(View view){
+        Log.e(TAG, "profile is clicked!");
+        replaceFragment("UserInfoFragment");
+    }
+
     private void replaceFragment(String fragmentString){
+        Log.e(TAG, "Replace fragment to" + fragmentString);
         Bundle bundle = new Bundle();
 //        bundle.putParcelable("userData",user);
 
@@ -148,6 +159,13 @@ public class GroupsListFragment extends Fragment {
             CreateGroupFragment fragment = new CreateGroupFragment();
             fragment.setArguments(bundle);
             ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
+
+            ft.commit();
+
+        } else if (fragmentString.equals("UserInfoFragment")) {
+            UserInfoFragment fragment = new UserInfoFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, UserInfoFragment.TAG);
 
             ft.commit();
         }

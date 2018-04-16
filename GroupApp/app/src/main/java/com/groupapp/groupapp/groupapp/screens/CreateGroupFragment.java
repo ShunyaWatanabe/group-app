@@ -53,7 +53,8 @@ public class CreateGroupFragment extends Fragment {
     public void joinGroup(){
 
         // move to group chat fragment
-        throw new UnsupportedOperationException();
+        replaceFragment();
+        //throw new UnsupportedOperationException();
     }
 
 
@@ -113,9 +114,9 @@ public class CreateGroupFragment extends Fragment {
 
         ft.addToBackStack("CreateGroupFragment");
 
-        GroupsListFragment fragment = new GroupsListFragment();
+        ChatPageFragment fragment = new ChatPageFragment();
         fragment.setArguments(bundle);
-        ft.replace(R.id.fragmentFrame, fragment, GroupsListFragment.TAG);
+        ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
 
         ft.commit();
 
