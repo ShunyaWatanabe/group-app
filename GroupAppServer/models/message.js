@@ -3,6 +3,7 @@
 const config = require('../config/config.json');
 
 const mongoose = require('mongoose');
+const group = require('../models/user');
 
 const Schema = mongoose.Schema;
 
