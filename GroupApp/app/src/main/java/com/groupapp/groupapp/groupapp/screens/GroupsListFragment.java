@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -56,6 +58,10 @@ public class GroupsListFragment extends Fragment {
     ProgressBar pbHeaderProgress;
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.create_group_button)
+    FloatingActionButton createGroupButton;
+    @BindView(R.id.iv_profile)
+    ImageView ivProfile;
 
     public static RecyclerView rvGroups;
 
@@ -94,11 +100,12 @@ public class GroupsListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups_list, container, false);
         rvGroups = view.findViewById(R.id.list);
-//        ButterKnife.bind(this,view);
+        ButterKnife.bind(this,view);
 //
 //        svEvent = (android.support.v7.widget.SearchView)view.findViewById(R.id.search_view);
 
         getGroups();
+        ivProfile.bringToFront();
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
@@ -125,6 +132,43 @@ public class GroupsListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    @OnClick(R.id.create_group_button)
+    public void createGroup(){
+        Log.e(TAG, "create group button is clicked!");
+        replaceFragment("CreateGroupFragment");
+    }
+
+    @OnClick(R.id.iv_profile)
+    public void show_profile(View view){
+        Log.e(TAG, "profile is clicked!");
+        replaceFragment("UserInfoFragment");
+    }
+
+    private void replaceFragment(String fragmentString){
+        Log.e(TAG, "Replace fragment to" + fragmentString);
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userData",user);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        ft.addToBackStack("GroupsListFragment");
+
+        if (fragmentString.equals("CreateGroupFragment")) {
+            CreateGroupFragment fragment = new CreateGroupFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
+
+            ft.commit();
+
+        } else if (fragmentString.equals("UserInfoFragment")) {
+            UserInfoFragment fragment = new UserInfoFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, UserInfoFragment.TAG);
+
+            ft.commit();
+        }
     }
 
     @Override

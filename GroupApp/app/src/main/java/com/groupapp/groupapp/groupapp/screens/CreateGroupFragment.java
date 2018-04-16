@@ -1,12 +1,16 @@
 package com.groupapp.groupapp.groupapp.screens;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import com.groupapp.groupapp.groupapp.R;
@@ -20,7 +24,21 @@ import butterknife.OnClick;
  */
 public class CreateGroupFragment extends Fragment {
 
+    public static final String TAG = CreateGroupFragment.class.getSimpleName();
+
     private Button[] buttonList = new Button[12];
+
+    ArrayAdapter<Button> arrayAdapter;
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
+    }
+
+    private OnFragmentInteractionListener mListener;
+
+    public CreateGroupFragment(){
+
+    }
 
     @BindView(R.id.b_joinGroup)
     Button join;
@@ -33,9 +51,11 @@ public class CreateGroupFragment extends Fragment {
 
     @OnClick(R.id.b_joinGroup)
     public void joinGroup(){
-        throw new UnsupportedOperationException();
-    }
 
+        // move to group chat fragment
+        replaceFragment();
+        //throw new UnsupportedOperationException();
+    }
 
 
     @Override
@@ -54,10 +74,8 @@ public class CreateGroupFragment extends Fragment {
             buttonList[i] = button;
         }
         //i think there is something wrong with the code here with arrayadapter on buttons, but I don't know how to fix it.
-        ArrayAdapter<Button> arrayAdapter = new ArrayAdapter<Button>(getContext(),
+        arrayAdapter = new ArrayAdapter<>(getContext(),
               android.R.layout.simple_list_item_1,buttonList);
-
-
 
         keyboard.setNumColumns(3);
         keyboard.setAdapter(arrayAdapter);
@@ -75,6 +93,33 @@ public class CreateGroupFragment extends Fragment {
         adapterToKeyboard();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void replaceFragment(){
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable("userData",user);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        ft.addToBackStack("CreateGroupFragment");
+
+        ChatPageFragment fragment = new ChatPageFragment();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+
+        ft.commit();
+
     }
 
 }

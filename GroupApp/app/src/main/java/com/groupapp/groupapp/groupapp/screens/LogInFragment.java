@@ -55,7 +55,8 @@ public class LogInFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse, this::handleErrorRegister));
-//        replaceFragment();
+
+        replaceFragment();
     }
 
     private void checkLoggedIn() {
