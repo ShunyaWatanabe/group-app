@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
 	fcm_token: [String],
 
 	groups_created: [{type: Schema.Types.ObjectId, ref: 'group'}],
-	groups_participated: [{type: Schema.Types.ObjectId, ref: 'group'}],
+	groups_participated: [{type: Schema.Types.ObjectId, ref: 'group'}]
 });
 
 mongoose.Promise = global.Promise;
