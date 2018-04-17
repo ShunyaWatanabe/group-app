@@ -3,7 +3,9 @@
 const config = require('../config/config.json');
 
 const mongoose = require('mongoose');
-const group = require('../models/group');
+
+const group 	= 	require('../models/group');
+const message 	= 	require('../models/message');
 
 const Schema = mongoose.Schema;
 
