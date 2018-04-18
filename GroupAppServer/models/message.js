@@ -1,6 +1,9 @@
 'use strict';
 
+const config = require('../config/config.json');
+
 const mongoose = require('mongoose');
+
 const user 	 = require('../models/user');
 const group	 = require('../models/group');
 
@@ -18,4 +21,5 @@ const messageSchema = mongoose.Schema({
 	});
 
 mongoose.Promise = global.Promise;
+mongoose.connect(config.db);
 module.exports = mongoose.model('message', messageSchema);
