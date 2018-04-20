@@ -28,6 +28,10 @@ public interface RetrofitInterface {
     @GET("users/{private_key}")
     Observable<User> getProfile(@Path("private_key") String private_key);
 
+//    @POST("groups/creategroup")
+//    Observable<Response>
+
+
     //Group
 //    @POST("events/create/{email}")
 //    Observable<Response> createEvent(@Path("email") String email, @Body Event event);
