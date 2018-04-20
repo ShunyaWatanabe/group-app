@@ -5,16 +5,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
+
+import com.groupapp.groupapp.groupapp.adapters.NumbersAdapter;
 import com.groupapp.groupapp.groupapp.R;
 import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,8 +32,10 @@ public class CreateGroupFragment extends Fragment {
     public static final String TAG = CreateGroupFragment.class.getSimpleName();
 
     private Button[] buttonList = new Button[12];
+    private ArrayList<String> numList = new ArrayList<>(12);
 
     ArrayAdapter<Button> arrayAdapter;
+    NumbersAdapter numbersAdapter;
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
@@ -72,13 +79,20 @@ public class CreateGroupFragment extends Fragment {
             else if (i == 11) button.setText("<");
             else button.setText(String.valueOf(i+1));
             buttonList[i] = button;
+            numList.add(Integer.toString(i));
         }
         //i think there is something wrong with the code here with arrayadapter on buttons, but I don't know how to fix it.
-        arrayAdapter = new ArrayAdapter<>(getContext(),
-              android.R.layout.simple_list_item_1,buttonList);
+        //arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, buttonList);
+        numbersAdapter = new NumbersAdapter(getContext(), android.R.layout.simple_list_item_1, numList);
 
         keyboard.setNumColumns(3);
-        keyboard.setAdapter(arrayAdapter);
+        keyboard.setAdapter(numbersAdapter);
+        keyboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Log.e("button clicked", "position: " + position);
+            }
+        });
     }
 
 
