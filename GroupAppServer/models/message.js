@@ -13,13 +13,10 @@ const messageSchema = mongoose.Schema({
 
 	group: {type: Schema.Types.ObjectId, required: true},
 	text: {type: String, required: true},
-	sender:{type: Schema.Types.ObjectId, ref: 'user'},
-	
-	},
-	{
-		timestamps: true;
+	sender:{type: Schema.Types.ObjectId, ref: 'user'}
+	// timestamps: true
 	});
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.db);
+mongoose.createConnection(config.db);
 module.exports = mongoose.model('message', messageSchema);

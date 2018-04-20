@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.groupapp.groupapp.groupapp.R;
-import com.groupapp.groupapp.groupapp.model.Message;
+import com.groupapp.groupapp.groupapp.model.MessageContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ import java.util.List;
 // MessageAdapter.java
 public class MessageAdapter extends BaseAdapter {
 
-    List<Message> messages = new ArrayList<Message>();
+    List<MessageContent> messages = new ArrayList<MessageContent>();
     Context context;
 
     public MessageAdapter(Context context) {
         this.context = context;
     }
 
-    public void add(Message message) {
+    public void add(MessageContent message) {
         this.messages.add(message);
         notifyDataSetChanged(); // to render the list we need to notify
     }
@@ -52,7 +52,7 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         MessageViewHolder holder = new MessageViewHolder();
         LayoutInflater messageInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        Message message = messages.get(i);
+        MessageContent message = messages.get(i);
 
         if (message.isBelongsToCurrentUser()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.my_message, null);

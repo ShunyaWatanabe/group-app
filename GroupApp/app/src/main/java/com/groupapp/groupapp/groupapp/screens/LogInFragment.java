@@ -111,9 +111,9 @@ public class LogInFragment extends Fragment {
         Log.e(TAG, "REGISTER succeeded!: " + response.toString());
         showSnackBarMessage("WELCOME USER");
         Log.e(TAG,response.getMessage());
-        //Constants.saveTokens(getActivity(), response.getToken(), response.getRefreshToken(), response.getMessage());
+        Constants.saveTokens(getActivity(), response.getToken(), response.getRefreshToken(), response.getMessage(), response.getPrivate_key());
 
-        //loadProfile(response.getToken(),response.getRefreshToken(),response.getMessage());
+        loadProfile(response.getToken(),response.getRefreshToken(),response.getMessage());
     }
 
     private void loadProfile(String mToken, String mRefreshToken, String mPrivate_Key) {

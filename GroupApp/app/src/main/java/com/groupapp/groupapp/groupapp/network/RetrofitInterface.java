@@ -1,7 +1,10 @@
 package com.groupapp.groupapp.groupapp.network;
 
+import android.app.FragmentManager;
+
 import com.groupapp.groupapp.groupapp.model.Response;
 import com.groupapp.groupapp.groupapp.model.User;
+import com.groupapp.groupapp.groupapp.model.Group;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -27,6 +30,32 @@ public interface RetrofitInterface {
 
     @GET("users/{private_key}")
     Observable<User> getProfile(@Path("private_key") String private_key);
+
+    @POST("users/changeUserName")
+    Observable<User> changeUserName();
+
+
+    //GROUPS
+    @POST("groups/creategroup")
+    Observable<Response> createGroup();
+
+    @POST("groups/joingroup")
+    Observable<Response> joinGroup();
+
+    @GET("groups/getinvitationcode")
+    Observable<Integer> getInvitationCode();
+
+    @POST("groups/leavegroup")
+    Observable<Response> leaveGroup();
+
+    @GET("groups/getmembers")
+    Observable<Response> getMembers();
+
+    @POST("groups/changeGroupName")
+    Observable<Group> changeGroupName();
+
+
+
 
     //Group
 //    @POST("events/create/{email}")
@@ -80,19 +109,6 @@ public interface RetrofitInterface {
 //    @GET("events/getEvent/{id}")
 //    Observable<Event> getEvent(@Path("id") String id);
 
-//
-//    //Comments
-//    @POST("comments/create/{email}")
-//    Observable<Response> createComment(@Path("email") String email, @Body Comment comment);
-//
-//    @POST("comments/edit/{id}")// comment id
-//    Observable<Response> editComment(@Path("id") String id, @Body Comment comment);
-//
-//    @GET("comments/delete/{id}") //comment id
-//    Observable<Response> deleteComment(@Path("id") String id, @Body Comment comment);
-//
-//    @GET("comments/getResponses/{id}") //comment id
-//    Observable<CommentList> getCommentResponses(@Path("id") String id);
 //
 //    //MESSAGES
 //    @POST("messages/getMessages")

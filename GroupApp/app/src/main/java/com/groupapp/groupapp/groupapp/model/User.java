@@ -17,6 +17,7 @@ public class User implements Parcelable {
     private ArrayList<Group> groups;
     private String token;
     private String fcm_token;
+    private String color;
 
     protected User(Parcel in) {
         name = in.readString();

@@ -17,12 +17,10 @@ const userSchema = mongoose.Schema({
 	refresh_token: String,
 	token: String,
 
-	fcm_token: [String],
-
 	groups_created: [{type: Schema.Types.ObjectId, ref: 'group'}],
 	groups_participated: [{type: Schema.Types.ObjectId, ref: 'group'}]
 });
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.db);
+mongoose.createConnection(config.db);
 module.exports = mongoose.model('user', userSchema);

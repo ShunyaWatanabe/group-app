@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import com.groupapp.groupapp.groupapp.model.MemberData;
-import com.groupapp.groupapp.groupapp.model.Message;
+import com.groupapp.groupapp.groupapp.model.MessageContent;
 import com.scaledrone.lib.Listener;
 import com.scaledrone.lib.Member;
 import com.scaledrone.lib.Room;
@@ -187,7 +187,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
             boolean belongsToCurrentUser = member.getId().equals(scaledrone.getClientID());
             // since the message body is a simple string in our case we can use json.asText() to parse it as such
             // if it was instead an object we could use a similar pattern to data parsing
-            final Message message = new Message(json.asText(), data, belongsToCurrentUser);
+            final MessageContent message = new MessageContent(json.asText(), data, belongsToCurrentUser);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
