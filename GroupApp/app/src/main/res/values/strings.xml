@@ -19,4 +19,6 @@
     <string name="group_name">Software Engineering</string>
     <string name="profile">profile</string>
 
+    <string name="input_placeholder">Write a message</string>
+
 </resources>

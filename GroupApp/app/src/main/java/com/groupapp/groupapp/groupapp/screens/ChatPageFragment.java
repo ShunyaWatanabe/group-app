@@ -10,16 +10,33 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.groupapp.groupapp.groupapp.MainActivity;
+import android.app.Activity;
 import com.groupapp.groupapp.groupapp.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ChatPageFragment extends Fragment {
+import com.groupapp.groupapp.groupapp.model.MemberData;
+import com.groupapp.groupapp.groupapp.model.MessageContent;
+import com.scaledrone.lib.Listener;
+import com.scaledrone.lib.Member;
+import com.scaledrone.lib.Room;
+import com.scaledrone.lib.Scaledrone;
+import com.scaledrone.lib.RoomListener;
+import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
+
+import java.util.Random;
+
+public class ChatPageFragment extends Fragment implements RoomListener{
     public static final String TAG = ChatPageFragment.class.getSimpleName();
 
     private Button[] buttonList = new Button[12];
@@ -27,6 +44,14 @@ public class ChatPageFragment extends Fragment {
     public ChatPageFragment(){
 
     }
+
+    private String channelID = "dCqA04nH0FCzZoFN";
+    private String roomName = "observable-room";
+
+    private Scaledrone scaledrone;
+
+    private MessageAdapter messageAdapter;
+
 
     @BindView(R.id.group_name)
     TextView groupName;
@@ -38,18 +63,22 @@ public class ChatPageFragment extends Fragment {
     Button bShowMembers;
 
     @BindView(R.id.b_send)
-    Button bSend;
+    ImageButton bSend;
 
-    @BindView(R.id.chat_message_input)
-    EditText chatMessageInput;
+    @BindView(R.id.editText)
+    EditText editText;
 
-    @BindView(R.id.chat_messages)
-    ListView chatMessages;
+    @BindView(R.id.messages_view)
+    ListView messagesView;
 
     @OnClick(R.id.b_send)
     public void sendMessage(){
-        //send message
-        throw new UnsupportedOperationException();
+        System.out.print("send button is clicked!");
+        String message = editText.getText().toString();
+        if (message.length() > 0) {
+            scaledrone.publish("observable-room", message);
+            editText.getText().clear();
+        }
     }
 
     @OnClick(R.id.b_add_member)
@@ -66,6 +95,34 @@ public class ChatPageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MemberData data = new MemberData(getRandomName(), getRandomColor());
+
+
+        scaledrone = new Scaledrone(channelID, data);
+
+        scaledrone.connect(new Listener() {
+            @Override
+            public void onOpen() {
+                System.out.println("Scaledrone connection open");
+                // Since the MainActivity itself already implement RoomListener we can pass it as a target
+                scaledrone.subscribe(roomName, ChatPageFragment.this);
+            }
+
+            @Override
+            public void onOpenFailure(Exception ex) {
+                System.err.println(ex);
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+                System.err.println(ex);
+            }
+
+            @Override
+            public void onClosed(String reason) {
+                System.err.println(reason);
+            }
+        });
     }
 
     @Override
@@ -73,6 +130,10 @@ public class ChatPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_page, container, false);
         ButterKnife.bind(this,view);
+        messageAdapter = new MessageAdapter(getContext());
+        messagesView.setAdapter(messageAdapter);
+        System.out.print("onCreateView");
+
         return view;
     }
 
@@ -97,5 +158,66 @@ public class ChatPageFragment extends Fragment {
             ft.commit();
         }
 
+    }
+
+
+    // Successfully connected to Scaledrone room
+    @Override
+    public void onOpen(Room room) {
+        System.out.println("Connected to room");
+    }
+
+    // Connecting to Scaledrone room failed
+    @Override
+    public void onOpenFailure(Room room, Exception ex) {
+        System.err.println(ex);
+    }
+
+    // Received a message from Scaledrone room
+    @Override
+    public void onMessage(Room room, final JsonNode json, final Member member) {
+        // TODO
+        // To transform the raw JsonNode into a POJO we can use an ObjectMapper
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            System.out.print("try in onMessage function ");
+            // member.clientData is a MemberData object, let's parse it as such
+            final MemberData data = mapper.treeToValue(member.getClientData(), MemberData.class);
+            // if the clientID of the message sender is the same as our's it was sent by us
+            boolean belongsToCurrentUser = member.getId().equals(scaledrone.getClientID());
+            // since the message body is a simple string in our case we can use json.asText() to parse it as such
+            // if it was instead an object we could use a similar pattern to data parsing
+            final MessageContent message = new MessageContent(json.asText(), data, belongsToCurrentUser);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    messageAdapter.add(message);
+                    // scroll the ListView to the last added element
+                    messagesView.setSelection(messagesView.getCount() - 1);
+                    System.out.print("reached here");
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getRandomName() {
+        String[] adjs = {"autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark", "summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter", "patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue", "billowing", "broken", "cold", "damp", "falling", "frosty", "green", "long", "late", "lingering", "bold", "little", "morning", "muddy", "old", "red", "rough", "still", "small", "sparkling", "throbbing", "shy", "wandering", "withered", "wild", "black", "young", "holy", "solitary", "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine", "polished", "ancient", "purple", "lively", "nameless"};
+        String[] nouns = {"waterfall", "river", "breeze", "moon", "rain", "wind", "sea", "morning", "snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn", "glitter", "forest", "hill", "cloud", "meadow", "sun", "glade", "bird", "brook", "butterfly", "bush", "dew", "dust", "field", "fire", "flower", "firefly", "feather", "grass", "haze", "mountain", "night", "pond", "darkness", "snowflake", "silence", "sound", "sky", "shape", "surf", "thunder", "violet", "water", "wildflower", "wave", "water", "resonance", "sun", "wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper", "frog", "smoke", "star"};
+        return (
+                adjs[(int) Math.floor(Math.random() * adjs.length)] +
+                        "_" +
+                        nouns[(int) Math.floor(Math.random() * nouns.length)]
+        );
+    }
+
+    private String getRandomColor() {
+        Random r = new Random();
+        StringBuffer sb = new StringBuffer("#");
+        while(sb.length() < 7){
+            sb.append(Integer.toHexString(r.nextInt()));
+        }
+        return sb.toString().substring(0, 7);
     }
 }
