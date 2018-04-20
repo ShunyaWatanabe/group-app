@@ -9,7 +9,7 @@ const user = require(backPath + 'models/user');
 
 const register = require(backPath + 'functions/register');
 const login = require(backPath + 'functions/login');
-const profile = require(backPath + 'functions/profile');
+// const profile = require(backPath + 'functions/profile');
 
 //Push notifications
 let FCM = require('fcm-node');
@@ -82,7 +82,7 @@ module.exports = router => {
 	//relogin
 	router.post('/users/relogin', (req, res) => {
 
-		var ob = JSON.stringify(req.body);
+		//var ob = JSON.stringify(req.body);
 
 		checkingTokens.checkTokens(req)
 
@@ -102,12 +102,12 @@ module.exports = router => {
 	//add a new user
 	router.post('/users/signup', (req, res) => {
 
-		// console.log("Name: " + req.body.name + " email: " + req.body.email + " pass: " + req.body.password);
+		console.log("Name: " + req.body.name); //+" private key "+req.body.private_key);
 
 		const name = req.body.name;
-		const private_key = req.body.private_key;
+		// const private_key = req.body.private_key;
 
-		if (!name || !private_key || !name.trim() || !private_key.trim()) {
+		if (!name  || !name.trim() ) {//|| !private_key || !private_key.trim()
 
 		console.log("error");
 			res.status(400).json({message: 'Invalid Request !'});
@@ -120,7 +120,7 @@ module.exports = router => {
 			.then(result => {
 				const token = jwt.sign(result, config.secret, { expiresIn: 20 });
 
-				res.setHeader('Location', '/users/'+private_key);
+				//res.setHeader('Location', '/users/'+name);
 				res.status(result.status).json({ message: result.message, token: token, refresh_token: result.refresh_token})
 			})
 

@@ -14,12 +14,10 @@ const groupSchema = mongoose.Schema({
 	name: String,
 	creator:{type: Schema.Types.ObjectId, ref: 'user'},
 	members:[{type: Schema.Types.ObjectId, ref: 'user'}],
-	conversation: [{type: Schema.Types.ObjectId, ref: 'message'}],
-	},
-	{
-		timestamps: true;
+	conversation: [{type: Schema.Types.ObjectId, ref: 'message'}]
+	// timestamps: true
 	});
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.db);
+mongoose.createConnection(config.db);
 module.exports = mongoose.model('group', groupSchema);

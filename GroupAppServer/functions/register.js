@@ -16,7 +16,7 @@ exports.registerUser = req =>
 		const newUser = new user({
 			name: req.body.name,
 
-			private_key =  randomstring.generate(12);
+			private_key:randomstring.generate(12),
 			created_at: new Date(),
 			refresh_token: refreshToken,
 
@@ -26,7 +26,7 @@ exports.registerUser = req =>
 
 		.then(() => {
 
-		
+
 			resolve({ status: 201, message: 'User created!', refresh_token: refreshToken,  })
 
 		})

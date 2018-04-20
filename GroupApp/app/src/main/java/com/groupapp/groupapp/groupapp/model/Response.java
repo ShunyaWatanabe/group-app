@@ -12,6 +12,7 @@ public class Response {
     private Boolean is_registered; //is user (fb) already registered
     private Boolean isAvailable; //is email available
     private String id;
+    private String private_key;
 
     public String getMessage() {
         return message;
@@ -37,4 +38,7 @@ public class Response {
         return id;
     }
 
+    public String getPrivate_key() {
+        return private_key;
+    }
 }

@@ -1,7 +1,7 @@
 'use strict';
 
-const express    = require('express');        
-const app        = express();                
+const express    = require('express');
+const app        = express();
 const bodyParser = require('body-parser');
 const logger 	 = require('morgan');
 const router 	 = express.Router();
@@ -29,22 +29,22 @@ app.use(helmet.contentSecurityPolicy({
 var ninetyDaysInSeconds = 7776000;
 app.use(helmet.hpkp({
   maxAge: ninetyDaysInSeconds,
-  sha256s: ['nipolski', 'bachosz', 'jimenez']
+  sha256s: ['nipolski', 'tbachosz', 'jimenez']
 }))
 
 
 //Limits the number of requests
 var RateLimit = require('express-rate-limit');
- 
-app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS if you use an ELB, custom Nginx setup, etc) 
- 
+
+app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS if you use an ELB, custom Nginx setup, etc)
+
 var limiter = new RateLimit({
-  windowMs: 60*1000, // 15 minutes 
-  max: 30, // limit each IP to 30 requests per windowMs 
-  delayMs: 0 // disable delaying - full speed until the max limit is reached 
+  windowMs: 60*1000, // 15 minutes
+  max: 30, // limit each IP to 30 requests per windowMs
+  delayMs: 0 // disable delaying - full speed until the max limit is reached
 });
- 
-//  apply to all requests 
+
+//  apply to all requests
 app.use(limiter);
 
 // CHAT
