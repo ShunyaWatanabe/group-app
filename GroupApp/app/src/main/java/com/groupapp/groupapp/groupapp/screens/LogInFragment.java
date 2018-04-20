@@ -56,9 +56,7 @@ public class LogInFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleErrorRegister));
-
-        replaceFragment();
+                .subscribe(this::handleResponseRegister, this::handleErrorRegister));
     }
 
     private void checkLoggedIn() {
@@ -66,6 +64,8 @@ public class LogInFragment extends Fragment {
             progress.show();
             Log.e("REFRESH TOKEN relogin", Constants.getPrivateKey(getActivity()));
             ReLoginProcess(Constants.getAccessToken(getActivity()), Constants.getPrivateKey(getActivity()), Constants.getRefreshToken(getActivity()));
+        }else{
+            Log.e(TAG,"User not logged in");
         }
     }
 
@@ -107,13 +107,13 @@ public class LogInFragment extends Fragment {
         }
     }
 
-    private void handleResponse(Response response){
+    private void handleResponseRegister(Response response){
         Log.e(TAG, "REGISTER succeeded!: " + response.toString());
         showSnackBarMessage("WELCOME USER");
         Log.e(TAG,response.getMessage());
         Constants.saveTokens(getActivity(), response.getToken(), response.getRefreshToken(), response.getMessage(), response.getPrivate_key());
 
-        loadProfile(response.getToken(),response.getRefreshToken(),response.getMessage());
+        loadProfile(response.getToken(),response.getRefreshToken(),response.getPrivate_key());
     }
 
     private void loadProfile(String mToken, String mRefreshToken, String mPrivate_Key) {
@@ -122,7 +122,7 @@ public class LogInFragment extends Fragment {
         mSubscriptions.add(NetworkUtil.getRetrofit(mToken, mRefreshToken, Constants.getPrivateKey(getActivity())).getProfile(mPrivate_Key)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseProfile,this::handleError));
+                .subscribe(this::handleResponseProfile,this::handleErrorLoadProfile));
     }
 
     private void handleResponseProfile(User user) {
@@ -138,11 +138,11 @@ public class LogInFragment extends Fragment {
         replaceFragment();
     }
 
-    private void handleError(Throwable error) {
+    private void handleErrorLoadProfile(Throwable error) {
 
         Log.e(TAG, "Login error!: " + error.getMessage());
 
-//        progress.dismiss();
+        progress.dismiss();
 
         if (error instanceof HttpException) {
 
@@ -151,8 +151,8 @@ public class LogInFragment extends Fragment {
             try {
 
                 String errorBody = ((HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody, Response.class);
-                showSnackBarMessage(response.getMessage());
+//                Response response = gson.fromJson(errorBody, Response.class);
+//                showSnackBarMessage(response.getMessage());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -168,7 +168,7 @@ public class LogInFragment extends Fragment {
 
         Log.e(TAG, "Register error!: " + error.getMessage());
 
-//        progress.dismiss();
+        progress.dismiss();
 
         if (error instanceof HttpException) {
 
