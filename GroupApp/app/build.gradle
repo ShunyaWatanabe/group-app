@@ -66,4 +66,6 @@ dependencies {
 //        sourceCompatibility 1.8
 //    }
 
+    compile 'com.scaledrone:scaledrone-java:0.3.0'
+
 }
