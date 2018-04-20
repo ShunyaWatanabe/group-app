@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment() {
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         ft.addToBackStack("MainActivity");
-        CreateGroupFragment fragment = new CreateGroupFragment();
-        ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
+        LogInFragment fragment = new LogInFragment();
+        ft.replace(R.id.fragmentFrame, fragment, LogInFragment.TAG);
         ft.commit();
     }
 
