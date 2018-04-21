@@ -14,7 +14,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="@string/user_name"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -24,7 +23,6 @@
             android:layout_below="@+id/tv_user_name"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="@string/user_key"
             android:textColor="@color/colorPrimaryDark" />
 
     </RelativeLayout>

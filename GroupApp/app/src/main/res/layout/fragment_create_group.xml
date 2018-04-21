@@ -21,22 +21,67 @@
             android:textSize="20sp"/>
 
 
-        <TextView
-            android:id="@+id/tv_inputDigit"
-            android:layout_below="@+id/tv_groupCreate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/inputDigit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:textSize="40sp"
-            android:text="-     -     -     -"
-            />
+            android:layout_below="@+id/tv_groupCreate"
+            android:gravity="center_horizontal"
+            android:padding="35dp">
+
+            <TextView
+                android:id="@+id/tv_inputDigit_1"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textSize="40sp"
+                android:padding="10dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/tv_inputDigit_2"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textSize="40sp"
+                android:padding="10dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/tv_inputDigit_3"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textSize="40sp"
+                android:padding="10dp"
+                android:text="-"
+                />
+
+            <TextView
+                android:id="@+id/tv_inputDigit_4"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textSize="40sp"
+                android:padding="10dp"
+                android:text="-"
+                />
+
+
+        </LinearLayout>
+
+
 
 
         <GridView
             android:id="@+id/gv_keyboard"
-            android:layout_below="@+id/tv_inputDigit"
+            android:layout_below="@+id/inputDigit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
@@ -50,7 +95,7 @@
             android:layout_below="@+id/gv_keyboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="30dp"
             android:textColor="@color/colorWhite"
             android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"

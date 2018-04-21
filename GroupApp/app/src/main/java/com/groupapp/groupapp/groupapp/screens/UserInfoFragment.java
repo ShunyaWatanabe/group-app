@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.groupapp.groupapp.groupapp.R;
+import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +29,13 @@ public class UserInfoFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
+
+
+
     }
 
     @Override
@@ -36,6 +43,9 @@ public class UserInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
         ButterKnife.bind(this,view);
+
+//        tvUserName.setText(Constants.loggedUser.getName());
+//        tvUserName.setText(Constants.loggedUser.getPrivate_key());
         return view;
     }
 
