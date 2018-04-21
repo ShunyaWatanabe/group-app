@@ -25,33 +25,33 @@ public class NetworkUtil {
 
     }
 
-    public static RetrofitInterface getRetrofit(String email, String password) {
+//    public static RetrofitInterface getRetrofit(String private_key, String password) {
+//
+//        String credentials = private_key + ":" + password;
+//        String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+//        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+//
+//        httpClient.addInterceptor(chain -> {
+//
+//            Request original = chain.request();
+//            Request.Builder builder = original.newBuilder()
+//                    .addHeader("Authorization", basic)
+//                    .method(original.method(),original.body());
+//            return  chain.proceed(builder.build());
+//
+//        });
+//
+//        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+//
+//        return new Retrofit.Builder()
+//                .baseUrl(Constants.API_URL)
+//                .client(httpClient.build())
+//                .addCallAdapterFactory(rxAdapter)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build().create(RetrofitInterface.class);
+//    }
 
-        String credentials = email + ":" + password;
-        String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        httpClient.addInterceptor(chain -> {
-
-            Request original = chain.request();
-            Request.Builder builder = original.newBuilder()
-                    .addHeader("Authorization", basic)
-                    .method(original.method(),original.body());
-            return  chain.proceed(builder.build());
-
-        });
-
-        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
-
-        return new Retrofit.Builder()
-                .baseUrl(Constants.API_URL)
-                .client(httpClient.build())
-                .addCallAdapterFactory(rxAdapter)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(RetrofitInterface.class);
-    }
-
-    public static RetrofitInterface getRetrofit(String token, String refreshToken, String email) {
+    public static RetrofitInterface getRetrofit(String token, String refreshToken, String private_key) {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -61,7 +61,7 @@ public class NetworkUtil {
             Request.Builder builder = original.newBuilder()
                     .addHeader("x-access-token", token)
                     .addHeader("refresh-token", refreshToken)
-                    .addHeader("email", email)
+                    .addHeader("private_key", private_key)
                     .method(original.method(),original.body());
             return  chain.proceed(builder.build());
 
