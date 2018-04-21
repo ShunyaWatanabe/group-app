@@ -18,11 +18,16 @@ import com.google.android.gms.nearby.connection.ConnectionsClient;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
+import com.google.android.gms.nearby.connection.Payload;
+import com.google.android.gms.nearby.connection.PayloadCallback;
+import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import butterknife.ButterKnife;
 import rx.subscriptions.CompositeSubscription;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,18 +40,19 @@ import rx.subscriptions.CompositeSubscription;
 public class AntechamberFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private static final String TAG = AntechamberFragment.class.getSimpleName();
+    public static final String TAG = AntechamberFragment.class.getSimpleName();
 
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
     //Retrofit
     private CompositeSubscription mSubscriptions;
+    String opponents="";
 
     public AntechamberFragment() {
         // Required empty public constructor
     }
 
-    public static AntechamberFragment newInstance(String param1, String param2) {
+    public static AntechamberFragment newInstance() {
         AntechamberFragment fragment = new AntechamberFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -66,6 +72,8 @@ public class AntechamberFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_antechamber, container, false);
         ButterKnife.bind(this,view);
+        startAdvertising();
+        startDiscovery();
         return view;
     }
 
@@ -79,7 +87,7 @@ public class AntechamberFragment extends Fragment {
     private void startAdvertising() {
         // Note: Advertising may fail. To keep this demo simple, we don't handle failures.
         connectionsClient.startAdvertising(
-                Constants.loggedUser.getName(), getActivity().getPackageName(), connectionLifecycleCallback, new AdvertisingOptions(STRATEGY));
+                Constants.loggedUser.getName(), getActivity().getPackageName(), connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY));
     }
 
     // Callbacks for finding other devices
@@ -102,7 +110,7 @@ public class AntechamberFragment extends Fragment {
                 public void onConnectionInitiated(String endpointId, ConnectionInfo connectionInfo) {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
-                    opponentName = connectionInfo.getEndpointName();
+                    opponents+=connectionInfo.getEndpointName();
                 }
 
                 @Override
@@ -113,10 +121,10 @@ public class AntechamberFragment extends Fragment {
                         connectionsClient.stopDiscovery();
                         connectionsClient.stopAdvertising();
 
-                        opponentEndpointId = endpointId;
-                        setOpponentName(opponentName);
-                        setStatusText(getString(R.string.status_connected));
-                        setButtonState(true);
+                        //opponentEndpointId = endpointId;
+                        //setOpponentName(opponentName);
+                        //setStatusText(getString(R.string.status_connected));
+                        //setButtonState(true);
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
                     }
@@ -125,9 +133,25 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onDisconnected(String endpointId) {
                     Log.i(TAG, "onDisconnected: disconnected from the opponent");
-                    resetGame();
+                    //resetGame();
                 }
             };
+
+    // Callbacks for receiving payloads
+    private final PayloadCallback payloadCallback =
+            new PayloadCallback() {
+                @Override
+                public void onPayloadReceived(String endpointId, Payload payload) {
+                    Log.i(TAG,"payloadReceived");
+                    //opponentChoice = GameChoice.valueOf(new String(payload.asBytes(), UTF_8));
+                }
+
+                @Override
+                public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
+                    Log.i(TAG,"payloadReceivedUpdate");
+                }
+            };
+
 
     @Override
     public void onAttach(Context context) {
