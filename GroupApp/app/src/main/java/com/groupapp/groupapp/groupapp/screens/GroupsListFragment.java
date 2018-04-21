@@ -315,15 +315,6 @@ public class GroupsListFragment extends Fragment {
 //        });
 //    }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (searchView.isSearchOpen()) {
-//            searchView.closeSearch();
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
-
     private void getSearchedEvents(String query) {
         progress.show();
 //
