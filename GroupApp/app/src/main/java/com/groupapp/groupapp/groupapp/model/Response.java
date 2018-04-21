@@ -15,7 +15,7 @@ public class Response {
     private Boolean isAvailable; //is email available
     private String id;
     private String private_key;
-    private ArrayList<Group> groups;
+    private String[] groups;
 
     public String getMessage() {
         return message;
@@ -45,7 +45,7 @@ public class Response {
         return private_key;
     }
 
-    public ArrayList<Group> getGroups(){
+    public String[] getGroups(){
         return groups;
     }
 

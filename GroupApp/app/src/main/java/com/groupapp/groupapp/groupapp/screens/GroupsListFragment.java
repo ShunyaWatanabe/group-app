@@ -101,7 +101,8 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        Constants.loggedUser.setGroups(response.getGroups());
+        //response.getGroups(), this is a String[] of all group ids
+
     }
 
     private void handleErrorGetGroup(Throwable err){
