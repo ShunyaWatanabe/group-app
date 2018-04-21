@@ -16,8 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.groupapp.groupapp.groupapp.R;
@@ -127,6 +125,7 @@ public class LogInFragment extends Fragment {
 
     private void handleResponseProfile(User user) {
         Constants.loggedUser = user;
+        Log.e(TAG,user.getName());
 
         if(user.getToken()!=null){
             Constants.saveAccessToken(getActivity(), user.getToken());
