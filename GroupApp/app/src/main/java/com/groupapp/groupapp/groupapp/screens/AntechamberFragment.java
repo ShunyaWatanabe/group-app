@@ -1,10 +1,13 @@
 package com.groupapp.groupapp.groupapp.screens;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +87,7 @@ public class AntechamberFragment extends Fragment {
     private void startDiscovery() {
         // Note: Discovery may fail. To keep this demo simple, we don't handle failures.
         Log.e(TAG,"Start Discovery...");
-        //Log.e("OPPONENTS",opponents);
+        Log.e("OPPONENTS",opponents);
         connectionsClient.startDiscovery(
                 "255", endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY))
                 .addOnFailureListener(
@@ -120,7 +123,7 @@ public class AntechamberFragment extends Fragment {
                 public void onEndpointFound(String endpointId, DiscoveredEndpointInfo info) {
                     Log.i(TAG, "onEndpointFound: endpoint found, connecting");
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
-                    startDiscovery();
+//                    startDiscovery();
                 }
 
                 @Override
