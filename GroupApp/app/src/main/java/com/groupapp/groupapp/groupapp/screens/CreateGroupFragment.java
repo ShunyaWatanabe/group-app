@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 
+import com.google.android.gms.nearby.connection.ConnectionsClient;
 import com.groupapp.groupapp.groupapp.adapters.NumbersAdapter;
 import com.groupapp.groupapp.groupapp.R;
 import android.widget.ArrayAdapter;
@@ -37,7 +38,6 @@ public class CreateGroupFragment extends Fragment {
     private ArrayList<String> numList = new ArrayList<>(12);
     private String code = "";
     private String codeText = "-     -     -     -";
-
 
     ArrayAdapter<Button> arrayAdapter;
     NumbersAdapter numbersAdapter;
@@ -150,9 +150,9 @@ public class CreateGroupFragment extends Fragment {
 
         ft.addToBackStack("CreateGroupFragment");
 
-        ChatPageFragment fragment = new ChatPageFragment();
+        AntechamberFragment fragment = new AntechamberFragment();
         fragment.setArguments(bundle);
-        ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+        ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
 
         ft.commit();
 
