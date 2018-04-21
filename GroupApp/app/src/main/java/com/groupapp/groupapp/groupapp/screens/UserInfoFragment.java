@@ -21,6 +21,9 @@ import com.groupapp.groupapp.groupapp.utils.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnItemClick;
+import butterknife.OnTouch;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -30,14 +33,14 @@ public class UserInfoFragment extends Fragment {
 
 
     private CompositeSubscription mSubscriptions;
-    private boolean changed = false;
+//    private boolean changed = true;
 
     @BindView(R.id.et_user_name)
     TextView etUserName;
     @BindView(R.id.tv_user_key)
     TextView tvUserKey;
-    @BindView(R.id.b_change_name)
-    Button changeName;
+
+
     @BindView(R.id.rl_userinfo)
     RelativeLayout root;
 
@@ -68,6 +71,7 @@ public class UserInfoFragment extends Fragment {
         etUserName.setText(Constants.loggedUser.getName());
         tvUserKey.setText(Constants.loggedUser.getPrivate_key());
         etUserName.setEnabled(false);
+
         return view;
     }
 
@@ -82,41 +86,37 @@ public class UserInfoFragment extends Fragment {
         //mListener = null;
     }
 
-    @OnClick(R.id.b_change_name)
-    public void changeName(){
-        etUserName.setEnabled(true);
-        changed = true;
-    }
 
+    //THIS DOES NOT WORK!!!!!!!!!!!!
     @OnClick(R.id.et_user_name)
     public void enableChangeName(){
-        changed = true;
-        etUserName.setEnabled(changed);
-
+        etUserName.setEnabled(true);
+        Log.e(TAG, "click edit text");
     }
+
 
     @OnClick(R.id.rl_userinfo)
     public void saveChange(){
-        if (changed){
-            changed = false;
-            etUserName.setEnabled(changed);
-            String newName = etUserName.getText().toString();
+        Log.e(TAG, "click backgrond");
 
-            if (!newName.equals(Constants.loggedUser.getName())){
 
-                String[] temp ={newName,Constants.loggedUser.getPrivate_key()};
+        etUserName.setEnabled(false);
+        String newName = etUserName.getText().toString();
 
-                mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
-                        Constants.getRefreshToken(getActivity()),
-                        Constants.getName(getActivity())).changeUserName(temp)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
+        if (!newName.equals(Constants.loggedUser.getName())){
+            String[] temp ={newName,Constants.loggedUser.getPrivate_key()};
+
+            mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
+                    Constants.getRefreshToken(getActivity()),
+                    Constants.getName(getActivity())).changeUserName(temp)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
 
             }
 
-        }
+
 
     }
 
