@@ -11,10 +11,11 @@ import android.widget.Button;
 
 import java.util.List;
 
-public class NumbersAdapter extends ArrayAdapter{
+public class NumbersAdapter extends BaseAdapter{
+    Context context;
 
-    public NumbersAdapter(@NonNull Context context, int resource, @NonNull List objects) {
-        super(context, resource, objects);
+    public NumbersAdapter(Context c) {
+        context = c;
     }
 
     @Override
@@ -36,7 +37,9 @@ public class NumbersAdapter extends ArrayAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         Button button;
         if (convertView == null) {
-            button = new Button(super.getContext());
+            button = new Button(context);
+            button.setClickable(false);
+            button.setFocusable(false);
             if (position == 9) button.setText("");
             else if (position == 10) button.setText("0");
             else if (position == 11) button.setText("<");
