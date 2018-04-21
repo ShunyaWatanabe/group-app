@@ -49,6 +49,7 @@ public class AntechamberFragment extends Fragment {
 
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
+    private String code;
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
@@ -68,6 +69,7 @@ public class AntechamberFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSubscriptions= new CompositeSubscription();
+        code=getArguments().getString("code");
         connectionsClient = Nearby.getConnectionsClient(getActivity());
 
     }
@@ -89,7 +91,7 @@ public class AntechamberFragment extends Fragment {
         Log.e(TAG,"Start Discovery...");
         Log.e("OPPONENTS",opponents);
         connectionsClient.startDiscovery(
-                "255", endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY))
+                code, endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY))
                 .addOnFailureListener(
                         new OnFailureListener() {
                             @Override
@@ -105,7 +107,7 @@ public class AntechamberFragment extends Fragment {
         // Note: Advertising may fail. To keep this demo simple, we don't handle failures.
         Log.e(TAG,"Start Advertising...");
         connectionsClient.startAdvertising(
-                Constants.loggedUser.getName(), "255", connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY))
+                Constants.loggedUser.getName(), code, connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY))
          .addOnFailureListener(
                 new OnFailureListener() {
                     @Override

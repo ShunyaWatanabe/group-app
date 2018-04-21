@@ -226,7 +226,7 @@ public class CreateGroupFragment extends Fragment {
 
     private void replaceFragment(){
         Bundle bundle = new Bundle();
-//        bundle.putParcelable("userData",user);
+        bundle.putString("code",code);
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 

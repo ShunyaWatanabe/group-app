@@ -94,8 +94,8 @@ public class LogInFragment extends Fragment {
             Gson gson = new GsonBuilder().create();
             try {
                 String errorBody = ((HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody, Response.class);
-                showSnackBarMessage(response.getMessage());
+//                Response response = gson.fromJson(errorBody, Response.class);
+//                showSnackBarMessage(response.getMessage());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -240,7 +240,7 @@ public class LogInFragment extends Fragment {
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-        ft.addToBackStack("LogInFragment");
+//        ft.addToBackStack("LogInFragment");
 
         GroupsListFragment fragment = new GroupsListFragment();
         fragment.setArguments(bundle);
