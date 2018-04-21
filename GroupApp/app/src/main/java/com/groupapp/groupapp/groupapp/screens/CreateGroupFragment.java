@@ -84,7 +84,7 @@ public class CreateGroupFragment extends Fragment {
     @OnClick(R.id.b_joinGroup)
     public void joinGroup(){
 
-        if (code.length()>3){
+        if (code.indexOf("-")==-1){
             //send code to server
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
