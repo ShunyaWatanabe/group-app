@@ -13,6 +13,7 @@
         android:layout_gravity="top|start"
         android:src="@drawable/profile"
         android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/profile"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -52,23 +53,24 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_groups"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rl_groups">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_profile">
 
         <!--<android.support.v7.widget.SearchView-->
-            <!--android:id="@+id/search_view"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:queryHint="Change location"-->
-            <!--android:background="@drawable/search_view_ballot_box"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_toStartOf="@+id/b_open_filters"/>-->
+        <!--android:id="@+id/search_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:queryHint="Change location"-->
+        <!--android:background="@drawable/search_view_ballot_box"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_toStartOf="@+id/b_open_filters"/>-->
 
         <android.support.v4.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
