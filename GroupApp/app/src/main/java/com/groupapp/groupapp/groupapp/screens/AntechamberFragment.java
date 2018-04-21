@@ -3,6 +3,7 @@ package com.groupapp.groupapp.groupapp.screens;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
 import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
@@ -72,6 +74,8 @@ public class AntechamberFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_antechamber, container, false);
         ButterKnife.bind(this,view);
+        Log.e(TAG,"is connectionsClient initliaized");
+        Log.e(TAG,connectionsClient.toString());
         startAdvertising();
         startDiscovery();
         return view;
@@ -79,16 +83,34 @@ public class AntechamberFragment extends Fragment {
 
     private void startDiscovery() {
         // Note: Discovery may fail. To keep this demo simple, we don't handle failures.
-        Log.e("OPPONENTS",opponents);
+        Log.e(TAG,"Start Discovery...");
+        //Log.e("OPPONENTS",opponents);
         connectionsClient.startDiscovery(
-                getActivity().getPackageName(), endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY));
+                "255", endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY))
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG,"Unable to discover");
+                                e.printStackTrace();
+                            }
+                        });
     }
 
     /** Broadcasts our presence using Nearby Connections so other players can find us. */
     private void startAdvertising() {
         // Note: Advertising may fail. To keep this demo simple, we don't handle failures.
+        Log.e(TAG,"Start Advertising...");
         connectionsClient.startAdvertising(
-                Constants.loggedUser.getName(), getActivity().getPackageName(), connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY));
+                Constants.loggedUser.getName(), "255", connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY))
+         .addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG,"Unable to advertise");
+                        e.printStackTrace();
+                    }
+                });
     }
 
     // Callbacks for finding other devices
@@ -102,7 +124,10 @@ public class AntechamberFragment extends Fragment {
                 }
 
                 @Override
-                public void onEndpointLost(String endpointId) {}
+                public void onEndpointLost(String endpointId) {
+                    Log.e(TAG,"NO ENDPOINT FOUND");
+                }
+
             };
 
     // Callbacks for connections to other devices
