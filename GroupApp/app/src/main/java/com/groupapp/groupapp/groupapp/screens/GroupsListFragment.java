@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.groupapp.groupapp.groupapp.R;
+import com.groupapp.groupapp.groupapp.adapters.GroupListAdapter;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.GroupsList;
 
@@ -48,7 +50,7 @@ public class GroupsListFragment extends Fragment {
 
     android.support.v7.widget.SearchView svEvent;
 
-    public static ArrayList<Group> groupsList;
+    public static ArrayList<Group> groupsList = new ArrayList<>();
     private ProgressDialog progress;
     @BindView(R.id.tv_progressText)
     TextView progressText;
@@ -95,7 +97,7 @@ public class GroupsListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups_list, container, false);
@@ -103,9 +105,30 @@ public class GroupsListFragment extends Fragment {
         ButterKnife.bind(this,view);
 //
 //        svEvent = (android.support.v7.widget.SearchView)view.findViewById(R.id.search_view);
-
         getGroups();
         ivProfile.bringToFront();
+
+
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        rvGroups.setHasFixedSize(true);
+
+        // use a linear layout manager
+        RecyclerView.LayoutManager rvGroupsLayoutManager = new LinearLayoutManager(getContext());
+        rvGroups.setLayoutManager(rvGroupsLayoutManager);
+
+        // get string array of group names
+        ArrayList<String> groupNamesList = new ArrayList<>();
+        for (Group g: groupsList){
+            groupNamesList.add(g.getName());
+        }
+
+        // specify an adapter (see also next example)
+        RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
+        rvGroups.setAdapter(rvGroupsAdapter);
+
+
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
@@ -180,6 +203,17 @@ public class GroupsListFragment extends Fragment {
     private void getGroups() {
         //Change latter to loggeduser.getEmail()
         //for now not sure if it already download these data
+
+        // create dummy group list
+        Group group = new Group();
+        group.setName("Software Engineering");
+        groupsList.add(group);
+        group = new Group();
+        group.setName("Computer Networks");
+        groupsList.add(group);
+        group = new Group();
+        group.setName("Operating Systems");
+        groupsList.add(group);
 
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())
