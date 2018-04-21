@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.nearby.connection.Strategy;
 import com.groupapp.groupapp.groupapp.model.User;
 
 /**
@@ -36,6 +37,7 @@ public class Constants {
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
     public static final int LOCATION_REQUEST = 4;
+    public static final Strategy STRATEGY = Strategy.P2P_CLUSTER;
 
     public static User loggedUser;
 
