@@ -101,7 +101,9 @@ public class CreateGroupFragment extends Fragment {
                     // do nothing
                     break;
                 case "12":
-                    code = code.substring(0, code.length() - 1);
+
+                    //code = code.substring(0, code.length() - 1);
+                    code = "";
                     codeText = "-     -     -     -";
                     break;
                 default:
