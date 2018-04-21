@@ -87,22 +87,34 @@ public class UserInfoFragment extends Fragment {
         etUserName.setEnabled(true);
         changed = true;
     }
+
+    @OnClick(R.id.et_user_name)
+    public void enableChangeName(){
+        changed = true;
+        etUserName.setEnabled(changed);
+
+    }
+
     @OnClick(R.id.rl_userinfo)
     public void saveChange(){
         if (changed){
             changed = false;
-            etUserName.setEnabled(false);
+            etUserName.setEnabled(changed);
             String newName = etUserName.getText().toString();
 
-            String[] temp ={newName,Constants.loggedUser.getPrivate_key()};
+            if (!newName.equals(Constants.loggedUser.getName())){
 
-            mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
-                    Constants.getRefreshToken(getActivity()),
-                    Constants.getName(getActivity())).changeUserName(temp)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
+                String[] temp ={newName,Constants.loggedUser.getPrivate_key()};
+
+                mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
+                        Constants.getRefreshToken(getActivity()),
+                        Constants.getName(getActivity())).changeUserName(temp)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
+
+            }
 
         }
 

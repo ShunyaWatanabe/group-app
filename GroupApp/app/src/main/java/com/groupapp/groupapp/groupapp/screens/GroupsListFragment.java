@@ -30,6 +30,10 @@ import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.adapters.GroupListAdapter;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.GroupsList;
+import com.groupapp.groupapp.groupapp.model.Response;
+import com.groupapp.groupapp.groupapp.model.User;
+import com.groupapp.groupapp.groupapp.network.NetworkUtil;
+import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,6 +89,23 @@ public class GroupsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mSubscriptions = new CompositeSubscription();
+
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getGroup(Constants.loggedUser.getPrivate_key())
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+    }
+
+    private void handleResponseGetGroup(Response response){
+        Log.e(TAG, "Get groups complete!");
+        Constants.loggedUser.setGroups(response.getGroups());
+    }
+
+    private void handleErrorGetGroup(Throwable err){
+        Log.e(TAG, "Get groups fail!");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.groupapp.groupapp.groupapp.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Tomek on 2018-04-04.
  */
@@ -13,6 +15,7 @@ public class Response {
     private Boolean isAvailable; //is email available
     private String id;
     private String private_key;
+    private ArrayList<Group> groups;
 
     public String getMessage() {
         return message;
@@ -41,4 +44,10 @@ public class Response {
     public String getPrivate_key() {
         return private_key;
     }
+
+    public ArrayList<Group> getGroups(){
+        return groups;
+    }
+
+
 }

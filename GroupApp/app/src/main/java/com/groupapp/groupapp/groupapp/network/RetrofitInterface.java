@@ -36,6 +36,9 @@ public interface RetrofitInterface {
 
 
     //GROUPS
+    @GET("groups/{getgroup}")
+    Observable<Response> getGroup(@Path("getgroup") String private_key );
+
     @POST("groups/joingroup")
     Observable<Response> joinGroup(@Body User user);
 
