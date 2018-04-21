@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Group {
 
     private String name;
+    private String id;
     private String created_at;
     private ArrayList<User> members;
     private ArrayList<Message> conversation;
@@ -47,7 +48,11 @@ public class Group {
     }
 
 
-
-
-
+    public String getId() {
+        return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}

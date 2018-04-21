@@ -20,5 +20,6 @@
     <string name="profile">profile</string>
 
     <string name="input_placeholder">Write a message</string>
+    <string name="group">GroupName</string>
 
 </resources>
