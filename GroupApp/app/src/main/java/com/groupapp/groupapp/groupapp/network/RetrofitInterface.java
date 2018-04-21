@@ -32,7 +32,7 @@ public interface RetrofitInterface {
     Observable<User> getProfile(@Path("private_key") String private_key);
 
     @POST("users/changeUserName")
-    Observable<User> changeUserName();
+    Observable<Response> changeUserName(@Body String[] name_private_key);
 
 
     //GROUPS

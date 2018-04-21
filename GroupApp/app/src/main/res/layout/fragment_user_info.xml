@@ -5,8 +5,16 @@
     tools:context="com.groupapp.groupapp.groupapp.screens.UserInfoFragment">
 
     <RelativeLayout
+        android:id="@+id/rl_userinfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/b_change_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="change name"
+            />
 
         <EditText
             android:id="@+id/et_user_name"

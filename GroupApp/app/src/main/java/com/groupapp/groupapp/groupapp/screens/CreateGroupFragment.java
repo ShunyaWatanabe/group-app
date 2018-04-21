@@ -116,15 +116,12 @@ public class CreateGroupFragment extends Fragment {
 
     }
 
-    private void handleResponseJoin(Response respnose){
-        //todo
-      //  throw new UnsupportedOperationException();
-
+    private void handleResponseJoin(Response response){
+        Log.e(TAG, "Join group succeeded!: " + response.toString());
     }
 
     private void handleErrorJoin(Throwable error){
-        //todo
-       // throw new UnsupportedOperationException();
+        Log.e(TAG, "Join group error!: " + error.getMessage());
     }
 
     @Override
