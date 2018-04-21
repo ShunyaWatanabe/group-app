@@ -108,8 +108,6 @@ public class GroupsListFragment extends Fragment {
         getGroups();
         ivProfile.bringToFront();
 
-
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         rvGroups.setHasFixedSize(true);
@@ -127,8 +125,6 @@ public class GroupsListFragment extends Fragment {
         // specify an adapter (see also next example)
         RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
         rvGroups.setAdapter(rvGroupsAdapter);
-
-
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
