@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 public class Group {
 
-
-
     private String name;
     private String created_at;
     private ArrayList<User> members;
