@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 
+import com.google.android.gms.nearby.connection.ConnectionsClient;
 import com.groupapp.groupapp.groupapp.adapters.NumbersAdapter;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.model.Response;
@@ -48,7 +49,6 @@ public class CreateGroupFragment extends Fragment {
     private Button[] buttonList = new Button[12];
     private ArrayList<String> numList = new ArrayList<>(12);
     private String code = "----";
-
 
     ArrayAdapter<Button> arrayAdapter;
     NumbersAdapter numbersAdapter;
