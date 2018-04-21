@@ -79,6 +79,7 @@ public class AntechamberFragment extends Fragment {
 
     private void startDiscovery() {
         // Note: Discovery may fail. To keep this demo simple, we don't handle failures.
+        Log.e("OPPONENTS",opponents);
         connectionsClient.startDiscovery(
                 getActivity().getPackageName(), endpointDiscoveryCallback, new DiscoveryOptions(Constants.STRATEGY));
     }
@@ -97,6 +98,7 @@ public class AntechamberFragment extends Fragment {
                 public void onEndpointFound(String endpointId, DiscoveredEndpointInfo info) {
                     Log.i(TAG, "onEndpointFound: endpoint found, connecting");
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
+                    startDiscovery();
                 }
 
                 @Override
@@ -152,16 +154,9 @@ public class AntechamberFragment extends Fragment {
                 }
             };
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
