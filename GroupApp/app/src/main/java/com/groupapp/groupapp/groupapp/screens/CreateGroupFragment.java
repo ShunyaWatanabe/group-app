@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import com.groupapp.groupapp.groupapp.adapters.NumbersAdapter;
 import com.groupapp.groupapp.groupapp.R;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,9 @@ public class CreateGroupFragment extends Fragment {
 
     private Button[] buttonList = new Button[12];
     private ArrayList<String> numList = new ArrayList<>(12);
+    private String code = "";
+    private String codeText = "-     -     -     -";
+
 
     ArrayAdapter<Button> arrayAdapter;
     NumbersAdapter numbersAdapter;
@@ -70,7 +75,7 @@ public class CreateGroupFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void adapterToKeyboard(){
+    private void setAdapterToKeyboard(){
         for (int i = 0; i < 12; i++) {
             Button button = new Button(getContext());
             button.setTextSize(15);
@@ -83,15 +88,31 @@ public class CreateGroupFragment extends Fragment {
         }
         //i think there is something wrong with the code here with arrayadapter on buttons, but I don't know how to fix it.
         //arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, buttonList);
-        numbersAdapter = new NumbersAdapter(getContext(), android.R.layout.simple_list_item_1, numList);
+        numbersAdapter = new NumbersAdapter(getActivity());
 
         keyboard.setNumColumns(3);
         keyboard.setAdapter(numbersAdapter);
-        keyboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Log.e("button clicked", "position: " + position);
+        keyboard.setOnItemClickListener((parent, v, position, id) -> {
+            Log.e("button clicked", "position: " + position);
+            System.out.print("button clicked");
+            String num = Integer.toString(position+1);
+            switch (num) {
+                case "10":
+                    // do nothing
+                    break;
+                case "12":
+                    code = code.substring(0, code.length() - 1);
+                    codeText = "-     -     -     -";
+                    break;
+                default:
+                    if (num.equals("11")) {
+                        num = "0";
+                    }
+                    code = code.concat(num);
+                    codeText = codeText.replaceFirst("-", num);
+                    break;
             }
+            inputDigit.setText(codeText);
         });
     }
 
@@ -102,9 +123,8 @@ public class CreateGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
         ButterKnife.bind(this,view);
 
-
         //I want to set an adapter to keyboard here
-        adapterToKeyboard();
+        setAdapterToKeyboard();
 
         return view;
     }
