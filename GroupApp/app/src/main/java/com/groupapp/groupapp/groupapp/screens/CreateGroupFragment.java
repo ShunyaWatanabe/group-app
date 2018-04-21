@@ -206,9 +206,9 @@ public class CreateGroupFragment extends Fragment {
 
         ft.addToBackStack("CreateGroupFragment");
 
-        ChatPageFragment fragment = new ChatPageFragment();
+        AntechamberFragment fragment = new AntechamberFragment();
         fragment.setArguments(bundle);
-        ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+        ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
 
         ft.commit();
 
