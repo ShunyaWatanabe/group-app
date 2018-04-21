@@ -19,8 +19,8 @@ import butterknife.ButterKnife;
 public class UserInfoFragment extends Fragment {
     public static final String TAG = UserInfoFragment.class.getSimpleName();
 
-    @BindView(R.id.tv_user_name)
-    TextView tvUserName;
+    @BindView(R.id.et_user_name)
+    TextView etUserName;
     @BindView(R.id.tv_user_key)
     TextView tvUserKey;
 
@@ -45,7 +45,7 @@ public class UserInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
         ButterKnife.bind(this,view);
 
-        tvUserName.setText(Constants.loggedUser.getName());
+        etUserName.setText(Constants.loggedUser.getName());
         tvUserKey.setText(Constants.loggedUser.getPrivate_key());
         return view;
     }
