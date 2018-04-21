@@ -88,13 +88,15 @@ public class CreateGroupFragment extends Fragment {
             //send code to server
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
-                    Constants.getName(getActivity())).joinGroup(Constants.loggedUser,code.substring(0,3))
+                    Constants.getName(getActivity())).joinGroup(Constants.loggedUser)
+                    //code
                     .observeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponseJoin, this::handleErrorJoin));
 
             //transfer to intermediatery page
+            code = "----";
             replaceFragment();
 
         }
