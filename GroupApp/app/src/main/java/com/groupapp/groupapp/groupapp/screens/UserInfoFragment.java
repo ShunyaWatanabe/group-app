@@ -108,11 +108,11 @@ public class UserInfoFragment extends Fragment {
         String newName = etUserName.getText().toString();
 
         if (!newName.equals(Constants.loggedUser.getName())){
-            String[] temp ={newName,Constants.loggedUser.getPrivate_key()};
+            String[] name_private_key ={newName,Constants.loggedUser.getPrivate_key()};
 
             mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
-                    Constants.getName(getActivity())).changeUserName(temp)
+                    Constants.getName(getActivity())).changeUserName(name_private_key)
                     .observeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())

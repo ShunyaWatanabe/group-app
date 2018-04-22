@@ -4,15 +4,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.groupapp.groupapp.groupapp.R;
+import com.groupapp.groupapp.groupapp.model.Response;
+import com.groupapp.groupapp.groupapp.network.NetworkUtil;
+import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class JoinGroupFragment extends Fragment {
     public static final String TAG = JoinGroupFragment.class.getSimpleName();
@@ -22,9 +29,7 @@ public class JoinGroupFragment extends Fragment {
     @BindView(R.id.tv_code_info)
     TextView tvCodeInfo;
 
-    public JoinGroupFragment(){
-        // constructor
-    }
+    private CompositeSubscription mSubscriptions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,25 @@ public class JoinGroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_join_group, container, false);
         ButterKnife.bind(this,view);
+
+        mSubscriptions = new CompositeSubscription();
+        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getInvitationCode("group_id") //todo
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetInvitationCode, this::handleErrorGetInvitationCode));
         return view;
+    }
+
+    private void handleResponseGetInvitationCode(Response response){
+        Log.e(TAG, "Get Invitation Code succeeds");
+        tvCode.setText(response.getMessage());
+    }
+
+    private void handleErrorGetInvitationCode(Throwable err){
+        Log.e(TAG, "Get Invitation Code fails");
     }
 
     @Override

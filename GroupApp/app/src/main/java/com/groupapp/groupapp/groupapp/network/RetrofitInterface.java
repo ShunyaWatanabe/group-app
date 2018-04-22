@@ -42,8 +42,8 @@ public interface RetrofitInterface {
     @POST("groups/joingroup")
     Observable<Response> joinGroup(@Body User user);
 
-    @GET("groups/getinvitationcode")
-    Observable<Integer> getInvitationCode();
+    @GET("groups/{getinvitationcode}")
+    Observable<Response> getInvitationCode(@Path("getinvitationcode") String group_id);
 
     @POST("groups/leavegroup")
     Observable<Response> leaveGroup();

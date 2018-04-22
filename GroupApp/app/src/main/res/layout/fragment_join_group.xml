@@ -15,7 +15,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="@string/code"
+            android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
