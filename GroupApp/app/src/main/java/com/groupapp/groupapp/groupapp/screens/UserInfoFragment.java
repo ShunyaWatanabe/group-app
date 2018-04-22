@@ -70,7 +70,6 @@ public class UserInfoFragment extends Fragment {
 
         etUserName.setText(Constants.loggedUser.getName());
         tvUserKey.setText(Constants.loggedUser.getPrivate_key());
-        etUserName.setEnabled(false);
 
         return view;
     }
@@ -87,11 +86,12 @@ public class UserInfoFragment extends Fragment {
     }
 
 
-    //THIS DOES NOT WORK!!!!!!!!!!!!
+
     @OnClick(R.id.et_user_name)
     public void enableChangeName(){
-        etUserName.setEnabled(true);
+
         Log.e(TAG, "click edit text");
+        etUserName.setCursorVisible(true);
     }
 
 
@@ -99,8 +99,12 @@ public class UserInfoFragment extends Fragment {
     public void saveChange(){
         Log.e(TAG, "click backgrond");
 
-
         etUserName.setEnabled(false);
+        etUserName.setEnabled(true);
+        etUserName.setCursorVisible(false);
+
+
+
         String newName = etUserName.getText().toString();
 
         if (!newName.equals(Constants.loggedUser.getName())){
@@ -115,8 +119,6 @@ public class UserInfoFragment extends Fragment {
                     .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
 
             }
-
-
 
     }
 
