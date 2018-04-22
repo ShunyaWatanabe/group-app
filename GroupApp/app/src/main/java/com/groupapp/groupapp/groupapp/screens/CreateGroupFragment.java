@@ -142,7 +142,7 @@ public class CreateGroupFragment extends Fragment {
             buttonList[i] = button;
             numList.add(Integer.toString(i));
         }
-        
+
         numbersAdapter = new NumbersAdapter(getActivity());
 
         keyboard.setNumColumns(3);
