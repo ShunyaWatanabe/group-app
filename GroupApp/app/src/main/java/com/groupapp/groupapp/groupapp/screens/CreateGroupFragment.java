@@ -142,7 +142,8 @@ public class CreateGroupFragment extends Fragment {
             buttonList[i] = button;
             numList.add(Integer.toString(i));
         }
-
+        //i think there is something wrong with the code here with arrayadapter on buttons, but I don't know how to fix it.
+        //arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, buttonList);
         numbersAdapter = new NumbersAdapter(getActivity());
 
         keyboard.setNumColumns(3);
