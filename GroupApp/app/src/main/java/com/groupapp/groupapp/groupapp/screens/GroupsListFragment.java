@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -147,6 +148,13 @@ public class GroupsListFragment extends Fragment {
         // specify an adapter (see also next example)
         RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
         rvGroups.setAdapter(rvGroupsAdapter);
+        /*rvGroups.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
+            @Override
+            void onTouchEvent(RecyclerView rv, MotionEvent e){
+
+            }
+        }
+        );*/
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
