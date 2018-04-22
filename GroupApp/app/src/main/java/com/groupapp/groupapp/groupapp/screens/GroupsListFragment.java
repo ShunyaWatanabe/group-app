@@ -153,7 +153,7 @@ public class GroupsListFragment extends Fragment {
                 new RecyclerItemClickListener(getContext(), rvGroups ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         // do whatever
-                        System.out.println("group clicked "+position);
+                        replaceFragment("ChatPageFragment");
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -211,19 +211,28 @@ public class GroupsListFragment extends Fragment {
 
         ft.addToBackStack("GroupsListFragment");
 
-        if (fragmentString.equals("CreateGroupFragment")) {
-            CreateGroupFragment fragment = new CreateGroupFragment();
-            fragment.setArguments(bundle);
-            ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
-
-            ft.commit();
-
-        } else if (fragmentString.equals("UserInfoFragment")) {
-            UserInfoFragment fragment = new UserInfoFragment();
-            fragment.setArguments(bundle);
-            ft.replace(R.id.fragmentFrame, fragment, UserInfoFragment.TAG);
-
-            ft.commit();
+        switch (fragmentString) {
+            case "CreateGroupFragment": {
+                CreateGroupFragment fragment = new CreateGroupFragment();
+                fragment.setArguments(bundle);
+                ft.replace(R.id.fragmentFrame, fragment, CreateGroupFragment.TAG);
+                ft.commit();
+                break;
+            }
+            case "UserInfoFragment": {
+                UserInfoFragment fragment = new UserInfoFragment();
+                fragment.setArguments(bundle);
+                ft.replace(R.id.fragmentFrame, fragment, UserInfoFragment.TAG);
+                ft.commit();
+                break;
+            }
+            case "ChatPageFragment": {
+                ChatPageFragment fragment = new ChatPageFragment();
+                fragment.setArguments(bundle);
+                ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+                ft.commit();
+                break;
+            }
         }
     }
 
