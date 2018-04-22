@@ -99,7 +99,8 @@ public class CreateGroupFragment extends Fragment {
     @OnClick(R.id.b_joinGroup)
     public void joinGroup(){
 
-        if (code.indexOf("-")==-1){
+
+        if (!code.contains("-")){
             //send code to server
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
