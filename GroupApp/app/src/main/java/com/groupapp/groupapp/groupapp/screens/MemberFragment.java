@@ -1,10 +1,12 @@
 package com.groupapp.groupapp.groupapp.screens;
 
 
-import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,9 +71,7 @@ public class MemberFragment extends Fragment {
         //todo client user side remove group
         //response.getId(); //this is the group ID
         //todo go back to chat list fragment
-        FragmentManager fm = getActivity().getFragmentManager();
-        fm.popBackStack("GroupsListFragment", 0);
-
+        getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void handleErrorLeaveGroup(Throwable err){
@@ -102,5 +102,17 @@ public class MemberFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    private LogInFragment.OnFragmentInteractionListener mListener;
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 }
 
