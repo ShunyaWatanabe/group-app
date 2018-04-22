@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-/**
- * Created by Tomek on 2018-04-04.
- */
 
 public class User implements Parcelable {
 

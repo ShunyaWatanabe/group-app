@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:maxLength="15"
             android:backgroundTint="@color/colorPrimary"
             android:hint="@string/user_name_hint" />
 

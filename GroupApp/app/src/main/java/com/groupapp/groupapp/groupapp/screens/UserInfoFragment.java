@@ -100,7 +100,6 @@ public class UserInfoFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
-
             }
 
     }
