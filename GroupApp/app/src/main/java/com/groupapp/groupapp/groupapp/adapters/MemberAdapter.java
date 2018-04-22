@@ -13,19 +13,24 @@ import android.app.ActionBar.LayoutParams;
 
 
 import com.groupapp.groupapp.groupapp.model.Group;
+import com.groupapp.groupapp.groupapp.model.User;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class MemberAdapter extends BaseAdapter {
     Context context;
-    Group group;
+    ArrayList<User> members;
 
-    public MemberAdapter(Context c, Group g) {
-        context = c;
-        group = g;
+
+    public MemberAdapter(Context c, ArrayList<User> members) {
+        this.context = c;
+        this.members = members;
     }
 
     @Override
     public int getCount() {
-        return group.getMembers().size();
+        return members.size();
     }
 
     @Override
@@ -43,7 +48,7 @@ public class MemberAdapter extends BaseAdapter {
         TextView textView;
         if (convertView == null) {
             textView = new TextView(context);
-            textView.setText(group.getMembers().get(position).getName());
+            textView.setText(members.get(position).getName());
             textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         } else {
             textView = (TextView) convertView;

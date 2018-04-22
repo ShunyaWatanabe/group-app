@@ -8,22 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.model.Response;
-import com.groupapp.groupapp.groupapp.model.User;
+
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
-import butterknife.OnItemClick;
-import butterknife.OnTouch;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -33,7 +28,6 @@ public class UserInfoFragment extends Fragment {
 
 
     private CompositeSubscription mSubscriptions;
-//    private boolean changed = true;
 
     @BindView(R.id.et_user_name)
     TextView etUserName;
@@ -41,19 +35,12 @@ public class UserInfoFragment extends Fragment {
     TextView tvUserKey;
 
 
-    public UserInfoFragment(){
-        // constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         mSubscriptions = new CompositeSubscription();
-
-
-
 
 
     }
@@ -78,7 +65,7 @@ public class UserInfoFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+
     }
 
 

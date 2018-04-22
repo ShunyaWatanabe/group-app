@@ -7,13 +7,9 @@ public class Group {
 
     private String name;
     private String id;
-    private String created_at;
+//    private String created_at;
     private ArrayList<User> members;
     private ArrayList<Message> conversation;
-
-    public Group(){
-
-    }
 
     public String getName() {
         return name;
@@ -23,20 +19,12 @@ public class Group {
         this.name = name;
     }
 
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
     public ArrayList<User> getMembers() {
         return members;
     }
 
-    public void setMembers(ArrayList<User> members) {
-        this.members = members;
+    public void addMembers(User newMember) {
+        this.members.add(newMember);
     }
 
     public ArrayList<Message> getConversation() {
@@ -47,12 +35,7 @@ public class Group {
         this.conversation = conversation;
     }
 
-
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

@@ -2,7 +2,6 @@ package com.groupapp.groupapp.groupapp.screens;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,7 +23,6 @@ import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.io.IOException;
-import java.sql.Time;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +43,6 @@ public class LogInFragment extends Fragment {
     Button bStart;
     @BindView(R.id.et_username)
     EditText etUsername;
-
 
 
     @OnClick(R.id.et_username)
