@@ -7,7 +7,6 @@ public class Group {
 
     private String name;
     private String id;
-//  private String created_at;
     private ArrayList<User> members;
     private ArrayList<Message> conversation;
 
