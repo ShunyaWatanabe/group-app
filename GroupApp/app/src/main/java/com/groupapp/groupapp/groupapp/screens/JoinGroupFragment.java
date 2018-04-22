@@ -30,10 +30,24 @@ public class JoinGroupFragment extends Fragment {
     TextView tvCodeInfo;
 
     private CompositeSubscription mSubscriptions;
+    private String group_ID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //todo create groupID of the current group
+        group_ID = "send me the codes";
+
+        mSubscriptions = new CompositeSubscription();
+        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getInvitationCode(group_ID)
+                //i have to change here
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetInvitationCode, this::handleErrorGetInvitationCode));
     }
 
     @Override
@@ -42,22 +56,15 @@ public class JoinGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_join_group, container, false);
         ButterKnife.bind(this,view);
 
-        mSubscriptions = new CompositeSubscription();
-        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
-                Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).getInvitationCode("send me the codes") //todo
-                //i have to change here
-                .observeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetInvitationCode, this::handleErrorGetInvitationCode));
+        tvCode.setText("wait");
         return view;
     }
 
     private void handleResponseGetInvitationCode(Response response){
         Log.e(TAG, "Get Invitation Code succeeds");
         tvCode.setText(response.getMessage());
-        tvCodeInfo.setText("Code Active for 3 minutes");
+        tvCodeInfo.setText("Code Active for 5 minutes");
+
     }
 
     private void handleErrorGetInvitationCode(Throwable err){
