@@ -1,6 +1,7 @@
 package com.groupapp.groupapp.groupapp.screens;
 
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.v4.app.Fragment;
@@ -38,16 +39,20 @@ public class MemberFragment extends Fragment {
 
     private CompositeSubscription mSubscriptions;
 
+    private ArrayList<User> members = new ArrayList<>();
+    private String group_ID;
+
     @BindView(R.id.b_leaveGroup)
     Button bLeaveGroup;
     @BindView(R.id.gv_members)
     GridView gvMembers;
 
-    private ArrayList<User> members = new ArrayList<>();
-    private String group_ID;
 
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
+        // TO DO database transaction to erase this user from the group
+        //here i need to delete this person from the group
+
         String[] groupid_private_key = {Constants.loggedUser.getPrivate_key(),group_ID};
 
         mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
@@ -63,17 +68,16 @@ public class MemberFragment extends Fragment {
     private void handleResponseLeaveGroup(Response response){
         Log.e(TAG,"leave group succeed");
 
-
-
         //todo client user side remove group
         //response.getId(); //this is the group ID
         //todo go back to chat list fragment
+        //FragmentManager fm = getActivity().getFragmentManager();
+        //fm.popBackStack("GroupsListFragment", 0);
 
     }
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
-
     }
 
     //for the gridview I also need to link it to the profiles of people in the group
