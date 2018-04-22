@@ -50,8 +50,6 @@ public class MemberFragment extends Fragment {
 
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
-        // TO DO database transaction to erase this user from the group
-        //here i need to delete this person from the group
 
         String[] groupid_private_key = {Constants.loggedUser.getPrivate_key(),group_ID};
 
@@ -71,17 +69,14 @@ public class MemberFragment extends Fragment {
         //todo client user side remove group
         //response.getId(); //this is the group ID
         //todo go back to chat list fragment
-        //FragmentManager fm = getActivity().getFragmentManager();
-        //fm.popBackStack("GroupsListFragment", 0);
+        FragmentManager fm = getActivity().getFragmentManager();
+        fm.popBackStack("GroupsListFragment", 0);
 
     }
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
     }
-
-    //for the gridview I also need to link it to the profiles of people in the group
-
 
     @Override
     public void onCreate(Bundle savedInstanceState){
