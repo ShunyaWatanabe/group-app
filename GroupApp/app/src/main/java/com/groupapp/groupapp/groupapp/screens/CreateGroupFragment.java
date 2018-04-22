@@ -116,6 +116,7 @@ public class CreateGroupFragment extends Fragment {
 
     }
 
+    ///change the respons and error
     private void handleResponseJoin(Response response){
         Log.e(TAG, "Join group succeeded!: " + response.toString());
     }
