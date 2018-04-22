@@ -232,7 +232,10 @@ public class CreateGroupFragment extends Fragment {
 
         ft.addToBackStack("CreateGroupFragment");
 
+
         AntechamberFragment fragment = new AntechamberFragment();
+        //ChatPageFragment fragment = new ChatPageFragment(); //test
+
         fragment.setArguments(bundle);
         ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
 

@@ -25,7 +25,6 @@
             android:layout_below="@+id/tv_code"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="@string/code_info"
             android:textColor="@color/colorPrimaryDark" />
 
     </RelativeLayout>

@@ -45,7 +45,7 @@ public class JoinGroupFragment extends Fragment {
         mSubscriptions = new CompositeSubscription();
         mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).getInvitationCode("group_id") //todo
+                Constants.getName(getActivity())).getInvitationCode("send me the codes") //todo
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -56,6 +56,7 @@ public class JoinGroupFragment extends Fragment {
     private void handleResponseGetInvitationCode(Response response){
         Log.e(TAG, "Get Invitation Code succeeds");
         tvCode.setText(response.getMessage());
+        tvCodeInfo.setText("Code Active for 3 minutes");
     }
 
     private void handleErrorGetInvitationCode(Throwable err){
