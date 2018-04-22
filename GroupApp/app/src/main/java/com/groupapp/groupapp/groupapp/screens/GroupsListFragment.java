@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.adapters.GroupListAdapter;
+import com.groupapp.groupapp.groupapp.clickListeners.RecyclerItemClickListener;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.GroupsList;
 import com.groupapp.groupapp.groupapp.model.Response;
@@ -55,7 +56,7 @@ public class GroupsListFragment extends Fragment {
 
     android.support.v7.widget.SearchView svEvent;
 
-    public static ArrayList<Group> groupsList = new ArrayList<>();
+    public static ArrayList<Group> groupsList;
     private ProgressDialog progress;
     @BindView(R.id.tv_progressText)
     TextView progressText;
@@ -148,13 +149,19 @@ public class GroupsListFragment extends Fragment {
         // specify an adapter (see also next example)
         RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
         rvGroups.setAdapter(rvGroupsAdapter);
-        /*rvGroups.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener(){
-            @Override
-            void onTouchEvent(RecyclerView rv, MotionEvent e){
+        rvGroups.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), rvGroups ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        System.out.println("group clicked "+position);
+                    }
 
-            }
-        }
-        );*/
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                        System.out.println("group clicked long");
+                    }
+                })
+        );
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
@@ -231,6 +238,7 @@ public class GroupsListFragment extends Fragment {
         //for now not sure if it already download these data
 
         // create dummy group list
+        groupsList = new ArrayList<>();
         Group group = new Group();
         group.setName("Software Engineering");
         groupsList.add(group);
