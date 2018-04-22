@@ -1,6 +1,7 @@
 package com.groupapp.groupapp.groupapp.screens;
 
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.v4.app.Fragment;
@@ -33,10 +34,14 @@ public class MemberFragment extends Fragment {
     Button bLeaveGroup;
     @BindView(R.id.gv_members)
     GridView gvMembers;
+
+
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
-        throw new UnsupportedOperationException();
+        // TO DO database transaction to erase this user from the group
         //here i need to delete this person from the group
+        FragmentManager fm = getActivity().getFragmentManager();
+        fm.popBackStack("GroupsListFragment", 0);
     }
 
     //for the gridview I also need to link it to the profiles of people in the group
