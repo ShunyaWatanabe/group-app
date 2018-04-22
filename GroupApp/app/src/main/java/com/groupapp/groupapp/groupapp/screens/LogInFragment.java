@@ -58,7 +58,6 @@ public class LogInFragment extends Fragment {
         etUsername.setCursorVisible(false);
     }
 
-
     @OnClick(R.id.b_start)
     public void startApp(){
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
