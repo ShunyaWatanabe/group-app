@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.http.Body;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -45,6 +47,22 @@ public class LogInFragment extends Fragment {
     Button bStart;
     @BindView(R.id.et_username)
     EditText etUsername;
+
+
+
+    @OnClick(R.id.et_username)
+    public void enableChangeName(){
+        Log.e(TAG, "click edit text");
+        etUsername.setCursorVisible(true);
+    }
+
+    @OnClick(R.id.rl_login)
+    public void saveChange(){
+        etUsername.setEnabled(false);
+        etUsername.setEnabled(true);
+        etUsername.setCursorVisible(false);
+    }
+
 
     @OnClick(R.id.b_start)
     public void startApp(){

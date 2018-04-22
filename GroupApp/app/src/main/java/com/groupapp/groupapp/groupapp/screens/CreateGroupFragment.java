@@ -94,6 +94,8 @@ public class CreateGroupFragment extends Fragment {
     @BindView(R.id.gv_keyboard)
     GridView keyboard;
 
+
+    //here should not immediately create group and send response to server, should go to ant room
     @OnClick(R.id.b_joinGroup)
     public void joinGroup(){
 

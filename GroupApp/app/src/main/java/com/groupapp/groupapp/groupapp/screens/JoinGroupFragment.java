@@ -46,6 +46,7 @@ public class JoinGroupFragment extends Fragment {
         mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
                 Constants.getName(getActivity())).getInvitationCode("send me the codes") //todo
+                //i have to change here
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

@@ -41,10 +41,6 @@ public class UserInfoFragment extends Fragment {
     TextView tvUserKey;
 
 
-    @BindView(R.id.rl_userinfo)
-    RelativeLayout root;
-
-
     public UserInfoFragment(){
         // constructor
     }
