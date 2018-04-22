@@ -63,7 +63,7 @@ public class JoinGroupFragment extends Fragment {
     private void handleResponseGetInvitationCode(Response response){
         Log.e(TAG, "Get Invitation Code succeeds");
         tvCode.setText(response.getMessage());
-        tvCodeInfo.setText("Code Active for 3 minutes");
+        tvCodeInfo.setText("Code Active for 5 minutes");
 
     }
 
