@@ -3,6 +3,7 @@ package com.groupapp.groupapp.groupapp.screens;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -137,27 +139,27 @@ public class GroupsListFragment extends Fragment {
         //rvGroups.setLayoutManager(rvGroupsLayoutManager);
 
         // get string array of group names
-        ArrayList<String> groupNamesList = new ArrayList<>();
-        for (Group g: groupsList){
-            groupNamesList.add(g.getName());
-        }
+//        ArrayList<String> groupNamesList = new ArrayList<>();
+//        for (Group g: groupsList){
+//            groupNamesList.add(g.getName());
+//        }
 
         // specify an adapter (see also next example)
-        RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
-        rvGroups.setAdapter(rvGroupsAdapter);
-        rvGroups.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), rvGroups ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                        replaceFragment("ChatPageFragment");
-                    }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                        System.out.println("group clicked long");
-                    }
-                })
-        );
+//        RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
+//        rvGroups.setAdapter(rvGroupsAdapter);
+//        rvGroups.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getContext(), rvGroups ,new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override public void onItemClick(View view, int position) {
+//                        // do whatever
+//                        replaceFragment("ChatPageFragment");
+//                    }
+//
+//                    @Override public void onLongItemClick(View view, int position) {
+//                        // do whatever
+//                        System.out.println("group clicked long");
+//                    }
+//                })
+//        );
 
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
@@ -256,17 +258,52 @@ public class GroupsListFragment extends Fragment {
         group.setName("Operating Systems");
         groupsList.add(group);
 
-        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvGroups.getContext(),
+//                mLayoutManager.getOrientation());
+//
+//        rvGroups.addItemDecoration(dividerItemDecoration);
 
-        rvGroups.setAdapter(adapter);
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
+        rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
+
+        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+        rvGroups.setAdapter(adapter);
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribeOn(Schedulers.io())
 //                .subscribe(this::handleResponse, this::handleError));
+
+        if(groupsList==null){
+            progressText.setText(getResources().getString(R.string.nothing_found));
+            pbHeaderProgress.setVisibility(View.GONE);
+        }else{
+            headerProgress.setVisibility(View.GONE);
+            pbHeaderProgress.setVisibility(View.GONE);
+        }
+        swipeContainer.setRefreshing(false);
+    }
+
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            //If we don't want the last space
+//            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+//                outRect.bottom = verticalSpaceHeight;
+//            }
+            outRect.bottom = verticalSpaceHeight;
+        }
     }
 
     public void initSwipeRefresh() {

@@ -21,5 +21,6 @@
 
     <string name="input_placeholder">Write a message</string>
     <string name="group">GroupName</string>
+    <string name="nothing_found">Nothing found</string>
 
 </resources>
