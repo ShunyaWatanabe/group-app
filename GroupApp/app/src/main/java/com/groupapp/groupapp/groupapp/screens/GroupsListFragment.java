@@ -272,6 +272,11 @@ public class GroupsListFragment extends Fragment {
         rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
 
         GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+//        GroupAdapter adapter = new GroupAdapter(Constants.loggedUser.getGroups(), getContext(),getActivity());
+        //todo Tomasz I save the ArrayList<Group> groups to constants.loggeruser. You acn get it by calling get groups.
+        //todo But somehow there is a sequential bug. If you call the line commented above, it will return a nullpointer.
+        //todo it's trivial. Fix it.
+
         rvGroups.setAdapter(adapter);
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())
