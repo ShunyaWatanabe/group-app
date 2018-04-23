@@ -91,10 +91,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         Bundle b = new Bundle();
 //        b.putParcelable("event",event);
-//        b.putInt("position",position);
+        //b.putInt("position",position);
         b.putString("groupID", groupID);
 
-        ft.addToBackStack("EventsFragment");
+        ft.addToBackStack("GroupsListFragment");
 
         if(code==0){
             ChatPageFragment fragment = new ChatPageFragment();

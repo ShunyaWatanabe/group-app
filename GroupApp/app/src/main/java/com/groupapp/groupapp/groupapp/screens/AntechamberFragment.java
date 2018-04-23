@@ -143,13 +143,14 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     opponents+=connectionInfo.getEndpointName();
+                    Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
                 }
 
                 @Override
                 public void onConnectionResult(String endpointId, ConnectionResolution result) {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
-
+                        Log.i(TAG,"Endpoint id "+endpointId);
                         connectionsClient.stopDiscovery();
                         connectionsClient.stopAdvertising();
 
