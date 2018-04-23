@@ -11,7 +11,7 @@ public class User implements Parcelable {
     private String name;
     private String private_key;
     private String created_at;
-    private ArrayList<Group> groups;
+    private Group[] groups;
     private String token;
     private String fcm_token;
     private String color;
@@ -76,11 +76,11 @@ public class User implements Parcelable {
         this.fcm_token = fcm_token;
     }
 
-    public ArrayList<Group> getGroups() {
+    public Group[] getGroups() {
         return groups;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
+    public void setGroups(Group[] groups) {
         this.groups = groups;
     }
 
@@ -101,7 +101,7 @@ public class User implements Parcelable {
         dest.writeString(name);
         dest.writeString(private_key);
         dest.writeString(created_at);
-        dest.writeList(groups);
+        dest.writeArray(groups);
         dest.writeString(token);
         dest.writeString(fcm_token);
     }

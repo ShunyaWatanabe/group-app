@@ -104,13 +104,7 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        Log.e(TAG, (response.getGroups() instanceof Group[])+"");
-
-
-        Log.e(TAG, response.getGroups().length+"");
-
-
-
+        Constants.loggedUser.setGroups(response.getGroups());
     }
 
     private void handleErrorGetGroup(Throwable err){
