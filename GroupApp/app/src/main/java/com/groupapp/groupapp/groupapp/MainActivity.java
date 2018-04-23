@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         LogInFragment fragment = new LogInFragment();
         ft.replace(R.id.fragmentFrame, fragment, LogInFragment.TAG);
         ft.commit();
+        Log.e("Stack count", getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     @Override

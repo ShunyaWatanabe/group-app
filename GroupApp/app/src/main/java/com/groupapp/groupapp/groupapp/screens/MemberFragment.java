@@ -72,6 +72,7 @@ public class MemberFragment extends Fragment {
         //response.getId(); //this is the group ID
         //todo go back to chat list fragment
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     private void handleErrorLeaveGroup(Throwable err){

@@ -259,6 +259,7 @@ public class LogInFragment extends Fragment {
         ft.replace(R.id.fragmentFrame, fragment, GroupsListFragment.TAG);
 
         ft.commit();
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
 
     }
 

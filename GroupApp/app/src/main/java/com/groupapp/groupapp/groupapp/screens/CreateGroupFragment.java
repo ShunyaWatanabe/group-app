@@ -243,6 +243,7 @@ public class CreateGroupFragment extends Fragment {
         ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
 
         ft.commit();
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
 
     }
 

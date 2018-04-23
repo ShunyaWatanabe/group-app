@@ -234,6 +234,8 @@ public class GroupsListFragment extends Fragment {
                 break;
             }
         }
+
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     @Override

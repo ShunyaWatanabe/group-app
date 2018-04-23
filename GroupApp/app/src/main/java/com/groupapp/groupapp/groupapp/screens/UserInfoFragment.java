@@ -126,9 +126,13 @@ public class UserInfoFragment extends Fragment {
 
         GroupsListFragment fragment = new GroupsListFragment();
         fragment.setArguments(bundle);
+
         ft.replace(R.id.fragmentFrame, fragment, GroupsListFragment.TAG);
 
         ft.commit();
+        //test
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
+
 
     }
 }
