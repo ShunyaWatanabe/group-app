@@ -41,7 +41,9 @@ import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,7 +108,7 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        Constants.loggedUser.setGroups(response.getGroups());
+        Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
     }
 
     private void handleErrorGetGroup(Throwable err){
