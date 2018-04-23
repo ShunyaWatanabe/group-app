@@ -3,6 +3,7 @@ package com.groupapp.groupapp.groupapp.screens;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -262,12 +263,14 @@ public class GroupsListFragment extends Fragment {
 //
 //        rvGroups.addItemDecoration(dividerItemDecoration);
 
-        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
 
-        rvGroups.setAdapter(adapter);
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
+        rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
+
+        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+        rvGroups.setAdapter(adapter);
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .observeOn(AndroidSchedulers.mainThread())
@@ -282,6 +285,25 @@ public class GroupsListFragment extends Fragment {
             pbHeaderProgress.setVisibility(View.GONE);
         }
         swipeContainer.setRefreshing(false);
+    }
+
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            //If we don't want the last space
+//            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+//                outRect.bottom = verticalSpaceHeight;
+//            }
+            outRect.bottom = verticalSpaceHeight;
+        }
     }
 
     public void initSwipeRefresh() {
