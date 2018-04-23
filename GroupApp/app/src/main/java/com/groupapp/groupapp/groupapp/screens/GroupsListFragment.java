@@ -105,7 +105,7 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        //response.getGroups(), this is a String[] of all group ids
+        //response.getGroups(), this is a Group[] of all group ids
 
     }
 
