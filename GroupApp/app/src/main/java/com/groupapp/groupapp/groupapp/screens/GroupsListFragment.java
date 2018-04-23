@@ -30,6 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.adapters.GroupListAdapter;
 import com.groupapp.groupapp.groupapp.clickListeners.RecyclerItemClickListener;
+import com.groupapp.groupapp.groupapp.groups.GroupAdapter;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.GroupsList;
 import com.groupapp.groupapp.groupapp.model.Response;
@@ -127,18 +128,13 @@ public class GroupsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_groups_list, container, false);
         rvGroups = view.findViewById(R.id.list);
         ButterKnife.bind(this,view);
-//
-//        svEvent = (android.support.v7.widget.SearchView)view.findViewById(R.id.search_view);
+
         getGroups();
         ivProfile.bringToFront();
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        rvGroups.setHasFixedSize(true);
-
         // use a linear layout manager
-        RecyclerView.LayoutManager rvGroupsLayoutManager = new LinearLayoutManager(getContext());
-        rvGroups.setLayoutManager(rvGroupsLayoutManager);
+//        RecyclerView.LayoutManager rvGroupsLayoutManager = new LinearLayoutManager(getContext());
+        //rvGroups.setLayoutManager(rvGroupsLayoutManager);
 
         // get string array of group names
         ArrayList<String> groupNamesList = new ArrayList<>();
@@ -260,6 +256,12 @@ public class GroupsListFragment extends Fragment {
         group.setName("Operating Systems");
         groupsList.add(group);
 
+        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+
+        rvGroups.setAdapter(adapter);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
+        rvGroups.setLayoutManager(mLayoutManager);
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .observeOn(AndroidSchedulers.mainThread())

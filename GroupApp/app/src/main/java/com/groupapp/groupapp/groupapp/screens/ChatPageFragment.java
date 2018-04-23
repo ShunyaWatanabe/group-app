@@ -96,6 +96,10 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String id = getArguments().getString("groupID");
+
+        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA
+
         MemberData data = new MemberData(getRandomName(), getRandomColor());
 
 
