@@ -203,10 +203,20 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onDisconnected(String endpointId) {
                     Log.i(TAG, "onDisconnected: disconnected from the opponent");
-                    //resetGame();
-                    //findEndpoint and render
+                    findAndDeleteEndpoint(endpointId);
                 }
             };
+
+    private void findAndDeleteEndpoint(String endpoint){
+        for(ConnectingUser user: joiningUsers){
+            if(user.getEndpoint()==endpoint) {
+                joiningUsers.remove(user);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        }
+        return;
+    }
 
     // Callbacks for receiving payloads
     //ADD SENDING MY PRIVATE KEY
