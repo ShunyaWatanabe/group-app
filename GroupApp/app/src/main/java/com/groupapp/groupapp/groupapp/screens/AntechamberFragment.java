@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.adapters.JoiningUserAdapter;
 import com.groupapp.groupapp.groupapp.model.ConnectingUser;
+import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.util.ArrayList;
@@ -78,7 +79,8 @@ public class AntechamberFragment extends Fragment {
 
     @OnClick(R.id.b_createGroupAntechamber)
     public void createGroup(){
-
+        //new Group();
+        //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
     }
 
     public AntechamberFragment() {
