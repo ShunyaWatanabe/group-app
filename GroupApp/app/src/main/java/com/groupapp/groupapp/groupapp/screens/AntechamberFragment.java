@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.subscriptions.CompositeSubscription;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -65,12 +66,20 @@ public class AntechamberFragment extends Fragment {
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
+    String tempName;
 
     ArrayList<ConnectingUser> joiningUsers = new ArrayList<ConnectingUser>();
     JoiningUserAdapter adapter;
 
     @BindView(R.id.gv_joining_users)
     GridView gvJoiningUsers;
+    @BindView(R.id.b_createGroupAntechamber)
+    Button bCreateGroup;
+
+    @OnClick(R.id.b_createGroupAntechamber)
+    public void createGroup(){
+
+    }
 
     public AntechamberFragment() {
         // Required empty public constructor
@@ -170,17 +179,8 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
-                    //Checking for more users
-                    joiningUsers.add(new ConnectingUser("kupa1",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa2",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa3",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa4",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa5",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa6",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa7",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa8",endpointId));
-                    joiningUsers.add(new ConnectingUser(connectionInfo.getEndpointName(),endpointId));
-                    //INNA OPCJA TO ZROBIC TABELE KTORA CALY CZAS SIE REGENERUJE PRZEZ TWORZENIE ODPWOIEDNICH REAKCJI NA DOLACZAJACYCH I ODLACZAJACYCH USEROW
+                    tempName = connectionInfo.getEndpointName();
+                    sendPaylod(endpointId);
                 }
 
                 @Override
@@ -189,8 +189,18 @@ public class AntechamberFragment extends Fragment {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
 
-                        connectionsClient.stopDiscovery();
-                        connectionsClient.stopAdvertising();
+//                        connectionsClient.stopDiscovery();
+//                        connectionsClient.stopAdvertising();
+                        //Checking for more users
+                        joiningUsers.add(new ConnectingUser("kupa1",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa2",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa3",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa4",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa5",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa6",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa7",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa8",endpointId));
+                        joiningUsers.add(new ConnectingUser(tempName,endpointId));
 
                         adapter.notifyDataSetChanged();
 
@@ -203,20 +213,9 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onDisconnected(String endpointId) {
                     Log.i(TAG, "onDisconnected: disconnected from the opponent");
-                    findAndDeleteEndpoint(endpointId);
+                    deleteByEndpoint(findEndpoint(endpointId));
                 }
             };
-
-    private void findAndDeleteEndpoint(String endpoint){
-        for(ConnectingUser user: joiningUsers){
-            if(user.getEndpoint()==endpoint) {
-                joiningUsers.remove(user);
-                adapter.notifyDataSetChanged();
-                return;
-            }
-        }
-        return;
-    }
 
     // Callbacks for receiving payloads
     //ADD SENDING MY PRIVATE KEY
@@ -225,6 +224,9 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
                     Log.i(TAG,"payloadReceived");
+                    //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT
+                    addKey( new String(payload.asBytes(),UTF_8),findEndpoint(endpointId));
+                    Log.i(TAG,"USER KEY "+findEndpoint(endpointId).toString());
                     //opponentChoice = GameChoice.valueOf(new String(payload.asBytes(), UTF_8));
                 }
 
@@ -234,14 +236,43 @@ public class AntechamberFragment extends Fragment {
                 }
             };
 
-    public void render(){
-
-        for(ConnectingUser joiner : joiningUsers){
-            final Button b = new Button(getContext());
-            b.setText(joiner.getName());
-            gvJoiningUsers.addView(b);
-        }
+    private void addKey(String key, ConnectingUser user){
+        user.setKey(key);
     }
+
+    private ConnectingUser findEndpoint(String endpoint){
+        Log.i(TAG,"In findAndDelete");
+        for(ConnectingUser user: joiningUsers){
+            if(user.getEndpoint().equals(endpoint)){
+                Log.i(TAG,"user found!");
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private void deleteByEndpoint(ConnectingUser user){
+        //                Log.i(TAG,"Users after delete " + joiningUsers.toString());
+        joiningUsers.remove(user);
+        adapter.notifyDataSetChanged();
+//                Log.i(TAG,"Users after delete " + joiningUsers.toString());
+        return;
+    }
+
+    private void sendPaylod(String otherEndpoint){
+        connectionsClient.sendPayload(
+                otherEndpoint, Payload.fromBytes(Constants.loggedUser.getPrivate_key().getBytes(UTF_8)));
+
+    }
+
+//    public void render(){
+//
+//        for(ConnectingUser joiner : joiningUsers){
+//            final Button b = new Button(getContext());
+//            b.setText(joiner.getName());
+//            gvJoiningUsers.addView(b);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -251,7 +282,14 @@ public class AntechamberFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        connectionsClient.stopAdvertising();
+        connectionsClient.stopDiscovery();
         mListener = null;
+    }
+
+    public void replaceFragment(){
+        connectionsClient.stopAdvertising();
+        connectionsClient.stopDiscovery();
     }
 
     public interface OnFragmentInteractionListener {
