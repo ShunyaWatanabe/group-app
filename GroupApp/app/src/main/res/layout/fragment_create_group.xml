@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_groupCreate"
             android:gravity="center_horizontal"
-            android:padding="35dp">
+            android:padding="30dp">
 
             <TextView
                 android:id="@+id/tv_inputDigit_1"
@@ -90,17 +90,40 @@
         </GridView>
 
 
-        <Button
-            android:id="@+id/b_joinGroup"
-            android:layout_below="@+id/gv_keyboard"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textColor="@color/colorWhite"
+            android:layout_below="@+id/gv_keyboard"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="@string/join_group" />
+            android:gravity="center_horizontal">
+
+            <Button
+
+
+                android:id="@+id/b_createGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorPrimary"
+                android:layout_marginRight="32dp"
+                android:gravity="center"
+                android:text="@string/new_group" />
+
+            <Button
+                android:id="@+id/b_joinInvite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:layout_marginLeft="32dp"
+                android:text="@string/join_invite" />
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
