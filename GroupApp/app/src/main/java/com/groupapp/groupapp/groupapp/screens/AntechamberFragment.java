@@ -12,6 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.AdvertisingOptions;
@@ -27,8 +33,13 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.groupapp.groupapp.groupapp.R;
+import com.groupapp.groupapp.groupapp.adapters.JoiningUserAdapter;
+import com.groupapp.groupapp.groupapp.model.ConnectingUser;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.subscriptions.CompositeSubscription;
 
@@ -47,12 +58,19 @@ public class AntechamberFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     public static final String TAG = AntechamberFragment.class.getSimpleName();
 
+
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
     private String code;
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
+
+    ArrayList<ConnectingUser> joiningUsers = new ArrayList<ConnectingUser>();
+    JoiningUserAdapter adapter;
+
+    @BindView(R.id.gv_joining_users)
+    GridView gvJoiningUsers;
 
     public AntechamberFragment() {
         // Required empty public constructor
@@ -81,6 +99,15 @@ public class AntechamberFragment extends Fragment {
         ButterKnife.bind(this,view);
         Log.e(TAG,"is connectionsClient initliaized");
         Log.e(TAG,connectionsClient.toString());
+
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setLayoutParams(new GridView.LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                android.view.ViewGroup.LayoutParams.FILL_PARENT));
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        adapter = new JoiningUserAdapter(getContext(),joiningUsers);
+        gvJoiningUsers.setAdapter(adapter);
+
         startAdvertising();
         startDiscovery();
         return view;
@@ -142,8 +169,18 @@ public class AntechamberFragment extends Fragment {
                 public void onConnectionInitiated(String endpointId, ConnectionInfo connectionInfo) {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
-                    opponents+=connectionInfo.getEndpointName();
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
+                    //Checking for more users
+                    joiningUsers.add(new ConnectingUser("kupa1",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa2",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa3",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa4",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa5",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa6",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa7",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa8",endpointId));
+                    joiningUsers.add(new ConnectingUser(connectionInfo.getEndpointName(),endpointId));
+                    //INNA OPCJA TO ZROBIC TABELE KTORA CALY CZAS SIE REGENERUJE PRZEZ TWORZENIE ODPWOIEDNICH REAKCJI NA DOLACZAJACYCH I ODLACZAJACYCH USEROW
                 }
 
                 @Override
@@ -151,13 +188,13 @@ public class AntechamberFragment extends Fragment {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
+
                         connectionsClient.stopDiscovery();
                         connectionsClient.stopAdvertising();
 
-                        //opponentEndpointId = endpointId;
-                        //setOpponentName(opponentName);
-                        //setStatusText(getString(R.string.status_connected));
-                        //setButtonState(true);
+                        adapter.notifyDataSetChanged();
+
+                        //render();
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
                     }
@@ -167,10 +204,12 @@ public class AntechamberFragment extends Fragment {
                 public void onDisconnected(String endpointId) {
                     Log.i(TAG, "onDisconnected: disconnected from the opponent");
                     //resetGame();
+                    //findEndpoint and render
                 }
             };
 
     // Callbacks for receiving payloads
+    //ADD SENDING MY PRIVATE KEY
     private final PayloadCallback payloadCallback =
             new PayloadCallback() {
                 @Override
@@ -184,6 +223,15 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG,"payloadReceivedUpdate");
                 }
             };
+
+    public void render(){
+
+        for(ConnectingUser joiner : joiningUsers){
+            final Button b = new Button(getContext());
+            b.setText(joiner.getName());
+            gvJoiningUsers.addView(b);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {

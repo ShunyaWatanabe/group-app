@@ -1,12 +1,10 @@
-package com.groupapp.groupapp.groupapp.groups;
+package com.groupapp.groupapp.groupapp.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.screens.ChatPageFragment;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

@@ -22,5 +22,6 @@
     <string name="input_placeholder">Write a message</string>
     <string name="group">GroupName</string>
     <string name="nothing_found">Nothing found</string>
+    <string name="waiting_antechamber">Waiting for other users to join... press \"Create\" when ready</string>
 
 </resources>

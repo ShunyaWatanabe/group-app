@@ -2,7 +2,6 @@ package com.groupapp.groupapp.groupapp.screens;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,17 +10,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -30,13 +26,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.groupapp.groupapp.groupapp.R;
-import com.groupapp.groupapp.groupapp.adapters.GroupListAdapter;
-import com.groupapp.groupapp.groupapp.clickListeners.RecyclerItemClickListener;
-import com.groupapp.groupapp.groupapp.groups.GroupAdapter;
+import com.groupapp.groupapp.groupapp.adapters.GroupAdapter;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.GroupsList;
 import com.groupapp.groupapp.groupapp.model.Response;
-import com.groupapp.groupapp.groupapp.model.User;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
@@ -134,33 +127,6 @@ public class GroupsListFragment extends Fragment {
         getGroups();
         ivProfile.bringToFront();
 
-        // use a linear layout manager
-//        RecyclerView.LayoutManager rvGroupsLayoutManager = new LinearLayoutManager(getContext());
-        //rvGroups.setLayoutManager(rvGroupsLayoutManager);
-
-        // get string array of group names
-//        ArrayList<String> groupNamesList = new ArrayList<>();
-//        for (Group g: groupsList){
-//            groupNamesList.add(g.getName());
-//        }
-
-        // specify an adapter (see also next example)
-//        RecyclerView.Adapter rvGroupsAdapter = new GroupListAdapter(groupNamesList.toArray(new String[groupsList.size()]));
-//        rvGroups.setAdapter(rvGroupsAdapter);
-//        rvGroups.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getContext(), rvGroups ,new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override public void onItemClick(View view, int position) {
-//                        // do whatever
-//                        replaceFragment("ChatPageFragment");
-//                    }
-//
-//                    @Override public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                        System.out.println("group clicked long");
-//                    }
-//                })
-//        );
-
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getString(R.string.searching));
         progress.setCancelable(false);
@@ -257,13 +223,6 @@ public class GroupsListFragment extends Fragment {
         group = new Group();
         group.setName("Operating Systems");
         groupsList.add(group);
-
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvGroups.getContext(),
-//                mLayoutManager.getOrientation());
-//
-//        rvGroups.addItemDecoration(dividerItemDecoration);
-
-
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
@@ -375,55 +334,5 @@ public class GroupsListFragment extends Fragment {
         } else {
 
         }
-    }
-
-//    private void initSearchView(){
-//        svEvent.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-//
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                getSearchedEvents(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//
-//        svEvent.setOnCloseListener(() -> {
-//            progress.show();
-//            getGroups();
-//            return false;
-//        });
-//    }
-
-    private void getSearchedEvents(String query) {
-        progress.show();
-//
-//        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEventsSearch(query)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(this::handleResponseSearchedEvents, this::handleError));
-    }
-
-    private void handleResponseSearchedEvents(GroupsList events) {
-//        progress.dismiss();
-//
-//        Log.e(TAG, "Events!");
-//
-//        if(events.getToken() != null)
-//            Constants.saveAccessToken(getActivity(), events.getToken());
-//
-//        if(events.getEvents()==null || events.getEvents().size() == 0)
-//            eventList = new ArrayList<>();
-//        else
-//            eventList = events.getEvents();
-//
-//        EventAdapter adapter = new EventAdapter(eventList, getContext(), getActivity());
-//        lvEvents.setAdapter(adapter);
-
     }
 }
