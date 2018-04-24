@@ -34,7 +34,9 @@ import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,12 +101,12 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        //response.getGroups(), this is a Group[] of all group ids
-
+        Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
     }
 
     private void handleErrorGetGroup(Throwable err){
         Log.e(TAG, "Get groups fail!");
+        Log.e(TAG, err.getMessage());
     }
 
     @Override
@@ -229,6 +231,11 @@ public class GroupsListFragment extends Fragment {
         rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
 
         GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+//        GroupAdapter adapter = new GroupAdapter(Constants.loggedUser.getGroups(), getContext(),getActivity());
+        //todo Tomasz I save the ArrayList<Group> groups to constants.loggeruser. You acn get it by calling get groups.
+        //todo But somehow there is a sequential bug. If you call the line commented above, it will return a nullpointer.
+        //todo it's trivial. Fix it.
+
         rvGroups.setAdapter(adapter);
 //        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
 //                .observeOn(AndroidSchedulers.mainThread())

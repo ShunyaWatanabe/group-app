@@ -1,5 +1,7 @@
 package com.groupapp.groupapp.groupapp.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**

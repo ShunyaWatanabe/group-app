@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Group {
 
     private String name;
-    private String id;
+    private String _id;
     private ArrayList<User> members;
     private ArrayList<Message> conversation;
 
@@ -35,6 +35,6 @@ public class Group {
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 }

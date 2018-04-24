@@ -12,26 +12,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 
-import com.google.android.gms.nearby.connection.ConnectionsClient;
 import com.groupapp.groupapp.groupapp.adapters.NumbersAdapter;
 import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.model.Response;
-import com.groupapp.groupapp.groupapp.model.User;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.lang.StringBuilder;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -76,8 +70,7 @@ public class CreateGroupFragment extends Fragment {
 
     }
 
-    @BindView(R.id.b_joinGroup)
-    Button join;
+
 
     @BindView(R.id.tv_inputDigit_1)
     TextView inputDigit1;
@@ -94,30 +87,65 @@ public class CreateGroupFragment extends Fragment {
     @BindView(R.id.gv_keyboard)
     GridView keyboard;
 
+    @OnClick(R.id.b_joinInvite)
+    public void joinInvitation(){
+
+        if (!code.contains("-")){
+            //send code to server
+
+            String [] private_key_invitation_code = {Constants.loggedUser.getPrivate_key(),code};
+            mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                    Constants.getRefreshToken(getActivity()),
+                    Constants.getName(getActivity())).joinInvite(private_key_invitation_code)
+                    //send code to the server and join by invitation
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(this::handleResponseJoin, this::handleErrorJoin));
+
+            code = "----";
+            //replaceFragment();
+
+            //todo here we need to go into the new group;
+
+        }
+    }
+
 
     //here should not immediately create group and send response to server, should go to ant room
-    @OnClick(R.id.b_joinGroup)
-    public void joinGroup(){
+    @OnClick(R.id.b_createGroup)
+    public void createNewGroup(){
 
 
         if (!code.contains("-")){
             //send code to server
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
-                    Constants.getName(getActivity())).joinGroup(Constants.loggedUser)
+                    Constants.getName(getActivity())).newGroup(Constants.loggedUser)
                     //code
                     .observeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(this::handleResponseJoin, this::handleErrorJoin));
+                    .subscribe(this::handleResponseCreate, this::handleErrorCreate));
 
 
             code = "----";
+
+
             replaceFragment();
 
         }
 
     }
+    ///change the respons and error
+    private void handleResponseCreate(Response response){
+        Log.e(TAG, "Create group succeeded!: " + response.toString());
+    }
+
+    private void handleErrorCreate(Throwable error){
+        Log.e(TAG, "Create group error!: " + error.getMessage());
+    }
+
 
     ///change the respons and error
     private void handleResponseJoin(Response response){
@@ -186,10 +214,8 @@ public class CreateGroupFragment extends Fragment {
             inputDigit2.setText(Character.toString(code.charAt(1)));
             inputDigit3.setText(Character.toString(code.charAt(2)));
             inputDigit4.setText(Character.toString(code.charAt(3)));
-
         });
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

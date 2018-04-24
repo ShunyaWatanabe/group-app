@@ -14,14 +14,13 @@
     <string name="code_info">Join group using this code within 3 minutes</string>
     <string name="leave_group">Leave Group</string>
     <string name="create_group">ENTER FOUR DIGITS</string>
-    <string name="join_group">Join</string>
-
     <string name="group_name">Software Engineering</string>
     <string name="profile">profile</string>
-
     <string name="input_placeholder">Write a message</string>
     <string name="group">GroupName</string>
     <string name="nothing_found">Nothing found</string>
     <string name="waiting_antechamber">Waiting for other users to join... press \"Create\" when ready</string>
+    <string name="new_group">New Group</string>
+    <string name="join_invite">Invitation</string>
 
 </resources>
