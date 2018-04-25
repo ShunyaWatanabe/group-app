@@ -12,6 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.AdvertisingOptions;
@@ -27,9 +33,15 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.groupapp.groupapp.groupapp.R;
+import com.groupapp.groupapp.groupapp.adapters.JoiningUserAdapter;
+import com.groupapp.groupapp.groupapp.model.ConnectingUser;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.subscriptions.CompositeSubscription;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -47,12 +59,27 @@ public class AntechamberFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     public static final String TAG = AntechamberFragment.class.getSimpleName();
 
+
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
     private String code;
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
+    String tempName;
+
+    ArrayList<ConnectingUser> joiningUsers = new ArrayList<ConnectingUser>();
+    JoiningUserAdapter adapter;
+
+    @BindView(R.id.gv_joining_users)
+    GridView gvJoiningUsers;
+    @BindView(R.id.b_createGroupAntechamber)
+    Button bCreateGroup;
+
+    @OnClick(R.id.b_createGroupAntechamber)
+    public void createGroup(){
+
+    }
 
     public AntechamberFragment() {
         // Required empty public constructor
@@ -81,6 +108,15 @@ public class AntechamberFragment extends Fragment {
         ButterKnife.bind(this,view);
         Log.e(TAG,"is connectionsClient initliaized");
         Log.e(TAG,connectionsClient.toString());
+
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setLayoutParams(new GridView.LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                android.view.ViewGroup.LayoutParams.FILL_PARENT));
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        adapter = new JoiningUserAdapter(getContext(),joiningUsers);
+        gvJoiningUsers.setAdapter(adapter);
+
         startAdvertising();
         startDiscovery();
         return view;
@@ -142,8 +178,9 @@ public class AntechamberFragment extends Fragment {
                 public void onConnectionInitiated(String endpointId, ConnectionInfo connectionInfo) {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
-                    opponents+=connectionInfo.getEndpointName();
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
+                    tempName = connectionInfo.getEndpointName();
+                    sendPaylod(endpointId);
                 }
 
                 @Override
@@ -151,13 +188,23 @@ public class AntechamberFragment extends Fragment {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
-                        connectionsClient.stopDiscovery();
-                        connectionsClient.stopAdvertising();
 
-                        //opponentEndpointId = endpointId;
-                        //setOpponentName(opponentName);
-                        //setStatusText(getString(R.string.status_connected));
-                        //setButtonState(true);
+//                        connectionsClient.stopDiscovery();
+//                        connectionsClient.stopAdvertising();
+                        //Checking for more users
+                        joiningUsers.add(new ConnectingUser("kupa1",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa2",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa3",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa4",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa5",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa6",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa7",endpointId));
+                        joiningUsers.add(new ConnectingUser("kupa8",endpointId));
+                        joiningUsers.add(new ConnectingUser(tempName,endpointId));
+
+                        adapter.notifyDataSetChanged();
+
+                        //render();
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
                     }
@@ -166,16 +213,20 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onDisconnected(String endpointId) {
                     Log.i(TAG, "onDisconnected: disconnected from the opponent");
-                    //resetGame();
+                    deleteByEndpoint(findEndpoint(endpointId));
                 }
             };
 
     // Callbacks for receiving payloads
+    //ADD SENDING MY PRIVATE KEY
     private final PayloadCallback payloadCallback =
             new PayloadCallback() {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
                     Log.i(TAG,"payloadReceived");
+                    //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT
+                    addKey( new String(payload.asBytes(),UTF_8),findEndpoint(endpointId));
+                    Log.i(TAG,"USER KEY "+findEndpoint(endpointId).toString());
                     //opponentChoice = GameChoice.valueOf(new String(payload.asBytes(), UTF_8));
                 }
 
@@ -185,6 +236,44 @@ public class AntechamberFragment extends Fragment {
                 }
             };
 
+    private void addKey(String key, ConnectingUser user){
+        user.setKey(key);
+    }
+
+    private ConnectingUser findEndpoint(String endpoint){
+        Log.i(TAG,"In findAndDelete");
+        for(ConnectingUser user: joiningUsers){
+            if(user.getEndpoint().equals(endpoint)){
+                Log.i(TAG,"user found!");
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private void deleteByEndpoint(ConnectingUser user){
+        //                Log.i(TAG,"Users after delete " + joiningUsers.toString());
+        joiningUsers.remove(user);
+        adapter.notifyDataSetChanged();
+//                Log.i(TAG,"Users after delete " + joiningUsers.toString());
+        return;
+    }
+
+    private void sendPaylod(String otherEndpoint){
+        connectionsClient.sendPayload(
+                otherEndpoint, Payload.fromBytes(Constants.loggedUser.getPrivate_key().getBytes(UTF_8)));
+
+    }
+
+//    public void render(){
+//
+//        for(ConnectingUser joiner : joiningUsers){
+//            final Button b = new Button(getContext());
+//            b.setText(joiner.getName());
+//            gvJoiningUsers.addView(b);
+//        }
+//    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -193,7 +282,14 @@ public class AntechamberFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        connectionsClient.stopAdvertising();
+        connectionsClient.stopDiscovery();
         mListener = null;
+    }
+
+    public void replaceFragment(){
+        connectionsClient.stopAdvertising();
+        connectionsClient.stopDiscovery();
     }
 
     public interface OnFragmentInteractionListener {
