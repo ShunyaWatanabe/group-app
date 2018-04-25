@@ -162,13 +162,28 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onEndpointFound(String endpointId, DiscoveredEndpointInfo info) {
                     Log.i(TAG, "onEndpointFound: endpoint found, connecting");
+                    info.getEndpointName();
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
 //                    startDiscovery();
+                    tempName = info.getEndpointName();
+                    joiningUsers.add(new ConnectingUser("kupa1",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa2",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa3",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa4",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa5",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa6",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa7",endpointId));
+                    joiningUsers.add(new ConnectingUser("kupa8",endpointId));
+                    joiningUsers.add(new ConnectingUser(tempName,endpointId));
+
+                    adapter.notifyDataSetChanged();
+
                 }
 
                 @Override
                 public void onEndpointLost(String endpointId) {
                     Log.e(TAG,"NO ENDPOINT FOUND");
+                    deleteByEndpoint(findEndpoint(endpointId));
                 }
 
             };
@@ -181,7 +196,7 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG, "onConnectionInitiated: accepting connection");
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
-                    tempName = connectionInfo.getEndpointName();
+//                    tempName = connectionInfo.getEndpointName();
                     sendPaylod(endpointId);
                 }
 
@@ -191,22 +206,20 @@ public class AntechamberFragment extends Fragment {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
 
-//                        connectionsClient.stopDiscovery();
-//                        connectionsClient.stopAdvertising();
-                        //Checking for more users
-                        joiningUsers.add(new ConnectingUser("kupa1",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa2",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa3",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa4",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa5",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa6",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa7",endpointId));
-                        joiningUsers.add(new ConnectingUser("kupa8",endpointId));
-                        joiningUsers.add(new ConnectingUser(tempName,endpointId));
+                        //Checking for more users than one (better display)
+//                        joiningUsers.add(new ConnectingUser("kupa1",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa2",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa3",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa4",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa5",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa6",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa7",endpointId));
+//                        joiningUsers.add(new ConnectingUser("kupa8",endpointId));
+//                        joiningUsers.add(new ConnectingUser(tempName,endpointId));
+//
+//                        adapter.notifyDataSetChanged();
 
-                        adapter.notifyDataSetChanged();
 
-                        //render();
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
                     }

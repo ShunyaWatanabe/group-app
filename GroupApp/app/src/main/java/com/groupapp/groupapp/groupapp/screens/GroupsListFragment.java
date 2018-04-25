@@ -54,7 +54,7 @@ public class GroupsListFragment extends Fragment {
 
     android.support.v7.widget.SearchView svEvent;
 
-    public static ArrayList<Group> groupsList;
+    public ArrayList<Group> groupsList;
     private ProgressDialog progress;
     @BindView(R.id.tv_progressText)
     TextView progressText;
@@ -95,7 +95,7 @@ public class GroupsListFragment extends Fragment {
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
         Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
-        //groupsList = response.getGroups();
+        groupsList = new ArrayList<>(Arrays.asList(response.getGroups()));
         // create dummy group list
 //        groupsList = new ArrayList<>();
 //        Group group = new Group();
@@ -113,10 +113,6 @@ public class GroupsListFragment extends Fragment {
         rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
 
         GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
-//        GroupAdapter adapter = new GroupAdapter(Constants.loggedUser.getGroups(), getContext(),getActivity());
-        //todo Tomasz I save the ArrayList<Group> groups to constants.loggeruser. You acn get it by calling get groups.
-        //todo But somehow there is a sequential bug. If you call the line commented above, it will return a nullpointer.
-        //todo it's trivial. Fix it.
 
         rvGroups.setAdapter(adapter);
 
