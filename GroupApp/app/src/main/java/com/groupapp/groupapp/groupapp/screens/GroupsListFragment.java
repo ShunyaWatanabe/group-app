@@ -109,6 +109,7 @@ public class GroupsListFragment extends Fragment {
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
         Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
+
     }
 
     private void handleErrorGetGroup(Throwable err){
