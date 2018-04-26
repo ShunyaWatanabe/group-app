@@ -54,7 +54,7 @@ public class GroupsListFragment extends Fragment {
 
     android.support.v7.widget.SearchView svEvent;
 
-    public ArrayList<Group> groupsList;
+    public ArrayList<Group> groupsListTemp;
     private ProgressDialog progress;
     @BindView(R.id.tv_progressText)
     TextView progressText;
@@ -94,30 +94,20 @@ public class GroupsListFragment extends Fragment {
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
-        Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
 
-        groupsList = new ArrayList<>(Arrays.asList(response.getGroups()));
-        // create dummy group list
-//        groupsList = new ArrayList<>();
-//        Group group = new Group();
-//        group.setName("Software Engineering");
-//        groupsList.add(group);
-//        group = new Group();
-//        group.setName("Computer Networks");
-//        groupsList.add(group);
-//        group = new Group();
-//        group.setName("Operating Systems");
-//        groupsList.add(group);
+        groupsListTemp = new ArrayList<>(Arrays.asList(response.getGroups()));
+
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
         rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
 
-        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+        GroupAdapter adapter = new GroupAdapter(groupsListTemp, getContext(),getActivity());
 
         rvGroups.setAdapter(adapter);
 
-        if(groupsList==null){
+        if(groupsListTemp==null){
             progressText.setText(getResources().getString(R.string.nothing_found));
             pbHeaderProgress.setVisibility(View.GONE);
         }else{
@@ -125,6 +115,8 @@ public class GroupsListFragment extends Fragment {
             pbHeaderProgress.setVisibility(View.GONE);
         }
         swipeContainer.setRefreshing(false);
+
+        Constants.loggedUser.setGroups(groupsListTemp);
     }
 
     private void handleErrorGetGroup(Throwable err){
@@ -276,7 +268,7 @@ public class GroupsListFragment extends Fragment {
     }
 
     public void refresh() {
-        if (groupsList == null) {
+        if (groupsListTemp == null) {
             pbHeaderProgress.setVisibility(View.VISIBLE);
             headerProgress.setVisibility(View.VISIBLE);
             progressText.setText(getResources().getString(R.string.loading_groups));
