@@ -89,15 +89,13 @@ public class GroupsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mSubscriptions = new CompositeSubscription();
-       getGroups();
+        getGroups();
     }
 
-    private void handleResponseGetGroup(Response response){
+    private void handleResponseGetGroups(Response response){
         Log.e(TAG, "Get groups complete!");
 
         groupsListTemp = new ArrayList<>(Arrays.asList(response.getGroups()));
-
-
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
@@ -119,7 +117,7 @@ public class GroupsListFragment extends Fragment {
         Constants.loggedUser.setGroups(groupsListTemp);
     }
 
-    private void handleErrorGetGroup(Throwable err){
+    private void handleErrorGetGroups(Throwable err){
         Log.e(TAG, "Get groups fail!");
         Log.e(TAG, err.getMessage());
     }
@@ -231,11 +229,11 @@ public class GroupsListFragment extends Fragment {
 
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).getGroup(Constants.loggedUser.getPrivate_key())
+                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+                .subscribe(this::handleResponseGetGroups, this::handleErrorGetGroups));
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
@@ -276,55 +274,55 @@ public class GroupsListFragment extends Fragment {
         getGroups();
     }
 
-
-    private void handleResponse(GroupsList groups) {
-        progress.dismiss();
-
-        Log.e(TAG, "Events!");
-
-//        if(events.getToken() != null)
-//            Constants.saveAccessToken(getActivity(), events.getToken());
 //
-//        eventList = events.getEvents();
+//    private void handleResponse(GroupsList groups) {
+//        progress.dismiss();
 //
-//        EventAdapter adapter = new EventAdapter(eventList, getContext(),getActivity());
+//        Log.e(TAG, "Events!");
 //
-//        //lvEvents.setHasFixedSize(true);
+////        if(events.getToken() != null)
+////            Constants.saveAccessToken(getActivity(), events.getToken());
+////
+////        eventList = events.getEvents();
+////
+////        EventAdapter adapter = new EventAdapter(eventList, getContext(),getActivity());
+////
+////        //lvEvents.setHasFixedSize(true);
+////
+////        // use a linear layout manager
+////        lvEvents.setAdapter(adapter);
+////        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
+////        lvEvents.setLayoutManager(mLayoutManager);
+////
+////        if(eventList==null){
+////            progressText.setText(getResources().getString(R.string.nothing_found));
+////            pbHeaderProgress.setVisibility(View.GONE);
+////        }else{
+////            headerProgress.setVisibility(View.GONE);
+////            pbHeaderProgress.setVisibility(View.GONE);
+////        }
+////        swipeContainer.setRefreshing(false);
+//    }
 //
-//        // use a linear layout manager
-//        lvEvents.setAdapter(adapter);
-//        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
-//        lvEvents.setLayoutManager(mLayoutManager);
+//    private void handleError(Throwable error) {
+//        progress.dismiss();
 //
-//        if(eventList==null){
-//            progressText.setText(getResources().getString(R.string.nothing_found));
-//            pbHeaderProgress.setVisibility(View.GONE);
-//        }else{
-//            headerProgress.setVisibility(View.GONE);
-//            pbHeaderProgress.setVisibility(View.GONE);
+//        Log.e(TAG, "Events error!: " + error.getMessage());
+//
+//        if (error instanceof HttpException) {
+//
+//            Gson gson = new GsonBuilder().create();
+//
+//            try {
+//
+//                String errorBody = ((HttpException) error).response().errorBody().string();
+////                Response response = gson.fromJson(errorBody, Response.class);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//
 //        }
-//        swipeContainer.setRefreshing(false);
-    }
-
-    private void handleError(Throwable error) {
-        progress.dismiss();
-
-        Log.e(TAG, "Events error!: " + error.getMessage());
-
-        if (error instanceof HttpException) {
-
-            Gson gson = new GsonBuilder().create();
-
-            try {
-
-                String errorBody = ((HttpException) error).response().errorBody().string();
-//                Response response = gson.fromJson(errorBody, Response.class);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-
-        }
-    }
+//    }
 }
