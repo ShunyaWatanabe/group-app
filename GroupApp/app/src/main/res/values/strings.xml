@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GroupApp</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="searching">Searching for groups...</string>
     <string name="loading_groups">Loading groups...</string>

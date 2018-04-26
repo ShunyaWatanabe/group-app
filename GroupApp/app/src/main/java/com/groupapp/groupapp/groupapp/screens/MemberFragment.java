@@ -53,6 +53,8 @@ public class MemberFragment extends Fragment {
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
 
+        //todo fatal if i click twice very fast it crahses the app
+
         String[] groupid_private_key = {Constants.loggedUser.getPrivate_key(),group_ID};
 
         mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
@@ -67,16 +69,24 @@ public class MemberFragment extends Fragment {
 
     private void handleResponseLeaveGroup(Response response){
         Log.e(TAG,"leave group succeed");
+        String removedGroupId = response.getId();
 
-        //todo client user side remove group
+        for (Group group : Constants.loggedUser.getGroups()){
+            if (group.getId().equals(removedGroupId)){
+                Constants.loggedUser.getGroups().remove(group);
+            }
+        }
         //response.getId(); //this is the group ID
-        //todo go back to chat list fragment
+
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
+
+        getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     @Override
@@ -87,7 +97,7 @@ public class MemberFragment extends Fragment {
 
         //todo populate it with actual values of the current group
         members.add(new User("a"));
-        group_ID = "fake group ID";
+        group_ID = "5ae0e32b69e8db0004b2d7e5";
 
     }
 
