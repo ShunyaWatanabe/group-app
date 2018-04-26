@@ -134,7 +134,6 @@ public class GroupsListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups_list, container, false);
         rvGroups = view.findViewById(R.id.list);
         ButterKnife.bind(this,view);
@@ -224,8 +223,6 @@ public class GroupsListFragment extends Fragment {
     }
 
     private void getGroups() {
-        //Change latter to loggeduser.getEmail()
-        //for now not sure if it already download these data
 
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
@@ -274,55 +271,4 @@ public class GroupsListFragment extends Fragment {
         getGroups();
     }
 
-//
-//    private void handleResponse(GroupsList groups) {
-//        progress.dismiss();
-//
-//        Log.e(TAG, "Events!");
-//
-////        if(events.getToken() != null)
-////            Constants.saveAccessToken(getActivity(), events.getToken());
-////
-////        eventList = events.getEvents();
-////
-////        EventAdapter adapter = new EventAdapter(eventList, getContext(),getActivity());
-////
-////        //lvEvents.setHasFixedSize(true);
-////
-////        // use a linear layout manager
-////        lvEvents.setAdapter(adapter);
-////        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
-////        lvEvents.setLayoutManager(mLayoutManager);
-////
-////        if(eventList==null){
-////            progressText.setText(getResources().getString(R.string.nothing_found));
-////            pbHeaderProgress.setVisibility(View.GONE);
-////        }else{
-////            headerProgress.setVisibility(View.GONE);
-////            pbHeaderProgress.setVisibility(View.GONE);
-////        }
-////        swipeContainer.setRefreshing(false);
-//    }
-//
-//    private void handleError(Throwable error) {
-//        progress.dismiss();
-//
-//        Log.e(TAG, "Events error!: " + error.getMessage());
-//
-//        if (error instanceof HttpException) {
-//
-//            Gson gson = new GsonBuilder().create();
-//
-//            try {
-//
-//                String errorBody = ((HttpException) error).response().errorBody().string();
-////                Response response = gson.fromJson(errorBody, Response.class);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//
-//        }
-//    }
 }
