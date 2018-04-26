@@ -54,7 +54,7 @@ public class GroupsListFragment extends Fragment {
 
     android.support.v7.widget.SearchView svEvent;
 
-    public static ArrayList<Group> groupsList;
+    public ArrayList<Group> groupsList;
     private ProgressDialog progress;
     @BindView(R.id.tv_progressText)
     TextView progressText;
@@ -89,20 +89,42 @@ public class GroupsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mSubscriptions = new CompositeSubscription();
-
-        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
-                Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).getGroup(Constants.loggedUser.getPrivate_key())
-                .observeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+       getGroups();
     }
 
     private void handleResponseGetGroup(Response response){
         Log.e(TAG, "Get groups complete!");
         Constants.loggedUser.setGroups(new ArrayList<>(Arrays.asList(response.getGroups())));
 
+        groupsList = new ArrayList<>(Arrays.asList(response.getGroups()));
+        // create dummy group list
+//        groupsList = new ArrayList<>();
+//        Group group = new Group();
+//        group.setName("Software Engineering");
+//        groupsList.add(group);
+//        group = new Group();
+//        group.setName("Computer Networks");
+//        groupsList.add(group);
+//        group = new Group();
+//        group.setName("Operating Systems");
+//        groupsList.add(group);
+
+        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
+        rvGroups.setLayoutManager(mLayoutManager);
+        rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
+
+        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
+
+        rvGroups.setAdapter(adapter);
+
+        if(groupsList==null){
+            progressText.setText(getResources().getString(R.string.nothing_found));
+            pbHeaderProgress.setVisibility(View.GONE);
+        }else{
+            headerProgress.setVisibility(View.GONE);
+            pbHeaderProgress.setVisibility(View.GONE);
+        }
+        swipeContainer.setRefreshing(false);
     }
 
     private void handleErrorGetGroup(Throwable err){
@@ -215,43 +237,13 @@ public class GroupsListFragment extends Fragment {
         //Change latter to loggeduser.getEmail()
         //for now not sure if it already download these data
 
-        // create dummy group list
-        groupsList = new ArrayList<>();
-        Group group = new Group();
-        group.setName("Software Engineering");
-        groupsList.add(group);
-        group = new Group();
-        group.setName("Computer Networks");
-        groupsList.add(group);
-        group = new Group();
-        group.setName("Operating Systems");
-        groupsList.add(group);
-
-        mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
-        rvGroups.setLayoutManager(mLayoutManager);
-        rvGroups.addItemDecoration(new VerticalSpaceItemDecoration(10));
-
-        GroupAdapter adapter = new GroupAdapter(groupsList, getContext(),getActivity());
-//        GroupAdapter adapter = new GroupAdapter(Constants.loggedUser.getGroups(), getContext(),getActivity());
-        //todo Tomasz I save the ArrayList<Group> groups to constants.loggeruser. You acn get it by calling get groups.
-        //todo But somehow there is a sequential bug. If you call the line commented above, it will return a nullpointer.
-        //todo it's trivial. Fix it.
-
-        rvGroups.setAdapter(adapter);
-//        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()), Constants.getRefreshToken(getActivity()), Constants.getEmail(getActivity())).getEvents(Constants.loggedUser.getEmail())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(this::handleResponse, this::handleError));
-
-        if(groupsList==null){
-            progressText.setText(getResources().getString(R.string.nothing_found));
-            pbHeaderProgress.setVisibility(View.GONE);
-        }else{
-            headerProgress.setVisibility(View.GONE);
-            pbHeaderProgress.setVisibility(View.GONE);
-        }
-        swipeContainer.setRefreshing(false);
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getGroup(Constants.loggedUser.getPrivate_key())
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
