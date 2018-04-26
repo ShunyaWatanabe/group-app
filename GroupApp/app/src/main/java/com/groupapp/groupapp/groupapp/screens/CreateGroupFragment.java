@@ -24,6 +24,7 @@ import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -115,37 +116,14 @@ public class CreateGroupFragment extends Fragment {
     //here should not immediately create group and send response to server, should go to ant room
     @OnClick(R.id.b_createGroup)
     public void createNewGroup(){
-
-
         if (!code.contains("-")){
-            //send code to server
-            mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
-                    Constants.getRefreshToken(getActivity()),
-                    Constants.getName(getActivity())).newGroup(Constants.loggedUser)
-                    //code
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(this::handleResponseCreate, this::handleErrorCreate));
-
-
             code = "----";
-
-
             replaceFragment();
-
+        }else{
+            Toast.makeText(getContext(),"Enter full code!",Toast.LENGTH_LONG);
         }
 
     }
-    ///change the respons and error
-    private void handleResponseCreate(Response response){
-        Log.e(TAG, "Create group succeeded!: " + response.toString());
-    }
-
-    private void handleErrorCreate(Throwable error){
-        Log.e(TAG, "Create group error!: " + error.getMessage());
-    }
-
 
     ///change the respons and error
     private void handleResponseJoin(Response response){

@@ -36,6 +36,8 @@ import com.groupapp.groupapp.groupapp.R;
 import com.groupapp.groupapp.groupapp.adapters.JoiningUserAdapter;
 import com.groupapp.groupapp.groupapp.model.ConnectingUser;
 import com.groupapp.groupapp.groupapp.model.Group;
+import com.groupapp.groupapp.groupapp.model.Response;
+import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -81,7 +85,28 @@ public class AntechamberFragment extends Fragment {
     public void createGroup(){
         //new Group();
         //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
+        //send code to server
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).newGroup(Constants.loggedUser)
+                //code
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseCreate, this::handleErrorCreate));
+
+
     }
+
+    ///change the respons and error
+    private void handleResponseCreate(Response response){
+        Log.e(TAG, "Create group succeeded!: " + response.toString());
+    }
+
+    private void handleErrorCreate(Throwable error){
+        Log.e(TAG, "Create group error!: " + error.getMessage());
+    }
+
 
     public AntechamberFragment() {
         // Required empty public constructor

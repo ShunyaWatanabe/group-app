@@ -96,6 +96,7 @@ public class GroupsListFragment extends Fragment {
         Log.e(TAG, "Get groups complete!");
 
         groupsListTemp = new ArrayList<>(Arrays.asList(response.getGroups()));
+        Log.e(TAG,Arrays.asList(response.getGroups()).toString());
 
         mLayoutManager = new LinearLayoutManager(getActivity());//, LinearLayoutManager.VERTICAL, true);
         rvGroups.setLayoutManager(mLayoutManager);
@@ -128,7 +129,7 @@ public class GroupsListFragment extends Fragment {
 //        super.onCreateOptionsMenu(menu, inflater);
 //
 //        initSearchView();
-//        initSwipeRefresh();
+        initSwipeRefresh();
     }
 
     @Override

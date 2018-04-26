@@ -25,9 +25,14 @@ import com.groupapp.groupapp.groupapp.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import com.groupapp.groupapp.groupapp.model.MemberData;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
+import com.groupapp.groupapp.groupapp.network.NetworkUtil;
+import com.groupapp.groupapp.groupapp.utils.Constants;
 import com.scaledrone.lib.Listener;
 import com.scaledrone.lib.Member;
 import com.scaledrone.lib.Room;
@@ -39,6 +44,8 @@ import java.util.Random;
 
 public class ChatPageFragment extends Fragment implements RoomListener{
     public static final String TAG = ChatPageFragment.class.getSimpleName();
+
+    private CompositeSubscription mSubscriptions;
 
     private Button[] buttonList = new Button[12];
 
@@ -96,9 +103,17 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
 
-        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA
+        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
 
@@ -137,6 +152,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
+        groupName.setText(groupName.getText());
         System.out.print("onCreateView");
 
         return view;
@@ -165,6 +181,12 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.unsubscribe();
     }
 
 
