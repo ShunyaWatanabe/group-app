@@ -1,5 +1,7 @@
 package com.groupapp.groupapp.groupapp.screens;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +46,7 @@ import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
 import java.util.Random;
 
 public class ChatPageFragment extends Fragment implements RoomListener{
+    private OnFragmentInteractionListener mListener;
     public static final String TAG = ChatPageFragment.class.getSimpleName();
 
     private Group thisGroup;
@@ -207,6 +210,16 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         mSubscriptions.unsubscribe();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     // Successfully connected to Scaledrone room
     @Override
@@ -266,5 +279,9 @@ public class ChatPageFragment extends Fragment implements RoomListener{
             sb.append(Integer.toHexString(r.nextInt()));
         }
         return sb.toString().substring(0, 7);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
     }
 }
