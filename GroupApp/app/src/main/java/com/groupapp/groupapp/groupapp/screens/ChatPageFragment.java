@@ -1,5 +1,7 @@
 package com.groupapp.groupapp.groupapp.screens;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +31,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.MemberData;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
@@ -43,7 +46,10 @@ import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
 import java.util.Random;
 
 public class ChatPageFragment extends Fragment implements RoomListener{
+    private OnFragmentInteractionListener mListener;
     public static final String TAG = ChatPageFragment.class.getSimpleName();
+
+    private Group thisGroup;
 
     private CompositeSubscription mSubscriptions;
 
@@ -106,6 +112,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
 
+
         //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
 //        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
 //                Constants.getRefreshToken(getActivity()),
@@ -114,6 +121,10 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribeOn(Schedulers.io())
 //                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+
+        //Downloading gorupData
+        getGroup(id);
+
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
 
@@ -145,6 +156,27 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         });
     }
 
+    private void getGroup(String id){
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getSingleGroupFromServer(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+    }
+
+    private void handleResponseGetGroup(Group group) {
+        Log.i(TAG,"Group downloaded");
+        thisGroup = group;
+        groupName.setText(thisGroup.getName());
+    }
+
+    private void handleErrorGetGroup(Throwable throwable) {
+        Log.e(TAG,"Error downloading the group");
+        throwable.printStackTrace();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -152,7 +184,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
-        groupName.setText(groupName.getText());
+
         System.out.print("onCreateView");
 
         return view;
@@ -189,6 +221,16 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         mSubscriptions.unsubscribe();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     // Successfully connected to Scaledrone room
     @Override
@@ -248,5 +290,9 @@ public class ChatPageFragment extends Fragment implements RoomListener{
             sb.append(Integer.toHexString(r.nextInt()));
         }
         return sb.toString().substring(0, 7);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
     }
 }
