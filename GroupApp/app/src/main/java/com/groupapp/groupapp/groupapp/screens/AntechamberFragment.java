@@ -68,10 +68,12 @@ public class AntechamberFragment extends Fragment {
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
     private String code;
+    private String groupID;
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
     String tempName;
+    private final String CREATED = "created";
 
     ArrayList<ConnectingUser> joiningUsers = new ArrayList<ConnectingUser>();
     JoiningUserAdapter adapter;
@@ -96,11 +98,17 @@ public class AntechamberFragment extends Fragment {
                 .subscribe(this::handleResponseCreate, this::handleErrorCreate));
 
 
+
+        //ZROBIC FUNKCJE KTORA TWORZY GRUPE< ZWRACA JEJ ID I POTEM ROZSYLA TO ID DO KAZDEGO UZYTKOWNIKA - RACZEJ TO
+        //ALBO TWORZYC EVENT W MOMENCIE TWORZENIA GRUPY I JAKOS SHAREOWAC TEN GROUP ID
+
+
     }
 
     ///change the respons and error
     private void handleResponseCreate(Response response){
         Log.e(TAG, "Create group succeeded!: " + response.toString());
+        sendToAllConnected();
     }
 
     private void handleErrorCreate(Throwable error){
@@ -222,7 +230,7 @@ public class AntechamberFragment extends Fragment {
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
 //                    tempName = connectionInfo.getEndpointName();
-                    sendPaylod(endpointId);
+                    sendPayloadKey(endpointId);
                 }
 
                 @Override
@@ -264,9 +272,16 @@ public class AntechamberFragment extends Fragment {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
                     Log.i(TAG,"payloadReceived");
-                    //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT
-                    addKey( new String(payload.asBytes(),UTF_8),findEndpoint(endpointId));
-                    Log.i(TAG,"USER KEY "+findEndpoint(endpointId).toString());
+                    //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT4
+                    String response = new String(payload.asBytes(),UTF_8);
+                    if(response.equals(CREATED)){
+                        //group created, moving to another screen
+                        replaceFragment(groupID);
+                    }else {
+                        //received a key
+                        addKey(new String(payload.asBytes(), UTF_8), findEndpoint(endpointId));
+                        Log.i(TAG, "USER KEY " + findEndpoint(endpointId).toString());
+                    }
                     //opponentChoice = GameChoice.valueOf(new String(payload.asBytes(), UTF_8));
                 }
 
@@ -299,10 +314,23 @@ public class AntechamberFragment extends Fragment {
         return;
     }
 
-    private void sendPaylod(String otherEndpoint){
+    private void sendPayloadKey(String otherEndpoint){
         connectionsClient.sendPayload(
                 otherEndpoint, Payload.fromBytes(Constants.loggedUser.getPrivate_key().getBytes(UTF_8)));
 
+    }
+
+    private void sendPayloadNotification(String otherEndpoint){
+        //Sending a payload to all connected user that the gorup has been created. moving them to the group in on receive
+        connectionsClient.sendPayload(
+                otherEndpoint, Payload.fromBytes(CREATED.getBytes(UTF_8)));
+
+    }
+
+    private void sendToAllConnected(){
+        for(ConnectingUser user:joiningUsers){
+            sendPayloadNotification(user.getEndpoint());
+        }
     }
 
 //    public void render(){
@@ -327,7 +355,7 @@ public class AntechamberFragment extends Fragment {
         mListener = null;
     }
 
-    public void replaceFragment(){
+    public void replaceFragment(String groupID){
         connectionsClient.stopAdvertising();
         connectionsClient.stopDiscovery();
     }
