@@ -46,6 +46,8 @@ import java.util.Random;
 public class ChatPageFragment extends Fragment implements RoomListener{
     public static final String TAG = ChatPageFragment.class.getSimpleName();
 
+    private Group thisGroup;
+
     private CompositeSubscription mSubscriptions;
 
     private Button[] buttonList = new Button[12];
@@ -143,7 +145,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     private void getGroup(String id){
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).getGroupFromServer(id)
+                Constants.getName(getActivity())).getSingleGroupFromServer(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -152,7 +154,8 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private void handleResponseGetGroup(Group group) {
         Log.i(TAG,"Group downloaded");
-        groupName.setText(group.getName());
+        thisGroup = group;
+        groupName.setText(thisGroup.getName());
     }
 
     private void handleErrorGetGroup(Throwable throwable) {

@@ -36,8 +36,8 @@ public interface RetrofitInterface {
     @GET("groups/{getgroups}")
     Observable<Response> getGroupsFromServer(@Path("getgroups") String private_key );
 
-    @GET("groups/{getgroup}")
-    Observable<Group> getGroupFromServer(@Path("getgroup") String private_key );
+    @GET("groups/get/{getsinglegroup}")
+    Observable<Group> getSingleGroupFromServer(@Path("getsinglegroup") String private_key );
 
     @POST("groups/newgroup")
     Observable<Response> newGroup(@Body User user);
