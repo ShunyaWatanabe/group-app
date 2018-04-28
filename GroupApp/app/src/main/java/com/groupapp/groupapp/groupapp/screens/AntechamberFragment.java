@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,9 +89,10 @@ public class AntechamberFragment extends Fragment {
         //new Group();
         //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
         //send code to server
+        Log.e(TAG,"JOININ USERS ARE: "+joiningUsers.toString());
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
-                Constants.getName(getActivity())).newGroup(Constants.loggedUser)
+                Constants.getName(getActivity())).newGroupFromAntechamber(joiningUsers)
                 //code
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +110,11 @@ public class AntechamberFragment extends Fragment {
     ///change the respons and error
     private void handleResponseCreate(Response response){
         Log.e(TAG, "Create group succeeded!: " + response.toString());
-        sendToAllConnected();
+        Log.e(TAG, "GroupID: " + response.getId());
+        Log.e(TAG, "GroupID: " + response.getMessage());
+        sendToAllConnected(response.getId());
+        replaceFragment(response.getId());
+
     }
 
     private void handleErrorCreate(Throwable error){
@@ -133,6 +139,7 @@ public class AntechamberFragment extends Fragment {
         mSubscriptions= new CompositeSubscription();
         code=getArguments().getString("code");
         connectionsClient = Nearby.getConnectionsClient(getActivity());
+        joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host",Constants.loggedUser.getPrivate_key()));
 
     }
 
@@ -274,9 +281,10 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG,"payloadReceived");
                     //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT4
                     String response = new String(payload.asBytes(),UTF_8);
-                    if(response.equals(CREATED)){
+                    if(response.substring(0,6).equals(CREATED)){
+                        Log.i(TAG,"Payload "+response.substring(7));
                         //group created, moving to another screen
-                        replaceFragment(groupID);
+                        replaceFragment(response.substring(7));
                     }else {
                         //received a key
                         addKey(new String(payload.asBytes(), UTF_8), findEndpoint(endpointId));
@@ -320,16 +328,17 @@ public class AntechamberFragment extends Fragment {
 
     }
 
-    private void sendPayloadNotification(String otherEndpoint){
+    private void sendPayloadNotification(String otherEndpoint, String gorupID){
         //Sending a payload to all connected user that the gorup has been created. moving them to the group in on receive
+        String temp = CREATED+"_"+groupID;
         connectionsClient.sendPayload(
-                otherEndpoint, Payload.fromBytes(CREATED.getBytes(UTF_8)));
+                otherEndpoint, Payload.fromBytes(temp.getBytes(UTF_8)));
 
     }
 
-    private void sendToAllConnected(){
+    private void sendToAllConnected(String groupID){
         for(ConnectingUser user:joiningUsers){
-            sendPayloadNotification(user.getEndpoint());
+            sendPayloadNotification(user.getEndpoint(), groupID);
         }
     }
 
@@ -358,6 +367,21 @@ public class AntechamberFragment extends Fragment {
     public void replaceFragment(String groupID){
         connectionsClient.stopAdvertising();
         connectionsClient.stopDiscovery();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("groupID",groupID);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+
+        //ft.addToBackStack(TAG);
+
+        ChatPageFragment fragment = new ChatPageFragment(); //test
+        fragment.setArguments(bundle);
+
+        ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
+
+        ft.commit();
+        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     public interface OnFragmentInteractionListener {

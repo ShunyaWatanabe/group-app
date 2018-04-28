@@ -9,11 +9,18 @@ public class ConnectingUser{
     String endpoint;
     String key;
 
-    public ConnectingUser(String name, String endpoint){
+
+    public ConnectingUser(String name, String endpoint, String private_key){
         this.name = name;
         this.endpoint = endpoint;
-        this.key=null;
+        this.key = private_key;
     }
+
+    public ConnectingUser(String name, String endpoint){
+        this(name, endpoint,null);
+    }
+
+
 
     public String getName() {
         return name;

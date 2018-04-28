@@ -2,9 +2,12 @@ package com.groupapp.groupapp.groupapp.network;
 
 import android.app.FragmentManager;
 
+import com.groupapp.groupapp.groupapp.model.ConnectingUser;
 import com.groupapp.groupapp.groupapp.model.Response;
 import com.groupapp.groupapp.groupapp.model.User;
 import com.groupapp.groupapp.groupapp.model.Group;
+
+import java.util.ArrayList;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -33,8 +36,14 @@ public interface RetrofitInterface {
     @GET("groups/{getgroups}")
     Observable<Response> getGroupsFromServer(@Path("getgroups") String private_key );
 
+    @GET("groups/{getgroup}")
+    Observable<Group> getGroupFromServer(@Path("getgroup") String private_key );
+
     @POST("groups/newgroup")
     Observable<Response> newGroup(@Body User user);
+
+    @POST("groups/newgroupfromanterchamber")
+    Observable<Response> newGroupFromAntechamber(@Body ArrayList<ConnectingUser> users);
 
     @POST("groups/joininvite")
     Observable<Response> joinInvite(@Body String[] private_key_invite_code);
