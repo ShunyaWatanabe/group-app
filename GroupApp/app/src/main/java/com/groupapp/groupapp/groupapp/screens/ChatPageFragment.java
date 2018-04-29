@@ -140,8 +140,19 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
 
+
+        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
+//        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+//                Constants.getRefreshToken(getActivity()),
+//                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
+
         //Downloading gorupData
         getGroup(id);
+
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
 

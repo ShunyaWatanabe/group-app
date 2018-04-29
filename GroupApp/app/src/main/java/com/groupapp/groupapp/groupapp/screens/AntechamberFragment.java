@@ -89,7 +89,12 @@ public class AntechamberFragment extends Fragment {
         //new Group();
         //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
         //send code to server
+  //  joiningUsers
+//
+
+
         Log.e(TAG,"JOININ USERS ARE: "+joiningUsers.toString());
+
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
                 Constants.getName(getActivity())).newGroupFromAntechamber(joiningUsers)
