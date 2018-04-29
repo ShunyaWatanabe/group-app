@@ -41,6 +41,8 @@ public class MemberFragment extends Fragment {
 
     private CompositeSubscription mSubscriptions;
 
+
+
     private ArrayList<User> members = new ArrayList<>();
     private String group_ID;
 
@@ -94,10 +96,12 @@ public class MemberFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mSubscriptions = new CompositeSubscription();
 
+        group_ID = getArguments().getString("groupID");
+
 
         //todo populate it with actual values of the current group
         members.add(new User("a"));
-        group_ID = "5ae0e32b69e8db0004b2d7e5";
+
 
     }
 
