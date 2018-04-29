@@ -211,23 +211,18 @@ public class AntechamberFragment extends Fragment {
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
 //                    startDiscovery();
                     tempName = info.getEndpointName();
-                    joiningUsers.add(new ConnectingUser("kupa1",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa2",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa3",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa4",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa5",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa6",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa7",endpointId));
-                    joiningUsers.add(new ConnectingUser("kupa8",endpointId));
                     joiningUsers.add(new ConnectingUser(tempName,endpointId));
 
                     adapter.notifyDataSetChanged();
+
+                    Log.e(TAG,"Send payload");
+                    sendPayloadKey(endpointId);
 
                 }
 
                 @Override
                 public void onEndpointLost(String endpointId) {
-                    Log.e(TAG,"NO ENDPOINT FOUND");
+                    Log.e(TAG,"Endpoint lost!");
                     deleteByEndpoint(findEndpoint(endpointId));
                 }
 
@@ -242,7 +237,7 @@ public class AntechamberFragment extends Fragment {
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
 //                    tempName = connectionInfo.getEndpointName();
-                    sendPayloadKey(endpointId);
+
                 }
 
                 @Override
@@ -286,14 +281,19 @@ public class AntechamberFragment extends Fragment {
                     Log.i(TAG,"payloadReceived");
                     //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT4
                     String response = new String(payload.asBytes(),UTF_8);
-                    if(response.substring(0,6).equals(CREATED)){
-                        Log.i(TAG,"Payload "+response.substring(7));
+                    Log.i(TAG,"Response1 is "+response);
+                    Log.i(TAG,"Response2 is "+response.substring(0,7));
+                    Log.i(TAG,"Response3 is "+response.substring(8));
+                    if(response.substring(0,7).equals(CREATED)){
+                        Log.i(TAG,"In created");
+                        Log.i(TAG,"Id of event"+response.substring(8));
                         //group created, moving to another screen
-                        replaceFragment(response.substring(7));
+                        //replaceFragment(response.substring(8));
                     }else {
                         //received a key
+                        Log.i(TAG,"Received a key!");
                         addKey(new String(payload.asBytes(), UTF_8), findEndpoint(endpointId));
-                        Log.i(TAG, "USER KEY " + findEndpoint(endpointId).toString());
+                        Log.i(TAG, "USER KEY " + findEndpoint(endpointId));
                     }
                     //opponentChoice = GameChoice.valueOf(new String(payload.asBytes(), UTF_8));
                 }
@@ -309,10 +309,9 @@ public class AntechamberFragment extends Fragment {
     }
 
     private ConnectingUser findEndpoint(String endpoint){
-        Log.i(TAG,"In findAndDelete");
+        Log.i(TAG,"In find");
         for(ConnectingUser user: joiningUsers){
             if(user.getEndpoint().equals(endpoint)){
-                Log.i(TAG,"user found!");
                 return user;
             }
         }
@@ -366,6 +365,7 @@ public class AntechamberFragment extends Fragment {
         super.onDetach();
         connectionsClient.stopAdvertising();
         connectionsClient.stopDiscovery();
+        joiningUsers.clear();
         mListener = null;
     }
 

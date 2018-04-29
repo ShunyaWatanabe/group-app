@@ -36,8 +36,9 @@ public class JoinGroupFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //todo create groupID of the current group
-        group_ID = "5ae0e32b69e8db0004b2d7e5";
+
+        group_ID = getArguments().getString("groupID");
+
 
         mSubscriptions = new CompositeSubscription();
         mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),

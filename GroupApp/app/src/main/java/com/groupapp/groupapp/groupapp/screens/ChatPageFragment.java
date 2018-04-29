@@ -244,10 +244,12 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private void replaceFragment(String fragmentString){
         Bundle bundle = new Bundle();
+        bundle.putString("groupID",thisGroup.getId());
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
         ft.addToBackStack("ChatPageFragment");
+
 
         if (fragmentString.equals("MemberFragment")) {
             MemberFragment fragment = new MemberFragment();
