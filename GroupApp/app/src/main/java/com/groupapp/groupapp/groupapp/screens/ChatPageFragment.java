@@ -55,8 +55,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 
-//import com.github.nkzawa.socketio.client.IO;
-//import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,23 +82,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private Socket mSocket;
     {
-        Log.i(TAG,"creating socket");
-        try {
-            IO.Options opts = new IO.Options();
-            opts.timeout = 30000;
-            opts.reconnection = true;
-            opts.reconnectionAttempts = 10;
-            opts.reconnectionDelay = 1000;
-            opts.forceNew = true;
-            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
-            mSocket = IO.socket(Constants.API_URL);
-            //mSocket = IO.socket("https://localhost");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        System.out.print("created socket!");
+
     }
 
     @BindView(R.id.group_name)
@@ -195,6 +177,23 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
         //mSocket.on("new message", onNewMessage);
         //mSocket.connect();
+        Log.i(TAG,"creating socket");
+        try {
+            IO.Options opts = new IO.Options();
+            opts.timeout = 30000;
+            opts.reconnection = true;
+            opts.reconnectionAttempts = 10;
+            opts.reconnectionDelay = 1000;
+            opts.forceNew = true;
+            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
+            mSocket = IO.socket(Constants.API_URL);
+            //mSocket = IO.socket("https://localhost");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.out.print("something happened\n");
+        }
+        Log.i(TAG,"created socket!");
+
 
         mSocket.connect();
         mSocket.on("join group", onJoined);
@@ -389,9 +388,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     private Emitter.Listener onMessageReceive = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
             Log.e("Response", "message received");
             JSONObject data = (JSONObject) args[0];
             Message m;
@@ -407,25 +403,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
             md = new MemberData(m.getSender().getName(), getRandomColor());
             mc = new MessageContent(m.getText(), md, true);
             messageAdapter.add(mc);
-            /*
-            JSONObject data = (JSONObject) args[0];
-            String message;
-            try {
-                message = data.getString("message");
-            } catch (JSONException e) {
-                return;
-            }
-
-            if(message != null) {
-                messageList.add(new Message(etMessage.getText().toString(), date.getTime(), email));
-                MessageAdapter adapter = new MessageAdapter(getActivity().getBaseContext(), R.layout.item_message_sender, messageList, null);
-                lvMessages.setAdapter(adapter);
-            }
-
-            Log.e("Response", message);
-            */
-//                }
-//            });
         }
     };
 
@@ -436,7 +413,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         }*/
         JSONObject object = new JSONObject();
         try {
-            object.put("group", getArguments().getString("groupID"));
+            object.put("groupId", getArguments().getString("groupID"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
