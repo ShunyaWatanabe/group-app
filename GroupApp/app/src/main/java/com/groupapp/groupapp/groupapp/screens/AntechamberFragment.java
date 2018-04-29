@@ -73,7 +73,6 @@ public class AntechamberFragment extends Fragment {
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
-    String tempName;
     private final String CREATED = "created";
 
     ArrayList<ConnectingUser> joiningUsers = new ArrayList<ConnectingUser>();
@@ -158,8 +157,8 @@ public class AntechamberFragment extends Fragment {
 
         LinearLayout layout = new LinearLayout(getContext());
         layout.setLayoutParams(new GridView.LayoutParams(
-                android.view.ViewGroup.LayoutParams.FILL_PARENT,
-                android.view.ViewGroup.LayoutParams.FILL_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setOrientation(LinearLayout.HORIZONTAL);
         adapter = new JoiningUserAdapter(getContext(),joiningUsers);
         gvJoiningUsers.setAdapter(adapter);
@@ -210,8 +209,9 @@ public class AntechamberFragment extends Fragment {
                     info.getEndpointName();
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
 //                    startDiscovery();
-                    tempName = info.getEndpointName();
-                    joiningUsers.add(new ConnectingUser(tempName,endpointId));
+                    Log.e(TAG, "NAME IS" + info.getEndpointName());
+                    joiningUsers.add(new ConnectingUser(info.getEndpointName(),endpointId));
+                    Log.e(TAG, "second name "+joiningUsers.get(1));
 
                     adapter.notifyDataSetChanged();
 
@@ -245,17 +245,6 @@ public class AntechamberFragment extends Fragment {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
-
-                        //Checking for more users than one (better display)
-//                        joiningUsers.add(new ConnectingUser("kupa1",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa2",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa3",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa4",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa5",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa6",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa7",endpointId));
-//                        joiningUsers.add(new ConnectingUser("kupa8",endpointId));
-//                        joiningUsers.add(new ConnectingUser(tempName,endpointId));
 //
 //                        adapter.notifyDataSetChanged();
 
@@ -332,7 +321,7 @@ public class AntechamberFragment extends Fragment {
 
     }
 
-    private void sendPayloadNotification(String otherEndpoint, String gorupID){
+    private void sendPayloadNotification(String otherEndpoint, String groupID){
         //Sending a payload to all connected user that the gorup has been created. moving them to the group in on receive
         String temp = CREATED+"_"+groupID;
         connectionsClient.sendPayload(
