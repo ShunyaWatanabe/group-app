@@ -22,6 +22,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.groupapp.groupapp.groupapp.MainActivity;
 import android.app.Activity;
 import com.groupapp.groupapp.groupapp.R;
@@ -29,6 +31,9 @@ import com.groupapp.groupapp.groupapp.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+//import io.socket.client.IO;
+//import io.socket.client.Socket;
+//import io.socket.emitter.Emitter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -50,8 +55,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
+//import com.github.nkzawa.socketio.client.IO;
+//import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,9 +84,23 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private Socket mSocket;
     {
+        Log.i(TAG,"creating socket");
         try {
-            mSocket = IO.socket("https://group-app-android.herokuapp.com");
-        } catch (URISyntaxException e) {}
+            IO.Options opts = new IO.Options();
+            opts.timeout = 30000;
+            opts.reconnection = true;
+            opts.reconnectionAttempts = 10;
+            opts.reconnectionDelay = 1000;
+            opts.forceNew = true;
+            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
+            mSocket = IO.socket(Constants.API_URL);
+            //mSocket = IO.socket("https://localhost");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.print("created socket!");
     }
 
     @BindView(R.id.group_name)
@@ -104,7 +123,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     @OnClick(R.id.b_send)
     public void sendMessage(){
-        System.out.print("send button is clicked!");
+        Log.i(TAG,"send button is clicked");
 
         // for scale drone
 //        String message = editText.getText().toString();
@@ -120,7 +139,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         }
 
         editText.setText("");
-        mSocket.emit("new message", io_message);
+        attemptSend(io_message);
     }
 
     @OnClick(R.id.b_add_member)
@@ -140,16 +159,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
 
-
-        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
-//        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
-//                Constants.getRefreshToken(getActivity()),
-//                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
-
+        Log.i(TAG,"oncreate: "+id);
         //Downloading gorupData
         getGroup(id);
 
@@ -183,8 +193,13 @@ public class ChatPageFragment extends Fragment implements RoomListener{
             }
         });
 
-        mSocket.on("new message", onNewMessage);
+        //mSocket.on("new message", onNewMessage);
+        //mSocket.connect();
+
         mSocket.connect();
+        mSocket.on("join group", onJoined);
+        mSocket.on("send message", onMessageReceive);
+        attemptJoinRoom();
     }
 
     private void getGroup(String id){
@@ -217,11 +232,11 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         messagesView.setAdapter(messageAdapter);
 
         // add previous messages
-        for (Message m : thisGroup.getConversation()){
+        /*for (Message m : thisGroup.getConversation()){
             MemberData md = new MemberData(getRandomName(), getRandomColor());
             MessageContent mc = new MessageContent(m.getText(), md, false);
             messageAdapter.add(mc);
-        }
+        }*/
 
         System.out.print("onCreateView");
 
@@ -305,7 +320,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
                     messageAdapter.add(message);
                     // scroll the ListView to the last added element
                     messagesView.setSelection(messagesView.getCount() - 1);
-                    System.out.print("reached here");
                 }
             });
         } catch (JsonProcessingException e) {
@@ -342,17 +356,19 @@ public class ChatPageFragment extends Fragment implements RoomListener{
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String message;
+                    Message m;
                     try {
-                        username = data.getString("username");
-                        message = data.getString("message");
+                        m = (Message) data.get("message");
                     } catch (JSONException e) {
                         return;
                     }
 
+                    MessageContent mc;
+                    MemberData md;
                     // add the message to view
-                    addMessage(username, message);
+                    md = new MemberData(m.getSender().getName(), getRandomColor());
+                    mc = new MessageContent(m.getText(), md, true);
+                    messageAdapter.add(mc);
                 }
             });
         }
@@ -360,5 +376,88 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    private Emitter.Listener onJoined = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+
+            Log.e("Response", "in joined");
+        }
+    };
+
+    private Emitter.Listener onMessageReceive = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+            Log.e("Response", "message received");
+            JSONObject data = (JSONObject) args[0];
+            Message m;
+            try {
+                m = (Message) data.get("message");
+            } catch (JSONException e) {
+                return;
+            }
+
+            MessageContent mc;
+            MemberData md;
+            // add the message to view
+            md = new MemberData(m.getSender().getName(), getRandomColor());
+            mc = new MessageContent(m.getText(), md, true);
+            messageAdapter.add(mc);
+            /*
+            JSONObject data = (JSONObject) args[0];
+            String message;
+            try {
+                message = data.getString("message");
+            } catch (JSONException e) {
+                return;
+            }
+
+            if(message != null) {
+                messageList.add(new Message(etMessage.getText().toString(), date.getTime(), email));
+                MessageAdapter adapter = new MessageAdapter(getActivity().getBaseContext(), R.layout.item_message_sender, messageList, null);
+                lvMessages.setAdapter(adapter);
+            }
+
+            Log.e("Response", message);
+            */
+//                }
+//            });
+        }
+    };
+
+    private void attemptJoinRoom() {
+        /*if (thisGroup == null) {
+            Log.i(TAG,"group is null");
+            return;
+        }*/
+        JSONObject object = new JSONObject();
+        try {
+            object.put("group", getArguments().getString("groupID"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("join group", object);
+        Log.i(TAG,"joined group");
+    }
+
+    private void attemptSend(String message) {
+        Log.i(TAG,"attempt send");
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
+        JSONObject object = new JSONObject();
+        try {
+            object.put("groupId", getArguments().getString("groupID"));
+            object.put("message", message);
+            object.put("sender", Constants.loggedUser.getPrivate_key());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("send message", object);
     }
 }
