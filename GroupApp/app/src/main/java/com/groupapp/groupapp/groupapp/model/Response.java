@@ -13,7 +13,7 @@ public class Response {
     private String message;
     private String token;
     private String refresh_token;
-
+    private String[] member_names;
     private String id;
     private String private_key;
     private Group[] groups;
@@ -42,5 +42,6 @@ public class Response {
         return groups;
     }
 
+    public String[] getMembers(){return member_names;}
 
 }

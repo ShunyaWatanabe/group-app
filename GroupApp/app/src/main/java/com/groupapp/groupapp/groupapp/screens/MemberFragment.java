@@ -25,6 +25,7 @@ import com.groupapp.groupapp.groupapp.model.User;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -98,25 +99,24 @@ public class MemberFragment extends Fragment {
 
         group_ID = getArguments().getString("groupID");
 
-//        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
-//                Constants.getRefreshToken(getActivity()),
-//                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(this::handleResponseGetMembers, this::handleErrorGetMembers));
-//
-//
-//        //todo populate it with actual values of the current group
-//        members.add("a");
-//
-////        @GET("groups/getmembers/{groupid}")
-////        Observable<Response> getMembers(@Path("groupid") String group_id);
-//
-//    }
-//
-//    public void handleResponseGetMembers(){
-//        Log.e("TAG","successs");
+        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).getMembers(group_ID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGetMembers, this::handleErrorGetMembers));
+    }
+
+
+    //todo this is failing
+    public void handleResponseGetMembers(Response response){
+        Log.e("TAG","successs");
+        members = new ArrayList<>(Arrays.asList(response.getMembers()));
+    }
+
+    public void handleErrorGetMembers(Throwable error){
+        Log.e("TAG","get members fails");
     }
 
 

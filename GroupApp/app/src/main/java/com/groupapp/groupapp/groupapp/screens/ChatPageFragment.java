@@ -168,6 +168,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
                 .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
     }
 
+    //todo this is failing
     private void handleResponseGetGroup(Group group) {
         Log.i(TAG,"Group downloaded");
         thisGroup = group;
