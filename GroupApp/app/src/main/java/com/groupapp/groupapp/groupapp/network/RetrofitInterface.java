@@ -31,6 +31,9 @@ public interface RetrofitInterface {
     @POST("users/changeUserName")
     Observable<Response> changeUserName(@Body String[] name_private_key);
 
+    @POST("users/addGroup")
+    Observable<Response> addGroupMembership(@Body String[] group_id);
+
 
     //GROUPS
     @GET("groups/{getgroups}")

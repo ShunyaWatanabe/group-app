@@ -111,6 +111,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         super.onCreate(savedInstanceState);
         mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
+        Log.e(TAG,"Chat id "+id);
 
 
         //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+

@@ -69,7 +69,7 @@ public class AntechamberFragment extends Fragment {
     // Our handle to Nearby Connections
     private ConnectionsClient connectionsClient;
     private String code;
-    private String groupID;
+    private String tempGroupID;
     //Retrofit
     private CompositeSubscription mSubscriptions;
     String opponents="";
@@ -143,7 +143,8 @@ public class AntechamberFragment extends Fragment {
         mSubscriptions= new CompositeSubscription();
         code=getArguments().getString("code");
         connectionsClient = Nearby.getConnectionsClient(getActivity());
-        joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host",Constants.loggedUser.getPrivate_key()));
+        joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));
+        joiningUsers.get(0).setKey(Constants.loggedUser.getPrivate_key());
 
     }
 
@@ -209,14 +210,7 @@ public class AntechamberFragment extends Fragment {
                     info.getEndpointName();
                     connectionsClient.requestConnection(Constants.loggedUser.getName(), endpointId, connectionLifecycleCallback);
 //                    startDiscovery();
-                    Log.e(TAG, "NAME IS" + info.getEndpointName());
-                    joiningUsers.add(new ConnectingUser(info.getEndpointName(),endpointId));
-                    Log.e(TAG, "second name "+joiningUsers.get(1));
 
-                    adapter.notifyDataSetChanged();
-
-                    Log.e(TAG,"Send payload");
-                    sendPayloadKey(endpointId);
 
                 }
 
@@ -237,6 +231,12 @@ public class AntechamberFragment extends Fragment {
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
 //                    tempName = connectionInfo.getEndpointName();
+                    joiningUsers.add(new ConnectingUser(connectionInfo.getEndpointName(),endpointId));
+                    Log.e(TAG, "first name "+joiningUsers.get(0).getName());
+                    Log.e(TAG, "second name "+joiningUsers.get(1).getName());
+
+                    adapter.notifyDataSetChanged();
+
 
                 }
 
@@ -245,9 +245,9 @@ public class AntechamberFragment extends Fragment {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
-//
-//                        adapter.notifyDataSetChanged();
 
+                        Log.e(TAG,"Send payload");
+                        sendPayloadKey(endpointId);
 
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
@@ -271,13 +271,13 @@ public class AntechamberFragment extends Fragment {
                     //ZNAJDZ USERA I DODAJ MU PRIVATE KEY PO ENDPOINT4
                     String response = new String(payload.asBytes(),UTF_8);
                     Log.i(TAG,"Response1 is "+response);
-                    Log.i(TAG,"Response2 is "+response.substring(0,7));
-                    Log.i(TAG,"Response3 is "+response.substring(8));
+//                    Log.i(TAG,"Response2 is "+response.substring(0,7));
+//                    Log.i(TAG,"Response3 is "+response.substring(8));
                     if(response.substring(0,7).equals(CREATED)){
-                        Log.i(TAG,"In created");
-                        Log.i(TAG,"Id of event"+response.substring(8));
+//                        Log.i(TAG,"In created");
+//                        Log.i(TAG,"Id of event"+response.substring(8));
                         //group created, moving to another screen
-                        //replaceFragment(response.substring(8));
+                        replaceFragment(response.substring(8));
                     }else {
                         //received a key
                         Log.i(TAG,"Received a key!");
@@ -316,6 +316,7 @@ public class AntechamberFragment extends Fragment {
     }
 
     private void sendPayloadKey(String otherEndpoint){
+        Log.e(TAG,"Sending payload key");
         connectionsClient.sendPayload(
                 otherEndpoint, Payload.fromBytes(Constants.loggedUser.getPrivate_key().getBytes(UTF_8)));
 
@@ -361,9 +362,31 @@ public class AntechamberFragment extends Fragment {
     public void replaceFragment(String groupID){
         connectionsClient.stopAdvertising();
         connectionsClient.stopDiscovery();
+        //We send both groupID and private key, otherwise we won't verify the user
 
+        String[] groupID_private_key ={groupID,Constants.loggedUser.getPrivate_key()};
+        tempGroupID=groupID;
+
+        mSubscriptions.add(NetworkUtil.getRetrofit(Constants.getAccessToken(getActivity()),
+                Constants.getRefreshToken(getActivity()),
+                Constants.getName(getActivity())).addGroupMembership(groupID_private_key)
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
+
+
+
+    }
+
+    private void handleErrorRegister(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    private void handleResponseChangeName(Response response) {
+        Log.i(TAG,response.toString());
         Bundle bundle = new Bundle();
-        bundle.putString("groupID",groupID);
+        bundle.putString("groupID",tempGroupID);
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
@@ -376,6 +399,7 @@ public class AntechamberFragment extends Fragment {
 
         ft.commit();
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
+
     }
 
     public interface OnFragmentInteractionListener {

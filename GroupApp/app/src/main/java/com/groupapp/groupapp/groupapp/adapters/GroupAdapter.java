@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e(TAG,"POSITION OF CLICKED GROUP " + position);
+                Log.e(TAG,"ID OF CLICKED GROUP " + thisGroup.getId());
+                Log.e(TAG,"REST OF CLICKED GROUP " + thisGroup.getName());
                 replaceFragment(0, thisGroup.getId());
             }
         });
