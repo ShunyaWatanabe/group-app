@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.nkzawa.emitter.Emitter;
 import com.groupapp.groupapp.groupapp.MainActivity;
 import android.app.Activity;
 import com.groupapp.groupapp.groupapp.R;
@@ -33,6 +35,7 @@ import rx.subscriptions.CompositeSubscription;
 
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.MemberData;
+import com.groupapp.groupapp.groupapp.model.Message;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
@@ -43,7 +46,15 @@ import com.scaledrone.lib.Scaledrone;
 import com.scaledrone.lib.RoomListener;
 import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Random;
+
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ChatPageFragment extends Fragment implements RoomListener{
     private OnFragmentInteractionListener mListener;
@@ -66,6 +77,12 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private MessageAdapter messageAdapter;
 
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("https://group-app-android.herokuapp.com");
+        } catch (URISyntaxException e) {}
+    }
 
     @BindView(R.id.group_name)
     TextView groupName;
@@ -88,11 +105,22 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     @OnClick(R.id.b_send)
     public void sendMessage(){
         System.out.print("send button is clicked!");
-        String message = editText.getText().toString();
-        if (message.length() > 0) {
-            scaledrone.publish("observable-room", message);
-            editText.getText().clear();
+
+        // for scale drone
+//        String message = editText.getText().toString();
+//        if (message.length() > 0) {
+//            scaledrone.publish("observable-room", message);
+//            editText.getText().clear();
+//        }
+
+        // for socket.io
+        String io_message = editText.getText().toString().trim();
+        if (TextUtils.isEmpty(io_message)) {
+            return;
         }
+
+        editText.setText("");
+        mSocket.emit("new message", io_message);
     }
 
     @OnClick(R.id.b_add_member)
@@ -143,6 +171,9 @@ public class ChatPageFragment extends Fragment implements RoomListener{
                 System.err.println(reason);
             }
         });
+
+        mSocket.on("new message", onNewMessage);
+        mSocket.connect();
     }
 
     private void getGroup(String id){
@@ -173,6 +204,13 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
+
+        // add previous messages
+        for (Message m : thisGroup.getConversation()){
+            MemberData md = new MemberData(getRandomName(), getRandomColor());
+            MessageContent mc = new MessageContent(m.getText(), md, false);
+            messageAdapter.add(mc);
+        }
 
         System.out.print("onCreateView");
 
@@ -208,6 +246,8 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.unsubscribe();
+        mSocket.disconnect();
+        mSocket.off("new message", onNewMessage);
     }
 
     @Override
@@ -280,6 +320,32 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         }
         return sb.toString().substring(0, 7);
     }
+
+    private void addMessage(String username, String message) {
+    }
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    String message;
+                    try {
+                        username = data.getString("username");
+                        message = data.getString("message");
+                    } catch (JSONException e) {
+                        return;
+                    }
+
+                    // add the message to view
+                    addMessage(username, message);
+                }
+            });
+        }
+    };
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
