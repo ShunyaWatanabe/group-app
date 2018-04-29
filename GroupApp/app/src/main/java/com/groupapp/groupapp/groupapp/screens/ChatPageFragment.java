@@ -55,8 +55,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private Button[] buttonList = new Button[12];
 
-    private String groupID = "";
-
     public ChatPageFragment(){
 
     }
@@ -112,7 +110,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSubscriptions = new CompositeSubscription();
-        groupID = getArguments().getString("groupID");
+        String id = getArguments().getString("groupID");
 
 
         //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
@@ -125,7 +123,7 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 //                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
 
         //Downloading gorupData
-        getGroup(groupID);
+        getGroup(id);
 
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
@@ -194,17 +192,11 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private void replaceFragment(String fragmentString){
         Bundle bundle = new Bundle();
-        bundle.putString("groupID",groupID);
+        bundle.putString("groupID",thisGroup.getId());
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
         ft.addToBackStack("ChatPageFragment");
-
-
-
-
-
-
 
 
         if (fragmentString.equals("MemberFragment")) {
