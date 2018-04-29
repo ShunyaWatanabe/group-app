@@ -44,11 +44,6 @@ import com.groupapp.groupapp.groupapp.model.Message;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
-import com.scaledrone.lib.Listener;
-import com.scaledrone.lib.Member;
-import com.scaledrone.lib.Room;
-import com.scaledrone.lib.Scaledrone;
-import com.scaledrone.lib.RoomListener;
 import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
 
 import java.net.URISyntaxException;
@@ -59,7 +54,7 @@ import java.util.Random;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ChatPageFragment extends Fragment implements RoomListener{
+public class ChatPageFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
     public static final String TAG = ChatPageFragment.class.getSimpleName();
 
@@ -73,17 +68,38 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     }
 
-    private String channelID = "dCqA04nH0FCzZoFN";
-    private String roomName = "observable-room";
-
-    private Scaledrone scaledrone;
-
     private MessageAdapter messageAdapter;
 
     private Socket mSocket;
     {
-
+        Log.i(TAG, "creating socket");
+        try {
+            mSocket = IO.socket(Constants.API_URL);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.out.print("something happened\n");
+        }
+        Log.i(TAG, "created socket!");
     }
+        /*
+        Log.i(TAG,"creating socket");
+        try {
+            IO.Options opts = new IO.Options();
+            opts.timeout = 30000;
+            opts.reconnection = true;
+            opts.reconnectionAttempts = 10;
+            opts.reconnectionDelay = 1000;
+            opts.forceNew = true;
+            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
+            mSocket = IO.socket(Constants.API_URL);
+            //mSocket = IO.socket("https://localhost");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.out.print("something happened\n");
+        }
+        Log.i(TAG,"created socket!");
+
+    }*/
 
     @BindView(R.id.group_name)
     TextView groupName;
@@ -107,13 +123,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     public void sendMessage(){
         Log.i(TAG,"send button is clicked");
 
-        // for scale drone
-//        String message = editText.getText().toString();
-//        if (message.length() > 0) {
-//            scaledrone.publish("observable-room", message);
-//            editText.getText().clear();
-//        }
-
         // for socket.io
         String io_message = editText.getText().toString().trim();
         if (TextUtils.isEmpty(io_message)) {
@@ -122,6 +131,12 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
         editText.setText("");
         attemptSend(io_message);
+        MessageContent mc;
+        MemberData md;
+        // add the message to view
+        md = new MemberData("s", getRandomColor());
+        mc = new MessageContent(io_message, md, true);
+        messageAdapter.add(mc);
     }
 
     @OnClick(R.id.b_add_member)
@@ -146,59 +161,12 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         getGroup(id);
 
 
-        MemberData data = new MemberData(getRandomName(), getRandomColor());
-
-
-        scaledrone = new Scaledrone(channelID, data);
-
-        scaledrone.connect(new Listener() {
-            @Override
-            public void onOpen() {
-                System.out.println("Scaledrone connection open");
-                // Since the MainActivity itself already implement RoomListener we can pass it as a target
-                scaledrone.subscribe(roomName, ChatPageFragment.this);
-            }
-
-            @Override
-            public void onOpenFailure(Exception ex) {
-                System.err.println(ex);
-            }
-
-            @Override
-            public void onFailure(Exception ex) {
-                System.err.println(ex);
-            }
-
-            @Override
-            public void onClosed(String reason) {
-                System.err.println(reason);
-            }
-        });
-
-        //mSocket.on("new message", onNewMessage);
-        //mSocket.connect();
-        Log.i(TAG,"creating socket");
-        try {
-            IO.Options opts = new IO.Options();
-            opts.timeout = 30000;
-            opts.reconnection = true;
-            opts.reconnectionAttempts = 10;
-            opts.reconnectionDelay = 1000;
-            opts.forceNew = true;
-            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
-            mSocket = IO.socket(Constants.API_URL);
-            //mSocket = IO.socket("https://localhost");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            System.out.print("something happened\n");
-        }
-        Log.i(TAG,"created socket!");
-
-
         mSocket.connect();
         mSocket.on("join group", onJoined);
         mSocket.on("send message", onMessageReceive);
         attemptJoinRoom();
+        mSocket.emit("join group", new JSONObject());
+        mSocket.emit("send message", new JSONObject());
     }
 
     private void getGroup(String id){
@@ -274,7 +242,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         super.onDestroy();
         mSubscriptions.unsubscribe();
         mSocket.disconnect();
-        mSocket.off("new message", onNewMessage);
     }
 
     @Override
@@ -286,46 +253,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    // Successfully connected to Scaledrone room
-    @Override
-    public void onOpen(Room room) {
-        System.out.println("Connected to room");
-    }
-
-    // Connecting to Scaledrone room failed
-    @Override
-    public void onOpenFailure(Room room, Exception ex) {
-        System.err.println(ex);
-    }
-
-    // Received a message from Scaledrone room
-    @Override
-    public void onMessage(Room room, final JsonNode json, final Member member) {
-        // TODO
-        // To transform the raw JsonNode into a POJO we can use an ObjectMapper
-        final ObjectMapper mapper = new ObjectMapper();
-        try {
-            System.out.print("try in onMessage function ");
-            // member.clientData is a MemberData object, let's parse it as such
-            final MemberData data = mapper.treeToValue(member.getClientData(), MemberData.class);
-            // if the clientID of the message sender is the same as our's it was sent by us
-            boolean belongsToCurrentUser = member.getId().equals(scaledrone.getClientID());
-            // since the message body is a simple string in our case we can use json.asText() to parse it as such
-            // if it was instead an object we could use a similar pattern to data parsing
-            final MessageContent message = new MessageContent(json.asText(), data, belongsToCurrentUser);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    messageAdapter.add(message);
-                    // scroll the ListView to the last added element
-                    messagesView.setSelection(messagesView.getCount() - 1);
-                }
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 
     private String getRandomName() {
@@ -349,31 +276,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     private void addMessage(String username, String message) {
     }
-
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    Message m;
-                    try {
-                        m = (Message) data.get("message");
-                    } catch (JSONException e) {
-                        return;
-                    }
-
-                    MessageContent mc;
-                    MemberData md;
-                    // add the message to view
-                    md = new MemberData(m.getSender().getName(), getRandomColor());
-                    mc = new MessageContent(m.getText(), md, true);
-                    messageAdapter.add(mc);
-                }
-            });
-        }
-    };
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
