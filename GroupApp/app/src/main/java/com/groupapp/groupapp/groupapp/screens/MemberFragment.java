@@ -43,7 +43,7 @@ public class MemberFragment extends Fragment {
 
 
 
-    private ArrayList<User> members = new ArrayList<>();
+    private ArrayList<String> members = new ArrayList<>();
     private String group_ID;
 
     @BindView(R.id.b_leaveGroup)
@@ -98,12 +98,27 @@ public class MemberFragment extends Fragment {
 
         group_ID = getArguments().getString("groupID");
 
-
-        //todo populate it with actual values of the current group
-        members.add(new User("a"));
-
-
+//        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
+//                Constants.getRefreshToken(getActivity()),
+//                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(this::handleResponseGetMembers, this::handleErrorGetMembers));
+//
+//
+//        //todo populate it with actual values of the current group
+//        members.add("a");
+//
+////        @GET("groups/getmembers/{groupid}")
+////        Observable<Response> getMembers(@Path("groupid") String group_id);
+//
+//    }
+//
+//    public void handleResponseGetMembers(){
+//        Log.e("TAG","successs");
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

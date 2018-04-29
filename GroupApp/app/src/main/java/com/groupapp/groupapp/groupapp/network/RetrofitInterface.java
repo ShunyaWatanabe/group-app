@@ -54,8 +54,8 @@ public interface RetrofitInterface {
     @POST("groups/leavegroup")
     Observable<Response> leaveGroup(@Body String[] private_key_groupID);
 
-    @GET("groups/getmembers")
-    Observable<Response> getMembers();
+    @GET("groups/getmembers/{groupid}")
+    Observable<Response> getMembers(@Path("groupid") String group_id);
 
     @POST("groups/changeGroupName")
     Observable<Group> changeGroupName();
