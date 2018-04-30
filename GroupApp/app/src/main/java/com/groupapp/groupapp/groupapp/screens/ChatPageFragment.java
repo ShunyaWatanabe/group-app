@@ -163,6 +163,8 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
+        bShowMembers.setEnabled(true);
+        bAddMember.setEnabled(true);
 
 //        Log.e(TAG, "IN ON ATTACH");
         SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
@@ -170,6 +172,7 @@ public class ChatPageFragment extends Fragment{
         editor.apply();
 
         loadMessages();
+
     }
 
     private void loadMessages(){
@@ -193,6 +196,8 @@ public class ChatPageFragment extends Fragment{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
+        bShowMembers.setEnabled(false);
+        bAddMember.setEnabled(false);
         return view;
     }
 
