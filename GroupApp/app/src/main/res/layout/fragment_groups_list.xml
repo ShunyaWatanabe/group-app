@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="30dp"/>
-        <!--app:srcCompat="@drawable/ic_stat_add" />-->
+        android:layout_margin="30dp"
+        app:srcCompat="@drawable/ic_add_white_48px"
+        tools:ignore="VectorDrawableCompat" />
 
     <LinearLayout
         android:id="@+id/linlaHeaderProgress"
@@ -51,13 +52,16 @@
 
         <ImageView
             android:id="@+id/iv_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/profile"
-            android:layout_alignParentTop="true"/>
+            android:focusable="true"
+            android:src="@drawable/profile" />
         <!--<android.support.v7.widget.SearchView-->
         <!--android:id="@+id/search_view"-->
         <!--android:layout_width="match_parent"-->
@@ -79,16 +83,18 @@
             <!--android:layout_below="@+id/search_view"-->
             <!---->
             <!---->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-
-                android:transcriptMode="alwaysScroll" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:transcriptMode="alwaysScroll" />
 
     </RelativeLayout>
 

@@ -1,6 +1,7 @@
 package com.groupapp.groupapp.groupapp.screens;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,6 +56,8 @@ import java.util.Random;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChatPageFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
@@ -114,17 +117,23 @@ public class ChatPageFragment extends Fragment{
         }
         attemptSend(io_message);
 
+        MemberData md = new MemberData("Anonymous", getWhite());
+        MessageContent  mc = new MessageContent(io_message, md, false);
+        messageAdapter.add(mc);
+
         editText.setText("");
     }
 
     @OnClick(R.id.b_add_member)
     public void addMember(){
         replaceFragment("JoinGroupFragment");
+        bAddMember.setEnabled(false);
     }
 
     @OnClick(R.id.b_show_members)
     public void showMembers(){
         replaceFragment("MemberFragment");
+        bShowMembers.setEnabled(false);
     }
 
 
@@ -153,13 +162,21 @@ public class ChatPageFragment extends Fragment{
                 .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
     }
 
-    //todo this is failing
     private void handleResponseGetGroup(Group group) {
         Log.e(TAG,"Group downloaded");
         Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
+        bShowMembers.setEnabled(true);
+        bAddMember.setEnabled(true);
+
+//        Log.e(TAG, "IN ON ATTACH");
+        SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
+        editor.putString("id", thisGroup.getId());
+        editor.apply();
+
         loadMessages();
+
     }
 
     private void loadMessages(){
@@ -173,6 +190,7 @@ public class ChatPageFragment extends Fragment{
     private void handleErrorGetGroup(Throwable throwable) {
         Log.e(TAG,"Error downloading the group");
         throwable.printStackTrace();
+
     }
 
     @Override
@@ -182,6 +200,8 @@ public class ChatPageFragment extends Fragment{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
+        bShowMembers.setEnabled(false);
+        bAddMember.setEnabled(false);
         return view;
     }
 
@@ -223,12 +243,30 @@ public class ChatPageFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
+        editor.remove("id");
+        editor.apply();
+
+        Log.e(TAG, "IN ON DETACH");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "RESUMING");
+        SharedPreferences prefs = getActivity().getPreferences(MODE_PRIVATE);
+        String restoredId = prefs.getString("id", null);
+        if (restoredId != null)
+        {
+            getGroup(restoredId);
+        }
+    }
+
 
     private String getWhite() {
         StringBuffer sb = new StringBuffer("#");

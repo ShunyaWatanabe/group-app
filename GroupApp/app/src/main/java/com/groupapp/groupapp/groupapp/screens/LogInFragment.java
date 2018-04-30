@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ public class LogInFragment extends Fragment {
 
     @OnClick(R.id.b_start)
     public void startApp(){
+        bStart.setEnabled(false);
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                                                     Constants.getRefreshToken(getActivity()),
                                                     Constants.getName(getActivity())).register(new User(etUsername.getText().toString()))
@@ -115,6 +117,7 @@ public class LogInFragment extends Fragment {
         } else {
             showSnackBarMessage("Network Error !");
         }
+        bStart.setEnabled(true);
     }
 
     private void handleResponseRegister(Response response){
@@ -172,6 +175,8 @@ public class LogInFragment extends Fragment {
 
             showSnackBarMessage("Network Error !");
         }
+
+        bStart.setEnabled(true);
     }
 
 
@@ -198,6 +203,7 @@ public class LogInFragment extends Fragment {
 
             showSnackBarMessage("Network Error !");
         }
+        bStart.setEnabled(true);
     }
 
     private OnFragmentInteractionListener mListener;
@@ -214,6 +220,7 @@ public class LogInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         mSubscriptions = new CompositeSubscription();
         progress = new ProgressDialog(getActivity());

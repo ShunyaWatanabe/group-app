@@ -14,7 +14,6 @@
     <string name="code_info">Join group using this code within 3 minutes</string>
     <string name="leave_group">Leave Group</string>
     <string name="create_group">ENTER FOUR DIGITS</string>
-    <string name="group_name">..</string>
     <string name="profile">profile</string>
     <string name="input_placeholder">Write a message</string>
     <string name="group">GroupName</string>

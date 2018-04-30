@@ -56,7 +56,7 @@ public class MemberFragment extends Fragment {
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
 
-        //todo fatal if i click twice very fast it crahses the app
+        bLeaveGroup.setEnabled(false);
 
         String[] groupid_private_key = {Constants.loggedUser.getPrivate_key(),group_ID};
 
@@ -74,6 +74,7 @@ public class MemberFragment extends Fragment {
         Log.e(TAG,"leave group succeed");
         String removedGroupId = response.getId();
 
+
         for (Group group : Constants.loggedUser.getGroups()){
             if (group.getId().equals(removedGroupId)){
                 Constants.loggedUser.getGroups().remove(group);
@@ -81,14 +82,21 @@ public class MemberFragment extends Fragment {
         }
         //response.getId(); //this is the group ID
 
+
+
+        //getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getFragmentManager().popBackStackImmediate(GroupsListFragment.class.getSimpleName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
 
-        getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //getFragmentManager().popBackStackImmediate(GroupsListFragment.class.getSimpleName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        bLeaveGroup.setEnabled(true);
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
@@ -109,7 +117,6 @@ public class MemberFragment extends Fragment {
     }
 
 
-    //todo this is failing
     public void handleResponseGetMembers(Response response){
         Log.e("TAG","successs");
         members = new ArrayList<>(Arrays.asList(response.getMembers()));

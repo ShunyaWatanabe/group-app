@@ -1,4 +1,4 @@
-##Release 1
+## Release 1
 
 Project SetUp. Delineated project goals and objectives. 
 
@@ -32,4 +32,14 @@ Working on group list link with DB.
 
 80% ready for the final release. 
 
+## Release 5
 
+Complete everything.
+
+Chat is working anonymously.
+
+Create groupw works perfectly.
+
+Fixed a number of bugs.
+
+Updated future development list.
