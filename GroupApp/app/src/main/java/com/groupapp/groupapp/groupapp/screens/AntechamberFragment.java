@@ -108,14 +108,16 @@ public class AntechamberFragment extends Fragment {
         Log.e(TAG, "Create group succeeded!: " + response.toString());
         Log.e(TAG, "GroupID: " + response.getId());
         Log.e(TAG, "GroupID: " + response.getMessage());
-        bCreateGroup.setEnabled(true);
         sendToAllConnected(response.getId());
+
         replaceFragment(response.getId());
+        bCreateGroup.setEnabled(true);
 
     }
 
     private void handleErrorCreate(Throwable error){
         Log.e(TAG, "Create group error!: " + error.getMessage());
+        bCreateGroup.setEnabled(true);
     }
 
 

@@ -73,7 +73,7 @@ public class MemberFragment extends Fragment {
     private void handleResponseLeaveGroup(Response response){
         Log.e(TAG,"leave group succeed");
         String removedGroupId = response.getId();
-        bLeaveGroup.setEnabled(true);
+
 
         for (Group group : Constants.loggedUser.getGroups()){
             if (group.getId().equals(removedGroupId)){
@@ -83,14 +83,13 @@ public class MemberFragment extends Fragment {
         //response.getId(); //this is the group ID
 
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+        bLeaveGroup.setEnabled(true);
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
-
-        getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        bLeaveGroup.setEnabled(true);
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
