@@ -88,6 +88,7 @@ public class AntechamberFragment extends Fragment {
         //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
         //send code to server
         //add the host
+        bCreateGroup.setEnabled(false);
         joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));
         joiningUsers.get(joiningUsers.size()-1).setKey(Constants.loggedUser.get_id());
         Log.e(TAG,"JOINING USERS ARE: "+joiningUsers.toString());
@@ -107,6 +108,7 @@ public class AntechamberFragment extends Fragment {
         Log.e(TAG, "Create group succeeded!: " + response.toString());
         Log.e(TAG, "GroupID: " + response.getId());
         Log.e(TAG, "GroupID: " + response.getMessage());
+        bCreateGroup.setEnabled(true);
         sendToAllConnected(response.getId());
         replaceFragment(response.getId());
 

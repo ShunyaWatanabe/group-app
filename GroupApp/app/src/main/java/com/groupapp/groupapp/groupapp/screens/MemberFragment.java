@@ -56,7 +56,7 @@ public class MemberFragment extends Fragment {
     @OnClick(R.id.b_leaveGroup)
     public void leaveGroup(){
 
-        //todo fatal if i click twice very fast it crahses the app
+        bLeaveGroup.setEnabled(false);
 
         String[] groupid_private_key = {Constants.loggedUser.getPrivate_key(),group_ID};
 
@@ -73,6 +73,7 @@ public class MemberFragment extends Fragment {
     private void handleResponseLeaveGroup(Response response){
         Log.e(TAG,"leave group succeed");
         String removedGroupId = response.getId();
+        bLeaveGroup.setEnabled(true);
 
         for (Group group : Constants.loggedUser.getGroups()){
             if (group.getId().equals(removedGroupId)){
@@ -82,6 +83,7 @@ public class MemberFragment extends Fragment {
         //response.getId(); //this is the group ID
 
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 
