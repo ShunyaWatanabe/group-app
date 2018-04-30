@@ -306,7 +306,7 @@ public class AntechamberFragment extends Fragment {
     private void sendPayloadKey(String otherEndpoint){
         Log.e(TAG,"Sending payload key");
         connectionsClient.sendPayload(
-                otherEndpoint, Payload.fromBytes(Constants.loggedUser.getPrivate_key().getBytes(UTF_8)));
+                otherEndpoint, Payload.fromBytes(Constants.loggedUser.get_id().getBytes(UTF_8)));
 
     }
 
