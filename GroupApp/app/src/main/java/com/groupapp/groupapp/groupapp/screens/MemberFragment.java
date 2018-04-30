@@ -119,7 +119,6 @@ public class MemberFragment extends Fragment {
         Log.e("TAG","get members fails");
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
