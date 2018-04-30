@@ -80,6 +80,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.print(thisGroup.getId());
                 Log.e(TAG,"POSITION OF CLICKED GROUP " + position);
                 Log.e(TAG,"ID OF CLICKED GROUP " + thisGroup.getId());
                 Log.e(TAG,"REST OF CLICKED GROUP " + thisGroup.getName());
