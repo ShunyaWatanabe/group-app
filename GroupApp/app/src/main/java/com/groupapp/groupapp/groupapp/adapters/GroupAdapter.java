@@ -77,18 +77,21 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         Group thisGroup = myGroups.get(position);
         holder.tvName.setText(thisGroup.getName());
 
+        Log.e(TAG,"MyGroups: " + myGroups.toString());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.print(thisGroup.getId());
                 Log.e(TAG,"POSITION OF CLICKED GROUP " + position);
                 Log.e(TAG,"ID OF CLICKED GROUP " + thisGroup.getId());
-                Log.e(TAG,"REST OF CLICKED GROUP " + thisGroup.getName());
+                Log.e(TAG,"NAME OF CLICKED GROUP " + thisGroup.getName());
                 replaceFragment(thisGroup.getId());
             }
         });
 
     }
+
     private void replaceFragment(String groupID) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();

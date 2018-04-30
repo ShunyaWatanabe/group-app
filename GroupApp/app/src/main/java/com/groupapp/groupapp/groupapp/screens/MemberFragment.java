@@ -117,7 +117,6 @@ public class MemberFragment extends Fragment {
     }
 
 
-    //todo this is failing
     public void handleResponseGetMembers(Response response){
         Log.e("TAG","successs");
         members = new ArrayList<>(Arrays.asList(response.getMembers()));
