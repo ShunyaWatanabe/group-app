@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@+id/b_add_member"
             android:id="@+id/b_show_members"
-            android:text="show"/>
+            android:text="member"/>
 
         <TextView
             android:layout_width="wrap_content"
