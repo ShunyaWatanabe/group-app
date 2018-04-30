@@ -8,7 +8,7 @@ public class Group {
     private String name;
     private String _id;
     private ArrayList<String> members;
-    private ArrayList<Message> conversation;
+    private ArrayList<String> conversation;
 
     public String getName() {
         return name;
@@ -26,11 +26,11 @@ public class Group {
         this.members.add(newMember);
     }
 
-    public ArrayList<Message> getConversation() {
+    public ArrayList<String> getConversation() {
         return conversation;
     }
 
-    public void setConversation(ArrayList<Message> conversation) {
+    public void setConversation(ArrayList<String> conversation) {
         this.conversation = conversation;
     }
 
