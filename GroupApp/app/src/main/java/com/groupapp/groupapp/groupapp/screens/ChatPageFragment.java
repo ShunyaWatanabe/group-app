@@ -243,6 +243,10 @@ public class ChatPageFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
+        editor.remove("id");
+        editor.apply();
+
         Log.e(TAG, "IN ON DETACH");
     }
 

@@ -82,6 +82,10 @@ public class MemberFragment extends Fragment {
         }
         //response.getId(); //this is the group ID
 
+
+
+        //getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getFragmentManager().popBackStackImmediate(GroupsListFragment.class.getSimpleName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
@@ -89,6 +93,9 @@ public class MemberFragment extends Fragment {
 
     private void handleErrorLeaveGroup(Throwable err){
         Log.e(TAG,"leave group fails");
+
+        //getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //getFragmentManager().popBackStackImmediate(GroupsListFragment.class.getSimpleName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
         bLeaveGroup.setEnabled(true);
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
@@ -110,7 +117,6 @@ public class MemberFragment extends Fragment {
     }
 
 
-    //todo this is failing
     public void handleResponseGetMembers(Response response){
         Log.e("TAG","successs");
         members = new ArrayList<>(Arrays.asList(response.getMembers()));
