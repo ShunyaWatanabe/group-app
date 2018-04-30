@@ -117,11 +117,11 @@ public class ChatPageFragment extends Fragment{
         }
         attemptSend(io_message);
         thisGroup.getConversation().add(io_message);
-//        loadMessages();
 
-//        MemberData md = new MemberData("Anonymous", getWhite());
-//        MessageContent  mc = new MessageContent(io_message, md, false);
-//        messageAdapter.add(mc);
+
+        MemberData md = new MemberData("Anonymous", getWhite());
+        MessageContent  mc = new MessageContent(io_message, md, true);
+        messageAdapter.add(mc);
 
         editText.setText("");
     }
