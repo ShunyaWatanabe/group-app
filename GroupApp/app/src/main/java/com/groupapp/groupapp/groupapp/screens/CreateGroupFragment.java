@@ -98,16 +98,13 @@ public class CreateGroupFragment extends Fragment {
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
                     Constants.getName(getActivity())).joinInvite(private_key_invitation_code)
-                    //send code to the server and join by invitation
                     .observeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::handleResponseJoin, this::handleErrorJoin));
 
             code = "----";
-            //replaceFragment();
 
-            //todo here we need to go into the new group;
 
         }
     }
@@ -118,7 +115,7 @@ public class CreateGroupFragment extends Fragment {
     public void createNewGroup(){
         if (!code.contains("-")){
             code = "----";
-            replaceFragment();
+            replaceFragment("AntechamberFragment","");
         }else{
             Toast.makeText(getContext(),"Enter full code!",Toast.LENGTH_LONG);
         }
@@ -128,6 +125,8 @@ public class CreateGroupFragment extends Fragment {
     ///change the respons and error
     private void handleResponseJoin(Response response){
         Log.e(TAG, "Join group succeeded!: " + response.toString());
+        replaceFragment( "ChatPageFragment",response.getId());
+
     }
 
     private void handleErrorJoin(Throwable error){
@@ -231,25 +230,30 @@ public class CreateGroupFragment extends Fragment {
         mListener = null;
     }
 
-    private void replaceFragment(){
+    private void replaceFragment(String fragmentString,String groupID){
         Bundle bundle = new Bundle();
-        bundle.putString("code",code);
-
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-        ft.addToBackStack("CreateGroupFragment");
-
-
-        AntechamberFragment fragment = new AntechamberFragment();
-        //ChatPageFragment fragment = new ChatPageFragment(); //test
-
-        fragment.setArguments(bundle);
-        ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
+        if (fragmentString.equals("AntechamberFragment")){
+            bundle.putString("code",code);
+            ft.addToBackStack("CreateGroupFragment");
+            AntechamberFragment fragment = new AntechamberFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, AntechamberFragment.TAG);
+        }
+        else{
+            bundle.putString("groupID", groupID);
+            ft.addToBackStack("GroupsListFragment");
+            ChatPageFragment fragment = new ChatPageFragment();
+            fragment.setArguments(bundle);
+            ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+        }
 
         ft.commit();
-        Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
-
     }
+
+
+
 
 }
 
