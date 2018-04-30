@@ -29,7 +29,7 @@ public class MessageAdapter extends BaseAdapter {
 
     public void add(MessageContent message) {
         this.messages.add(message);
-        notifyDataSetChanged(); // to render the list we need to notify
+        //notifyDataSetChanged(); // to render the list we need to notify
     }
 
     @Override
