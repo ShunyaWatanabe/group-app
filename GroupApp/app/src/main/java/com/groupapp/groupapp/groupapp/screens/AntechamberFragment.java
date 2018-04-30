@@ -89,7 +89,7 @@ public class AntechamberFragment extends Fragment {
         //send code to server
         //add the host
         joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));
-        joiningUsers.get(joiningUsers.size()-1).setKey(Constants.loggedUser.getPrivate_key());
+        joiningUsers.get(joiningUsers.size()-1).setKey(Constants.loggedUser.get_id());
         Log.e(TAG,"JOINING USERS ARE: "+joiningUsers.toString());
 
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
@@ -226,9 +226,6 @@ public class AntechamberFragment extends Fragment {
 
                     joiningUsers.add(new ConnectingUser(connectionInfo.getEndpointName(),endpointId));
                     adapter.notifyDataSetChanged();
-
-
-
                 }
 
                 @Override
@@ -236,12 +233,9 @@ public class AntechamberFragment extends Fragment {
                     if (result.getStatus().isSuccess()) {
                         Log.i(TAG, "onConnectionResult: connection successful");
                         Log.i(TAG,"Endpoint id "+endpointId);
-//                        Log.e(TAG, "first name "+joiningUsers.get(0).getName());
-                        //Log.e(TAG, "second name "+joiningUsers.get(1).getName());
-//                        adapter.notifyDataSetChanged();
 
                         Log.e(TAG,"Send payload");
-                        sendPayloadKey(endpointId);
+                        sendPayloadKey(Constants.loggedUser.get_id());
 
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
@@ -367,17 +361,15 @@ public class AntechamberFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
-
-
+                .subscribe(this::handleResponseUpdateMembership, this::handleErrorUpdateMembership));
 
     }
 
-    private void handleErrorRegister(Throwable throwable) {
+    private void handleErrorUpdateMembership(Throwable throwable) {
         throwable.printStackTrace();
     }
 
-    private void handleResponseChangeName(Response response) {
+    private void handleResponseUpdateMembership(Response response) {
         Log.i(TAG,response.toString());
         Bundle bundle = new Bundle();
         bundle.putString("groupID",tempGroupID);

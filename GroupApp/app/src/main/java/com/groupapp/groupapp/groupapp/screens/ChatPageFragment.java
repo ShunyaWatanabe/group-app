@@ -34,6 +34,7 @@ import rx.subscriptions.CompositeSubscription;
 import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.MemberData;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
+import com.groupapp.groupapp.groupapp.model.Response;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 import com.scaledrone.lib.Listener;
@@ -113,16 +114,6 @@ public class ChatPageFragment extends Fragment implements RoomListener{
         String id = getArguments().getString("groupID");
         Log.e(TAG,"Chat id "+id);
 
-
-        //BASED ON THAT ID OCTOVER DOWNLAOD THE GROUP DATA+
-//        mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
-//                Constants.getRefreshToken(getActivity()),
-//                Constants.getName(getActivity())).getGroupsFromServer(Constants.loggedUser.getPrivate_key())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
-
         //Downloading gorupData
         getGroup(id);
 
@@ -169,7 +160,8 @@ public class ChatPageFragment extends Fragment implements RoomListener{
 
     //todo this is failing
     private void handleResponseGetGroup(Group group) {
-        Log.i(TAG,"Group downloaded");
+        Log.e(TAG,"Group downloaded");
+        Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
     }
