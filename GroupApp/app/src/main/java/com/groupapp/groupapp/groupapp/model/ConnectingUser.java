@@ -13,7 +13,7 @@ public class ConnectingUser{
     public ConnectingUser(String name, String endpoint){
         this.name = name;
         this.endpoint = endpoint;
-        this.key = null;
+        this.key = null; //this will be a user's id
     }
 
 //    public ConnectingUser(String name, String endpoint){

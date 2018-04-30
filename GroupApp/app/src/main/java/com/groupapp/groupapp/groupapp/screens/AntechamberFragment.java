@@ -85,14 +85,12 @@ public class AntechamberFragment extends Fragment {
 
     @OnClick(R.id.b_createGroupAntechamber)
     public void createGroup(){
-        //new Group();
         //joiningUsers has an array of name, endpoint (not needed), and privateKey. We need to put all these users in a group.
         //send code to server
-  //  joiningUsers
-//
-
-
-        Log.e(TAG,"JOININ USERS ARE: "+joiningUsers.toString());
+        //add the host
+        joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));
+        joiningUsers.get(joiningUsers.size()-1).setKey(Constants.loggedUser.get_id());
+        Log.e(TAG,"JOINING USERS ARE: "+joiningUsers.toString());
 
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                 Constants.getRefreshToken(getActivity()),
@@ -102,13 +100,6 @@ public class AntechamberFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseCreate, this::handleErrorCreate));
-
-
-
-        //ZROBIC FUNKCJE KTORA TWORZY GRUPE< ZWRACA JEJ ID I POTEM ROZSYLA TO ID DO KAZDEGO UZYTKOWNIKA - RACZEJ TO
-        //ALBO TWORZYC EVENT W MOMENCIE TWORZENIA GRUPY I JAKOS SHAREOWAC TEN GROUP ID
-
-
     }
 
     ///change the respons and error
@@ -143,8 +134,6 @@ public class AntechamberFragment extends Fragment {
         mSubscriptions= new CompositeSubscription();
         code=getArguments().getString("code");
         connectionsClient = Nearby.getConnectionsClient(getActivity());
-        joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));
-        joiningUsers.get(0).setKey(Constants.loggedUser.getPrivate_key());
 
     }
 
@@ -161,6 +150,9 @@ public class AntechamberFragment extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setOrientation(LinearLayout.HORIZONTAL);
+        //joiningUsers.add(new ConnectingUser(Constants.loggedUser.getName(),"host"));//czemu
+        //joiningUsers.get(0).setKey(Constants.loggedUser.getPrivate_key());
+
         adapter = new JoiningUserAdapter(getContext(),joiningUsers);
         gvJoiningUsers.setAdapter(adapter);
 
@@ -187,8 +179,8 @@ public class AntechamberFragment extends Fragment {
 
     /** Broadcasts our presence using Nearby Connections so other players can find us. */
     private void startAdvertising() {
-        // Note: Advertising may fail. To keep this demo simple, we don't handle failures.
         Log.e(TAG,"Start Advertising...");
+
         connectionsClient.startAdvertising(
                 Constants.loggedUser.getName(), code, connectionLifecycleCallback, new AdvertisingOptions(Constants.STRATEGY))
          .addOnFailureListener(
@@ -231,13 +223,9 @@ public class AntechamberFragment extends Fragment {
                     connectionsClient.acceptConnection(endpointId, payloadCallback);
                     Log.e(TAG,"OPPONENT NAME "+connectionInfo.getEndpointName());
 //                    tempName = connectionInfo.getEndpointName();
+
                     joiningUsers.add(new ConnectingUser(connectionInfo.getEndpointName(),endpointId));
-                    Log.e(TAG, "first name "+joiningUsers.get(0).getName());
-                    Log.e(TAG, "second name "+joiningUsers.get(1).getName());
-
                     adapter.notifyDataSetChanged();
-
-
                 }
 
                 @Override
@@ -247,7 +235,7 @@ public class AntechamberFragment extends Fragment {
                         Log.i(TAG,"Endpoint id "+endpointId);
 
                         Log.e(TAG,"Send payload");
-                        sendPayloadKey(endpointId);
+                        sendPayloadKey(Constants.loggedUser.get_id());
 
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
@@ -362,8 +350,8 @@ public class AntechamberFragment extends Fragment {
     public void replaceFragment(String groupID){
         connectionsClient.stopAdvertising();
         connectionsClient.stopDiscovery();
-        //We send both groupID and private key, otherwise we won't verify the user
 
+        //We send both groupID and private key, otherwise we won't verify the user
         String[] groupID_private_key ={groupID,Constants.loggedUser.getPrivate_key()};
         tempGroupID=groupID;
 
@@ -373,17 +361,15 @@ public class AntechamberFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseChangeName, this::handleErrorRegister));
-
-
+                .subscribe(this::handleResponseUpdateMembership, this::handleErrorUpdateMembership));
 
     }
 
-    private void handleErrorRegister(Throwable throwable) {
+    private void handleErrorUpdateMembership(Throwable throwable) {
         throwable.printStackTrace();
     }
 
-    private void handleResponseChangeName(Response response) {
+    private void handleResponseUpdateMembership(Response response) {
         Log.i(TAG,response.toString());
         Bundle bundle = new Bundle();
         bundle.putString("groupID",tempGroupID);

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 public class User implements Parcelable {
-
+    private String _id;
     private String name;
     private String private_key;
     private String created_at;
@@ -17,6 +17,7 @@ public class User implements Parcelable {
     private String color;
 
     protected User(Parcel in) {
+        _id = in.readString();
         name = in.readString();
         private_key = in.readString();
         created_at = in.readString();
@@ -98,11 +99,20 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_id);
         dest.writeString(name);
         dest.writeString(private_key);
         dest.writeString(created_at);
         dest.writeList(groups);
         dest.writeString(token);
         dest.writeString(fcm_token);
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }
