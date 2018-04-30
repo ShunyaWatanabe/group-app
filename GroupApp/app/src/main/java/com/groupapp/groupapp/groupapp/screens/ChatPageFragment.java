@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Ack;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.groupapp.groupapp.groupapp.MainActivity;
@@ -75,6 +76,7 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG, "creating socket");
         try {
             mSocket = IO.socket(Constants.API_URL);
+            //mSocket = IO.socket("http://chat.socket.io");
         } catch (URISyntaxException e) {
             e.printStackTrace();
             System.out.print("something happened\n");
@@ -128,15 +130,25 @@ public class ChatPageFragment extends Fragment{
         if (TextUtils.isEmpty(io_message)) {
             return;
         }
-
-        editText.setText("");
         attemptSend(io_message);
+
+        // add the message to view
         MessageContent mc;
         MemberData md;
-        // add the message to view
         md = new MemberData("s", getRandomColor());
         mc = new MessageContent(io_message, md, true);
         messageAdapter.add(mc);
+
+        if (mSocket.connected()) {
+            Log.e("check connection", "connected");
+        } else {
+            Log.e("check connection", "NOT CONNECTED");
+        }
+
+        mSocket.disconnect();
+        mSocket.connect();
+
+        editText.setText("");
     }
 
     @OnClick(R.id.b_add_member)
@@ -158,15 +170,9 @@ public class ChatPageFragment extends Fragment{
 
         Log.i(TAG,"oncreate: "+id);
         //Downloading gorupData
-        getGroup(id);
+        //getGroup(id);
 
-
-        mSocket.connect();
-        mSocket.on("join group", onJoined);
-        mSocket.on("send message", onMessageReceive);
-        attemptJoinRoom();
-        mSocket.emit("join group", new JSONObject());
-        mSocket.emit("send message", new JSONObject());
+        initialize_socket();
     }
 
     private void getGroup(String id){
@@ -255,16 +261,6 @@ public class ChatPageFragment extends Fragment{
         super.onAttach(context);
     }
 
-    private String getRandomName() {
-        String[] adjs = {"autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark", "summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter", "patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue", "billowing", "broken", "cold", "damp", "falling", "frosty", "green", "long", "late", "lingering", "bold", "little", "morning", "muddy", "old", "red", "rough", "still", "small", "sparkling", "throbbing", "shy", "wandering", "withered", "wild", "black", "young", "holy", "solitary", "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine", "polished", "ancient", "purple", "lively", "nameless"};
-        String[] nouns = {"waterfall", "river", "breeze", "moon", "rain", "wind", "sea", "morning", "snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn", "glitter", "forest", "hill", "cloud", "meadow", "sun", "glade", "bird", "brook", "butterfly", "bush", "dew", "dust", "field", "fire", "flower", "firefly", "feather", "grass", "haze", "mountain", "night", "pond", "darkness", "snowflake", "silence", "sound", "sky", "shape", "surf", "thunder", "violet", "water", "wildflower", "wave", "water", "resonance", "sun", "wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper", "frog", "smoke", "star"};
-        return (
-                adjs[(int) Math.floor(Math.random() * adjs.length)] +
-                        "_" +
-                        nouns[(int) Math.floor(Math.random() * nouns.length)]
-        );
-    }
-
     private String getRandomColor() {
         Random r = new Random();
         StringBuffer sb = new StringBuffer("#");
@@ -281,13 +277,27 @@ public class ChatPageFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    private Emitter.Listener onJoined = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-
-            Log.e("Response", "in joined");
+    private void initialize_socket() {
+        mSocket.connect();
+        if (mSocket.connected()) {
+            Log.e("check connection", "connected");
+        } else {
+            Log.e("check connection", "NOT CONNECTED");
         }
-    };
+        mSocket.open();
+        if (mSocket.connected()) {
+            Log.e("check connection", "connected after open");
+        } else {
+            Log.e("check connection", "NOT CONNECTED after open");
+            return;
+        }
+        mSocket.on("join group", onJoined);
+        mSocket.on("send message", onMessageReceive);
+        attemptJoinRoom();
+        mSocket.send(new JSONObject());
+    }
+
+    private Emitter.Listener onJoined = args -> Log.e("Response", "joined");
 
     private Emitter.Listener onMessageReceive = new Emitter.Listener() {
         @Override
