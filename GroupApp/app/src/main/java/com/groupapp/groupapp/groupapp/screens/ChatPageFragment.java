@@ -117,6 +117,10 @@ public class ChatPageFragment extends Fragment{
         }
         attemptSend(io_message);
 
+        MemberData md = new MemberData("Anonymous", getWhite());
+        MessageContent  mc = new MessageContent(io_message, md, false);
+        messageAdapter.add(mc);
+
         editText.setText("");
     }
 
