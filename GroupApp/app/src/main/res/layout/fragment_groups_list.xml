@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="30dp"/>
-        <!--app:srcCompat="@drawable/ic_stat_add" />-->
+        android:layout_margin="30dp"
+        app:srcCompat="@drawable/ic_add_white_48px"
+        tools:ignore="VectorDrawableCompat" />
 
     <LinearLayout
         android:id="@+id/linlaHeaderProgress"
