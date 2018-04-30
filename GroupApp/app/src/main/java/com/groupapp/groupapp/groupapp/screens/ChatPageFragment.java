@@ -139,16 +139,6 @@ public class ChatPageFragment extends Fragment{
         md = new MemberData("s", getRandomColor());
         mc = new MessageContent(io_message, md, true);
         messageAdapter.add(mc);
-
-        if (mSocket.connected()) {
-            Log.e("check connection", "connected");
-        } else {
-            Log.e("check connection", "NOT CONNECTED");
-        }
-
-        mSocket.disconnect();
-        mSocket.connect();
-
         editText.setText("");
     }
 
@@ -171,7 +161,7 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG,"oncreate: "+id);
         Log.e(TAG,"Chat id "+id);
         //Downloading gorupData
-        //getGroup(id);
+        getGroup(id);
 
         initialize_socket();
     }
