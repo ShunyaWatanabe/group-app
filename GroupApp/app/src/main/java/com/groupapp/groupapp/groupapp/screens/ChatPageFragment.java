@@ -62,6 +62,8 @@ public class ChatPageFragment extends Fragment{
 
     private Group thisGroup;
 
+    private String id = "";
+
     private CompositeSubscription mSubscriptions;
 
     public ChatPageFragment(){
@@ -130,7 +132,9 @@ public class ChatPageFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSubscriptions = new CompositeSubscription();
-        String id = getArguments().getString("groupID");
+        if (getArguments()!=null) {
+            id = getArguments().getString("groupID");
+        }
         Log.i(TAG,"oncreate: "+id);
         Log.e(TAG,"Chat id "+id);
         //Downloading gorupData

@@ -235,7 +235,7 @@ public class AntechamberFragment extends Fragment {
                         Log.i(TAG,"Endpoint id "+endpointId);
 
                         Log.e(TAG,"Send payload");
-                        sendPayloadKey(Constants.loggedUser.get_id());
+                        sendPayloadKey(endpointId);
 
                     } else {
                         Log.i(TAG, "onConnectionResult: connection failed");
