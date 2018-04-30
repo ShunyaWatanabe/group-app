@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 public class MemberAdapter extends BaseAdapter {
     Context context;
-    ArrayList<User> members;
+    ArrayList<String> members;
 
 
-    public MemberAdapter(Context c, ArrayList<User> members) {
+    public MemberAdapter(Context c, ArrayList<String> members) {
         this.context = c;
         this.members = members;
     }
@@ -48,7 +48,7 @@ public class MemberAdapter extends BaseAdapter {
         TextView textView;
         if (convertView == null) {
             textView = new TextView(context);
-            textView.setText(members.get(position).getName());
+            textView.setText(members.get(position));
             textView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         } else {
             textView = (TextView) convertView;

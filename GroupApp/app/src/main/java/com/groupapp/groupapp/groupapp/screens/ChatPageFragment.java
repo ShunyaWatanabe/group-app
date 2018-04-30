@@ -43,6 +43,7 @@ import com.groupapp.groupapp.groupapp.model.Group;
 import com.groupapp.groupapp.groupapp.model.MemberData;
 import com.groupapp.groupapp.groupapp.model.Message;
 import com.groupapp.groupapp.groupapp.model.MessageContent;
+import com.groupapp.groupapp.groupapp.model.Response;
 import com.groupapp.groupapp.groupapp.network.NetworkUtil;
 import com.groupapp.groupapp.groupapp.utils.Constants;
 import com.groupapp.groupapp.groupapp.adapters.MessageAdapter;
@@ -167,8 +168,8 @@ public class ChatPageFragment extends Fragment{
         super.onCreate(savedInstanceState);
         mSubscriptions = new CompositeSubscription();
         String id = getArguments().getString("groupID");
-
         Log.i(TAG,"oncreate: "+id);
+        Log.e(TAG,"Chat id "+id);
         //Downloading gorupData
         //getGroup(id);
 
@@ -185,8 +186,10 @@ public class ChatPageFragment extends Fragment{
                 .subscribe(this::handleResponseGetGroup, this::handleErrorGetGroup));
     }
 
+    //todo this is failing
     private void handleResponseGetGroup(Group group) {
-        Log.i(TAG,"Group downloaded");
+        Log.e(TAG,"Group downloaded");
+        Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
     }

@@ -10,15 +10,15 @@ public class ConnectingUser{
     String key;
 
 
-    public ConnectingUser(String name, String endpoint, String private_key){
+    public ConnectingUser(String name, String endpoint){
         this.name = name;
         this.endpoint = endpoint;
-        this.key = private_key;
+        this.key = null; //this will be a user's id
     }
 
-    public ConnectingUser(String name, String endpoint){
-        this(name, endpoint,null);
-    }
+//    public ConnectingUser(String name, String endpoint){
+//        this(name, endpoint,null);
+//    }
 
 
 

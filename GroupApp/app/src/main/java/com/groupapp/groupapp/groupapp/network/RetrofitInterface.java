@@ -31,6 +31,9 @@ public interface RetrofitInterface {
     @POST("users/changeUserName")
     Observable<Response> changeUserName(@Body String[] name_private_key);
 
+    @POST("users/addGroup")
+    Observable<Response> addGroupMembership(@Body String[] group_id);
+
 
     //GROUPS
     @GET("groups/{getgroups}")
@@ -54,8 +57,8 @@ public interface RetrofitInterface {
     @POST("groups/leavegroup")
     Observable<Response> leaveGroup(@Body String[] private_key_groupID);
 
-    @GET("groups/getmembers")
-    Observable<Response> getMembers();
+    @GET("groups/getmembers/{groupid}")
+    Observable<Response> getMembers(@Path("groupid") String group_id);
 
     @POST("groups/changeGroupName")
     Observable<Group> changeGroupName();
