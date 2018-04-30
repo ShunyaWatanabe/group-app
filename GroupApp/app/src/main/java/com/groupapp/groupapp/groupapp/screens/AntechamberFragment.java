@@ -378,7 +378,7 @@ public class AntechamberFragment extends Fragment {
 
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-        //ft.addToBackStack(TAG);
+        ft.addToBackStack(TAG);
 
         ChatPageFragment fragment = new ChatPageFragment(); //test
         fragment.setArguments(bundle);
