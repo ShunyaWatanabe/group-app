@@ -69,8 +69,6 @@ public class ChatPageFragment extends Fragment{
 
     private CompositeSubscription mSubscriptions;
 
-    private Button[] buttonList = new Button[12];
-
     public ChatPageFragment(){
 
     }
@@ -89,25 +87,6 @@ public class ChatPageFragment extends Fragment{
         }
         Log.i(TAG, "created socket!");
     }
-        /*
-        Log.i(TAG,"creating socket");
-        try {
-            IO.Options opts = new IO.Options();
-            opts.timeout = 30000;
-            opts.reconnection = true;
-            opts.reconnectionAttempts = 10;
-            opts.reconnectionDelay = 1000;
-            opts.forceNew = true;
-            //mSocket = IO.socket("https://group-app-android.herokuapp.com");
-            mSocket = IO.socket(Constants.API_URL);
-            //mSocket = IO.socket("https://localhost");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            System.out.print("something happened\n");
-        }
-        Log.i(TAG,"created socket!");
-
-    }*/
 
     @BindView(R.id.group_name)
     TextView groupName;
@@ -138,12 +117,6 @@ public class ChatPageFragment extends Fragment{
         }
         attemptSend(io_message);
 
-        // add the message to view
-        MessageContent mc;
-        MemberData md;
-        md = new MemberData("s", getRandomColor());
-        mc = new MessageContent(io_message, md, true);
-        messageAdapter.add(mc);
         editText.setText("");
     }
 
@@ -170,7 +143,7 @@ public class ChatPageFragment extends Fragment{
         //Downloading gorupData
         getGroup(id);
 
-        initialize_socket();
+        initialize_socket_io();
     }
 
     private void getGroup(String id){
@@ -188,10 +161,22 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
+<<<<<<< HEAD
 //        Log.e(TAG, "IN ON ATTACH");
         SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
         editor.putString("id", thisGroup.getId());
         editor.apply();
+=======
+        loadMessages();
+    }
+
+    private void loadMessages(){
+        for (String message : thisGroup.getConversation()){
+            MemberData md = new MemberData("Anonymous", getWhite());
+            MessageContent mc = new MessageContent(message, md, false);
+            messageAdapter.add(mc);
+        }
+>>>>>>> d96f409d15c49d0ae9412d24cc85d7eb6b5dd665
     }
 
     private void handleErrorGetGroup(Throwable throwable) {
@@ -206,16 +191,6 @@ public class ChatPageFragment extends Fragment{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
-
-        // add previous messages
-        /*for (Message m : thisGroup.getConversation()){
-            MemberData md = new MemberData(getRandomName(), getRandomColor());
-            MessageContent mc = new MessageContent(m.getText(), md, false);
-            messageAdapter.add(mc);
-        }*/
-        initialize_socket();
-        System.out.print("onCreateView");
-
         return view;
     }
 
@@ -265,6 +240,7 @@ public class ChatPageFragment extends Fragment{
         super.onAttach(context);
     }
 
+<<<<<<< HEAD
     @Override
     public void onResume() {
         super.onResume();
@@ -279,9 +255,12 @@ public class ChatPageFragment extends Fragment{
 
     private String getRandomColor() {
         Random r = new Random();
+=======
+    private String getWhite() {
+>>>>>>> d96f409d15c49d0ae9412d24cc85d7eb6b5dd665
         StringBuffer sb = new StringBuffer("#");
         while(sb.length() < 7){
-            sb.append(Integer.toHexString(r.nextInt()));
+            sb.append("F");
         }
         return sb.toString().substring(0, 7);
     }
@@ -293,7 +272,7 @@ public class ChatPageFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    private void initialize_socket() {
+    private void initialize_socket_io() {
         mSocket.connect();
         mSocket.on("join group", onJoined);
         mSocket.on("send message", onMessageReceive);
@@ -307,19 +286,26 @@ public class ChatPageFragment extends Fragment{
         public void call(Object... args) {
             Log.e("Response", "message received");
             JSONObject data = (JSONObject) args[0];
-            Message m;
+            String m;
             try {
-                m = (Message) data.get("message");
+                m = (String) data.get("message");
             } catch (JSONException e) {
+                Log.e("Receiving message", "Json exception happened");
                 return;
             }
 
             MessageContent mc;
             MemberData md;
             // add the message to view
-            md = new MemberData(m.getSender().getName(), getRandomColor());
-            mc = new MessageContent(m.getText(), md, true);
+            md = new MemberData("Anonymous", getWhite());
+            mc = new MessageContent(m, md, false);
             messageAdapter.add(mc);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    messageAdapter.notifyDataSetChanged();
+                }
+            });
         }
     };
 
