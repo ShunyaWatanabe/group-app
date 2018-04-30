@@ -161,12 +161,12 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
-<<<<<<< HEAD
+
 //        Log.e(TAG, "IN ON ATTACH");
         SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
         editor.putString("id", thisGroup.getId());
         editor.apply();
-=======
+
         loadMessages();
     }
 
@@ -176,7 +176,6 @@ public class ChatPageFragment extends Fragment{
             MessageContent mc = new MessageContent(message, md, false);
             messageAdapter.add(mc);
         }
->>>>>>> d96f409d15c49d0ae9412d24cc85d7eb6b5dd665
     }
 
     private void handleErrorGetGroup(Throwable throwable) {
@@ -240,7 +239,6 @@ public class ChatPageFragment extends Fragment{
         super.onAttach(context);
     }
 
-<<<<<<< HEAD
     @Override
     public void onResume() {
         super.onResume();
@@ -253,11 +251,8 @@ public class ChatPageFragment extends Fragment{
         }
     }
 
-    private String getRandomColor() {
-        Random r = new Random();
-=======
+
     private String getWhite() {
->>>>>>> d96f409d15c49d0ae9412d24cc85d7eb6b5dd665
         StringBuffer sb = new StringBuffer("#");
         while(sb.length() < 7){
             sb.append("F");
