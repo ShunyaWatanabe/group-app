@@ -106,7 +106,6 @@ public class MemberFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseGetMembers, this::handleErrorGetMembers));
-
     }
 
 
