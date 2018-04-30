@@ -123,11 +123,13 @@ public class ChatPageFragment extends Fragment{
     @OnClick(R.id.b_add_member)
     public void addMember(){
         replaceFragment("JoinGroupFragment");
+        bAddMember.setEnabled(false);
     }
 
     @OnClick(R.id.b_show_members)
     public void showMembers(){
         replaceFragment("MemberFragment");
+        bShowMembers.setEnabled(false);
     }
 
 
@@ -161,6 +163,8 @@ public class ChatPageFragment extends Fragment{
         Log.i(TAG,group.toString());
         thisGroup = group;
         groupName.setText(thisGroup.getName());
+        bShowMembers.setEnabled(true);
+        bAddMember.setEnabled(true);
 
 //        Log.e(TAG, "IN ON ATTACH");
         SharedPreferences.Editor editor = getActivity().getPreferences(MODE_PRIVATE).edit();
@@ -168,6 +172,7 @@ public class ChatPageFragment extends Fragment{
         editor.apply();
 
         loadMessages();
+
     }
 
     private void loadMessages(){
@@ -181,6 +186,7 @@ public class ChatPageFragment extends Fragment{
     private void handleErrorGetGroup(Throwable throwable) {
         Log.e(TAG,"Error downloading the group");
         throwable.printStackTrace();
+
     }
 
     @Override
@@ -190,6 +196,8 @@ public class ChatPageFragment extends Fragment{
         ButterKnife.bind(this,view);
         messageAdapter = new MessageAdapter(getContext());
         messagesView.setAdapter(messageAdapter);
+        bShowMembers.setEnabled(false);
+        bAddMember.setEnabled(false);
         return view;
     }
 

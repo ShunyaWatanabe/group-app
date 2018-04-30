@@ -72,7 +72,11 @@ public class CreateGroupFragment extends Fragment {
 
     }
 
+    @BindView(R.id.b_joinInvite)
+    Button joinI;
 
+    @BindView(R.id.b_createGroup)
+    Button createG;
 
     @BindView(R.id.tv_inputDigit_1)
     TextView inputDigit1;
@@ -95,6 +99,7 @@ public class CreateGroupFragment extends Fragment {
         if (!code.contains("-")){
             //send code to server
 
+            joinI.setEnabled(false);
             String [] private_key_invitation_code = {Constants.loggedUser.getPrivate_key(),code};
             mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                     Constants.getRefreshToken(getActivity()),
@@ -105,8 +110,6 @@ public class CreateGroupFragment extends Fragment {
                     .subscribe(this::handleResponseJoin, this::handleErrorJoin));
 
             code = "----";
-
-
         }
     }
 
@@ -115,6 +118,7 @@ public class CreateGroupFragment extends Fragment {
     @OnClick(R.id.b_createGroup)
     public void createNewGroup(){
         if (!code.contains("-")){
+            createG.setEnabled(false);
             code = "----";
             replaceFragment("AntechamberFragment","");
         }else{
@@ -127,11 +131,11 @@ public class CreateGroupFragment extends Fragment {
     private void handleResponseJoin(Response response){
         Log.e(TAG, "Join group succeeded!: " + response.toString());
         replaceFragment( "ChatPageFragment",response.getId());
-
     }
 
     private void handleErrorJoin(Throwable error){
         Log.e(TAG, "Join group error!: " + error.getMessage());
+        joinI.setEnabled(true);
     }
 
     @Override

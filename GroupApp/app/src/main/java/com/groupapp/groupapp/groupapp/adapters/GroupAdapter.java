@@ -84,25 +84,25 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 Log.e(TAG,"POSITION OF CLICKED GROUP " + position);
                 Log.e(TAG,"ID OF CLICKED GROUP " + thisGroup.getId());
                 Log.e(TAG,"REST OF CLICKED GROUP " + thisGroup.getName());
-                replaceFragment(0, thisGroup.getId());
+                replaceFragment(thisGroup.getId());
             }
         });
 
     }
-    private void replaceFragment(int code, String groupID) {
+    private void replaceFragment(String groupID) {
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-        Bundle b = new Bundle();
+        Bundle bundle = new Bundle();
 //        b.putParcelable("event",event);
         //b.putInt("position",position);
-        b.putString("groupID", groupID);
+        bundle.putString("groupID", groupID);
 
         ft.addToBackStack("GroupsListFragment");
 
-        if(code==0){
-            ChatPageFragment fragment = new ChatPageFragment();
-            fragment.setArguments(b);
-            ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
-        }
+
+        ChatPageFragment fragment = new ChatPageFragment();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.fragmentFrame, fragment, ChatPageFragment.TAG);
+
         ft.commit();
     }
 

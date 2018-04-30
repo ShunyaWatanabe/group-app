@@ -61,6 +61,7 @@ public class LogInFragment extends Fragment {
 
     @OnClick(R.id.b_start)
     public void startApp(){
+        bStart.setEnabled(false);
         mSubscriptions.add(NetworkUtil.getRetrofit( Constants.getAccessToken(getActivity()),
                                                     Constants.getRefreshToken(getActivity()),
                                                     Constants.getName(getActivity())).register(new User(etUsername.getText().toString()))
@@ -116,6 +117,7 @@ public class LogInFragment extends Fragment {
         } else {
             showSnackBarMessage("Network Error !");
         }
+        bStart.setEnabled(true);
     }
 
     private void handleResponseRegister(Response response){
@@ -173,6 +175,8 @@ public class LogInFragment extends Fragment {
 
             showSnackBarMessage("Network Error !");
         }
+
+        bStart.setEnabled(true);
     }
 
 
@@ -199,6 +203,7 @@ public class LogInFragment extends Fragment {
 
             showSnackBarMessage("Network Error !");
         }
+        bStart.setEnabled(true);
     }
 
     private OnFragmentInteractionListener mListener;
