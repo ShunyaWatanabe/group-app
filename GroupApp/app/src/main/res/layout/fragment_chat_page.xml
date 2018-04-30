@@ -32,6 +32,8 @@
             android:padding="10dp"
             android:textSize="20sp"
             android:id="@+id/group_name"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorAccent"
             />
 
     </LinearLayout>

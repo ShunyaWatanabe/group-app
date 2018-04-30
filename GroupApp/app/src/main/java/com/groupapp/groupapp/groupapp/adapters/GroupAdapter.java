@@ -18,9 +18,6 @@ import com.groupapp.groupapp.groupapp.screens.ChatPageFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by Tomek on 2018-04-21.
- */
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
