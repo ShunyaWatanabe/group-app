@@ -113,6 +113,9 @@ public class MemberFragment extends Fragment {
     public void handleResponseGetMembers(Response response){
         Log.e("TAG","successs");
         members = new ArrayList<>(Arrays.asList(response.getMembers()));
+        gvMembers.setAdapter(new MemberAdapter(getContext(), members));
+        gvMembers.setColumnWidth(1);
+
     }
 
     public void handleErrorGetMembers(Throwable error){
@@ -126,8 +129,7 @@ public class MemberFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_member, container, false);
         ButterKnife.bind(this,view);
 
-        gvMembers.setAdapter(new MemberAdapter(getContext(), members));
-        gvMembers.setColumnWidth(1);
+
         return view;
     }
 
