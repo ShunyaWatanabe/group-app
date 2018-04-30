@@ -121,7 +121,6 @@ public class CreateGroupFragment extends Fragment {
             createG.setEnabled(false);
             code = "----";
             replaceFragment("AntechamberFragment","");
-            createG.setEnabled(true);
         }else{
             Toast.makeText(getContext(),"Enter full code!",Toast.LENGTH_LONG);
         }
@@ -132,8 +131,6 @@ public class CreateGroupFragment extends Fragment {
     private void handleResponseJoin(Response response){
         Log.e(TAG, "Join group succeeded!: " + response.toString());
         replaceFragment( "ChatPageFragment",response.getId());
-        joinI.setEnabled(true);
-
     }
 
     private void handleErrorJoin(Throwable error){

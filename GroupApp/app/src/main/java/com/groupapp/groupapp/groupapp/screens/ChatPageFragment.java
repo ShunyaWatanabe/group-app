@@ -123,11 +123,13 @@ public class ChatPageFragment extends Fragment{
     @OnClick(R.id.b_add_member)
     public void addMember(){
         replaceFragment("JoinGroupFragment");
+        bAddMember.setEnabled(false);
     }
 
     @OnClick(R.id.b_show_members)
     public void showMembers(){
         replaceFragment("MemberFragment");
+        bShowMembers.setEnabled(false);
     }
 
 
@@ -181,6 +183,7 @@ public class ChatPageFragment extends Fragment{
     private void handleErrorGetGroup(Throwable throwable) {
         Log.e(TAG,"Error downloading the group");
         throwable.printStackTrace();
+
     }
 
     @Override

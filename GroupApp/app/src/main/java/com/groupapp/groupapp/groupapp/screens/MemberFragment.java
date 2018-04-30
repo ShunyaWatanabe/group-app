@@ -83,7 +83,7 @@ public class MemberFragment extends Fragment {
         //response.getId(); //this is the group ID
 
         getFragmentManager().popBackStack("GroupsListFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        bLeaveGroup.setEnabled(true);
+
         Log.e("Stack count", getActivity().getSupportFragmentManager().getBackStackEntryCount() + "");
     }
 

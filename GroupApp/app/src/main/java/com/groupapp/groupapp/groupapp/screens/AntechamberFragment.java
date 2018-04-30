@@ -111,7 +111,7 @@ public class AntechamberFragment extends Fragment {
         sendToAllConnected(response.getId());
 
         replaceFragment(response.getId());
-        bCreateGroup.setEnabled(true);
+
 
     }
 
