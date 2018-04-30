@@ -1,4 +1,4 @@
-##Release 1
+## Release 1
 
 Project SetUp. Delineated project goals and objectives. 
 
