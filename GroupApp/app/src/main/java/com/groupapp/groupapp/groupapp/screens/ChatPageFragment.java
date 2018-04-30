@@ -76,7 +76,7 @@ public class ChatPageFragment extends Fragment{
     {
         Log.i(TAG, "creating socket");
         try {
-            mSocket = IO.socket(Constants.API_URL);
+            mSocket = IO.socket("https://group-app-android.herokuapp.com");
             //mSocket = IO.socket("http://chat.socket.io");
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -213,7 +213,7 @@ public class ChatPageFragment extends Fragment{
             MessageContent mc = new MessageContent(m.getText(), md, false);
             messageAdapter.add(mc);
         }*/
-
+        initialize_socket();
         System.out.print("onCreateView");
 
         return view;
@@ -282,22 +282,9 @@ public class ChatPageFragment extends Fragment{
 
     private void initialize_socket() {
         mSocket.connect();
-        if (mSocket.connected()) {
-            Log.e("check connection", "connected");
-        } else {
-            Log.e("check connection", "NOT CONNECTED");
-        }
-        mSocket.open();
-        if (mSocket.connected()) {
-            Log.e("check connection", "connected after open");
-        } else {
-            Log.e("check connection", "NOT CONNECTED after open");
-            return;
-        }
         mSocket.on("join group", onJoined);
         mSocket.on("send message", onMessageReceive);
         attemptJoinRoom();
-        mSocket.send(new JSONObject());
     }
 
     private Emitter.Listener onJoined = args -> Log.e("Response", "joined");
